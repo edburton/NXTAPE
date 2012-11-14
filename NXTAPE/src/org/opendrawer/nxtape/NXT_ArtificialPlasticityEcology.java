@@ -14,13 +14,13 @@ import lejos.nxt.remote.RemoteMotor;
 public class NXT_ArtificialPlasticityEcology extends PApplet {
 	NXTConnectionManager NXTcm;
 	NXTInfo[] NXTs;
-	TouchSensor touchTop;
-	TouchSensor touchLeft;
-	TouchSensor touchBottom;
-	TouchSensor touchRight;
-	MediatedMotor armHeadMotor;
-	MediatedMotor armMiddleMotor;
-	MediatedMotor armBodyMotor;
+	NXTTouchSensor touchTop;
+	NXTTouchSensor touchLeft;
+	NXTTouchSensor touchBottom;
+	NXTTouchSensor touchRight;
+	NXTMotor armHeadMotor;
+	NXTMotor armMiddleMotor;
+	NXTMotor armBodyMotor;
 	int debugCounter = 0;
 	int motorCentre = 0;
 
@@ -32,7 +32,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		PApplet.main(new String[] {/* "--present",*/ "org.opendrawer.nxtape.NXT_ArtificialPlasticityEcology" });
+		PApplet.main(new String[] {/* "--present", */"org.opendrawer.nxtape.NXT_ArtificialPlasticityEcology" });
 	}
 
 	private void setupNXT() {
@@ -43,17 +43,20 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		for (int i = 0; i < NXTs.length; i++)
 			println(NXTs[i].name);
 
-		//touchTop = new TouchSensor(SensorPort.S1);
-		touchLeft = new TouchSensor(SensorPort.S2);
-		touchBottom = new TouchSensor(SensorPort.S3);
-		touchRight = new TouchSensor(SensorPort.S4);
+		// touchTop = new TouchSensor(SensorPort.S1);
+		touchLeft = new NXTTouchSensor(new TouchSensor(SensorPort.S2),
+				"Touch Left");
+		touchBottom = new NXTTouchSensor(new TouchSensor(SensorPort.S3),
+				"Touch Bottom");
+		touchRight = new NXTTouchSensor(new TouchSensor(SensorPort.S4),
+				"Touch Right");
 
-		armHeadMotor = new MediatedMotor(Motor.A, "arm head motor", new Color(
-				255, 0, 0), -180, 0, 0, 0.75f);
-		armMiddleMotor = new MediatedMotor(Motor.B, "arm midle motor",
-				new Color(0, 255, 0), -60, 60, 0, 0.75f);
-		armBodyMotor = new MediatedMotor(Motor.C, "arm body motor", new Color(
-				0, 0, 255), -60, 60, 0, 0.75f);
+		armHeadMotor = new NXTMotor(Motor.A, "arm head motor", new Color(255,
+				0, 0), -180, 0, 0, 0.9f);
+		armMiddleMotor = new NXTMotor(Motor.B, "arm midle motor", new Color(0,
+				255, 0), -60, 60, 0, 0.9f);
+		armBodyMotor = new NXTMotor(Motor.C, "arm body motor", new Color(0, 0,
+				255), -60, 60, 0, 0.9f);
 
 		dataStreams = new DataStream[dataStreamCount];
 		dataStreams[0] = new DataStream(dataStreamWidth, "top touch sensor",
@@ -91,10 +94,15 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		noFill();
 		ellipse(200, 200, 100, 100);
 
-		boolean top = false;//touchTop.isPressed();
-		boolean bottom = touchBottom.isPressed();
-		boolean left = touchLeft.isPressed();
-		boolean right = touchRight.isPressed();
+		//touchTop.step();
+		touchBottom.step();
+		touchLeft.step();
+		touchRight.step();
+
+		boolean top = false;// touchTop.isPressed();
+		boolean bottom = touchBottom.getNormalizedValues()[0] != 0;
+		boolean left = touchLeft.getNormalizedValues()[0] != 0;
+		boolean right = touchRight.getNormalizedValues()[0] != 0;
 
 		if (top) {
 			fill(255, 128, 0);
@@ -105,7 +113,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		ellipse(200, 100, 50, 50);
 		if (bottom) {
 			fill(255, 128, 0);
-			armHeadMotor.accelerate(-1);
+			armHeadMotor.accelerate(-0.5f);
 		} else {
 			fill(0, 0, 0);
 			armHeadMotor.accelerate(0.01f);
@@ -113,24 +121,24 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		ellipse(200, 300, 50, 50);
 		if (left) {
 			fill(255, 128, 0);
-			armMiddleMotor.accelerate(-1);
-			armBodyMotor.accelerate(-1);
+			armMiddleMotor.accelerate(-0.5f);
+			armBodyMotor.accelerate(-0.5f);
 		} else
 			fill(0, 0, 0);
 		ellipse(100, 200, 50, 50);
 		if (right) {
 			fill(255, 128, 0);
 
-			armMiddleMotor.accelerate(1);
-			armBodyMotor.accelerate(1);
+			armMiddleMotor.accelerate(+0.5f);
+			armBodyMotor.accelerate(+0.5f);
 		} else
 			fill(0, 0, 0);
 		ellipse(300, 200, 50, 50);
-		
+
 		armHeadMotor.step();
 		armBodyMotor.step();
 		armMiddleMotor.step();
-		
+
 		fill(0, 0, 0);
 
 		float headA = (float) ((armHeadMotor.getNormalizedValues()[0]) * TWO_PI)

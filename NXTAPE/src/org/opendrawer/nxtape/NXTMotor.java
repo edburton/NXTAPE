@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import lejos.nxt.remote.RemoteMotor;
 
-public class MediatedMotor implements DataProvider {
+public class NXTMotor implements DataProvider {
 	private RemoteMotor remoteMotor;
 	private final String name;
 	private final Color colour;
@@ -12,14 +12,13 @@ public class MediatedMotor implements DataProvider {
 	private final float maxAngle;
 	private final int restAngle;
 	private final float friction;
-	private float maxRate;
 	private float virtualAngle;
-	private float virtualRate;
+	private float virtualSpeed;
 	private float actualAngle;
-	private int maxSpeed;
-	private float currentSpeed = 0;
+	private final static int maxSpeed=12;
+	private static String[] subTitles = new String[] { "Angle", "Speed" };
 
-	public MediatedMotor(RemoteMotor remoteMotor, String name, Color colour,
+	public NXTMotor(RemoteMotor remoteMotor, String name, Color colour,
 			int minAngle, int maxAngle, int restAngle, float friction) {
 		this.remoteMotor = remoteMotor;
 		this.name = name;
@@ -28,8 +27,7 @@ public class MediatedMotor implements DataProvider {
 		this.maxAngle = maxAngle;
 		this.friction = friction;
 		this.restAngle = (int) (virtualAngle = actualAngle = restAngle);
-		virtualRate = 0;
-		maxSpeed = remoteMotor.getSpeed();
+		virtualSpeed = 0;
 	}
 
 	public int getRestAngle() {
@@ -52,43 +50,42 @@ public class MediatedMotor implements DataProvider {
 		return maxAngle;
 	}
 
+	@Override
 	public void step() {
 		actualAngle = remoteMotor.getTachoCount();
 		virtualAngle = actualAngle;
-		if (currentSpeed > 0) {
-			virtualRate *= friction;
-			if (virtualRate > maxSpeed)
-				virtualRate = maxSpeed;
-			else if (virtualRate < -maxSpeed)
-				virtualRate = -maxSpeed;
-			virtualAngle += virtualRate;
-			currentSpeed *= friction;
+		if (virtualSpeed != 0) {
+			virtualSpeed *= friction;
+			if (virtualSpeed > 1)
+				virtualSpeed = 1;
+			else if (virtualSpeed < -1)
+				virtualSpeed = -1;
+			virtualAngle += virtualSpeed*maxSpeed ;
 			if (virtualAngle < minAngle) {
-				virtualRate = Math.abs(virtualRate);
+				virtualSpeed = Math.abs(virtualSpeed);
 				virtualAngle = minAngle + (minAngle - virtualAngle);
-				virtualRate *= friction * friction;
-				currentSpeed *= friction * friction;
+				virtualSpeed *= friction * friction;
 			} else if (virtualAngle > maxAngle) {
-				virtualRate = -Math.abs(virtualRate);
+				virtualSpeed = -Math.abs(virtualSpeed);
 				virtualAngle = maxAngle + (maxAngle - virtualAngle);
-				virtualRate *= friction * friction;
-				currentSpeed *= friction * friction;
-			}
-			if (currentSpeed <= 1) {
-				virtualRate = currentSpeed = 0;
+				virtualSpeed *= friction * friction;
 			}
 		}
-		remoteMotor.setSpeed((int) currentSpeed);
 		remoteMotor.rotateTo((int) virtualAngle, true);
 	}
 
 	public void accelerate(float rate) {
-		virtualRate += rate;
-		currentSpeed = maxSpeed;
+		virtualSpeed += rate;
 	}
 
 	@Override
 	public float[] getNormalizedValues() {
-		return new float[] {(actualAngle - minAngle) / (maxAngle - minAngle)};
+		return new float[] { (actualAngle - minAngle) / (maxAngle - minAngle),
+				virtualSpeed / 2 + 0.5f };
+	}
+
+	@Override
+	public String[] getValueNames() {
+		return subTitles;
 	}
 }
