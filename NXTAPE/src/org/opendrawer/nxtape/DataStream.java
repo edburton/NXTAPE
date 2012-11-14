@@ -4,6 +4,7 @@ public class DataStream {
 	protected final int width;
 	private float[][] data;
 	private int writeHead = 0;
+	private int totalWriteHead = 0;
 	protected DataProvider dataProvider;
 
 	public DataStream(int width, DataProvider dataProvider) {
@@ -16,11 +17,14 @@ public class DataStream {
 	public void write(float[] values) {
 		data[writeHead] = values;
 		writeHead++;
+		totalWriteHead++;
 		if (writeHead >= width)
 			writeHead = 0;
 	}
 
 	public float[] read(int pastPosition) {
+		if (pastPosition > width || pastPosition > totalWriteHead)
+			return null;
 		int index = writeHead - (1 + pastPosition);
 		while (index < 0)
 			index += width;
@@ -28,10 +32,10 @@ public class DataStream {
 	}
 
 	public float read(int pastPosition, int channel) {
-		int index = writeHead - (1 + pastPosition);
-		while (index < 0)
-			index += width;
-		return data[index][channel];
+		float[] v = read(pastPosition);
+		if (v == null)
+			return Float.NaN;
+		return v[channel];
 	}
 
 	public int getWidth() {

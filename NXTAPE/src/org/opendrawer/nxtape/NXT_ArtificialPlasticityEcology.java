@@ -53,11 +53,11 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				"Touch Right");
 
 		armHeadMotor = new NXTMotor(Motor.A, "arm head motor", new Color(255,
-				0, 0), -180, 0, 0, 0.9f);
+				0, 0), -180, 0, 0, 0.95f);
 		armMiddleMotor = new NXTMotor(Motor.B, "arm midle motor", new Color(0,
-				255, 0), -60, 60, 0, 0.9f);
+				255, 0), -60, 60, 0, 0.95f);
 		armBodyMotor = new NXTMotor(Motor.C, "arm body motor", new Color(0, 0,
-				255), -60, 60, 0, 0.9f);
+				255), -60, 60, 0, 0.95f);
 
 		dataStreams = new GraphicalDataStream[dataStreamCount];
 		// dataStreams[0] = new GraphicalDataStream(dataStreamWidth,
@@ -79,7 +79,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		frameRate(50);
 		ellipseMode(CORNERS);
 		rectMode(CORNERS);
-		background(0);
+		background(32);
 		frame.setBackground(new java.awt.Color(0, 0, 0));
 	}
 
@@ -97,22 +97,22 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		boolean right = touchRight.getNormalizedValues()[0] != 0;
 
 		if (top) {
-			armHeadMotor.accelerate(1);
+			armHeadMotor.accelerate(0.1f);
 
 		}
 		if (bottom) {
-			armHeadMotor.accelerate(-0.5f);
+			armHeadMotor.accelerate(-0.1f);
 		} else {
 			armHeadMotor.accelerate(0.01f);
 		}
 		if (left) {
-			armMiddleMotor.accelerate(-0.5f);
-			armBodyMotor.accelerate(-0.5f);
+			armMiddleMotor.accelerate(-0.1f);
+			armBodyMotor.accelerate(-0.1f);
 		}
 		if (right) {
 
-			armMiddleMotor.accelerate(+0.5f);
-			armBodyMotor.accelerate(+0.5f);
+			armMiddleMotor.accelerate(+0.1f);
+			armBodyMotor.accelerate(+0.1f);
 		}
 
 		armHeadMotor.step();
@@ -127,9 +127,9 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		dataStreams[5].write(armMiddleMotor.getNormalizedValues());
 		dataStreams[6].write(armBodyMotor.getNormalizedValues());
 
-		float height = 520 / 6;
+		float height = 440 / 6;
 		for (int n = 1; n < 7; n++) {
-			float y = 20 + ((n - 1.0f) / 6) * 560;
+			float y = 20 + ((n - 1.0f) / 6) * (580);
 			dataStreams[n].drawAt(g, 20, y, 760, height);
 		}
 

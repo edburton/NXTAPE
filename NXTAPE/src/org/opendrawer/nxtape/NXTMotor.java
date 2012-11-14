@@ -64,16 +64,16 @@ public class NXTMotor implements GraphicalDataProvider {
 				virtualSpeed = -1;
 			virtualAngle += virtualSpeed * maxSpeed;
 			if (virtualAngle < minAngle) {
-				virtualSpeed = Math.abs(virtualSpeed);
-				virtualAngle = minAngle + (minAngle - virtualAngle);
-				virtualSpeed *= friction * friction;
+				virtualSpeed = 0;
+				virtualAngle = minAngle;
 			} else if (virtualAngle > maxAngle) {
-				virtualSpeed = -Math.abs(virtualSpeed);
-				virtualAngle = maxAngle + (maxAngle - virtualAngle);
-				virtualSpeed *= friction * friction;
+				virtualSpeed = 0;
+				virtualAngle = maxAngle;
 			}
 		}
-		remoteMotor.rotateTo((int) virtualAngle, true);
+		int iVirtualAngle = (int) virtualAngle;
+		if (iVirtualAngle != actualAngle)
+			remoteMotor.rotateTo(iVirtualAngle, true);
 	}
 
 	public void accelerate(float rate) {
