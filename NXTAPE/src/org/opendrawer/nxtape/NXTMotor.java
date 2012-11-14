@@ -2,9 +2,11 @@ package org.opendrawer.nxtape;
 
 import java.awt.Color;
 
+import processing.core.PGraphics;
+
 import lejos.nxt.remote.RemoteMotor;
 
-public class NXTMotor implements DataProvider {
+public class NXTMotor implements GraphicalDataProvider {
 	private RemoteMotor remoteMotor;
 	private final String name;
 	private final Color colour;
@@ -15,7 +17,7 @@ public class NXTMotor implements DataProvider {
 	private float virtualAngle;
 	private float virtualSpeed;
 	private float actualAngle;
-	private final static int maxSpeed=12;
+	private final static int maxSpeed = 12;
 	private static String[] subTitles = new String[] { "Angle", "Speed" };
 
 	public NXTMotor(RemoteMotor remoteMotor, String name, Color colour,
@@ -60,7 +62,7 @@ public class NXTMotor implements DataProvider {
 				virtualSpeed = 1;
 			else if (virtualSpeed < -1)
 				virtualSpeed = -1;
-			virtualAngle += virtualSpeed*maxSpeed ;
+			virtualAngle += virtualSpeed * maxSpeed;
 			if (virtualAngle < minAngle) {
 				virtualSpeed = Math.abs(virtualSpeed);
 				virtualAngle = minAngle + (minAngle - virtualAngle);
@@ -81,11 +83,31 @@ public class NXTMotor implements DataProvider {
 	@Override
 	public float[] getNormalizedValues() {
 		return new float[] { (actualAngle - minAngle) / (maxAngle - minAngle),
-				virtualSpeed / 2 + 0.5f };
+				virtualSpeed / -2 + 0.5f };
 	}
 
 	@Override
-	public String[] getValueNames() {
+	public String[] getChannelNames() {
 		return subTitles;
+	}
+
+	@Override
+	public int getChannels() {// TODO Auto-generated method stub
+		return 2;
+	}
+
+	@Override
+	public void drawAt(PGraphics g, float x, float y, float width, float height) {
+		float radius = (Math.min(width, height) / 2) - 2.5f;
+		float xc = x + width / 2;
+		float yc = y + height / 2;
+		g.fill(0);
+		g.strokeWeight(5);
+		g.stroke(64, 64, 64);
+		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
+		g.stroke(255, 255, 0);
+		float a = (float) ((actualAngle / 360.0f) * (Math.PI * 2));
+		g.line(xc, yc, (float) (xc + Math.sin(a) * radius),
+				(float) (yc + Math.cos(a) * radius));
 	}
 }
