@@ -1,4 +1,4 @@
-package org.opendrawer;
+package org.opendrawer.nxtape;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		PApplet.main(new String[] {/* "--present",*/ "org.opendrawer.NXT_ArtificialPlasticityEcology" });
+		PApplet.main(new String[] {/* "--present",*/ "org.opendrawer.nxtape.NXT_ArtificialPlasticityEcology" });
 	}
 
 	private void setupNXT() {
@@ -133,11 +133,11 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		
 		fill(0, 0, 0);
 
-		float headA = (float) ((armHeadMotor.getNormalizedValue()) * TWO_PI)
+		float headA = (float) ((armHeadMotor.getNormalizedValues()[0]) * TWO_PI)
 				+ PI;
-		float middleA = (float) ((armMiddleMotor.getNormalizedValue()) * TWO_PI)
+		float middleA = (float) ((armMiddleMotor.getNormalizedValues()[0]) * TWO_PI)
 				+ PI;
-		float bodyA = (float) ((armBodyMotor.getNormalizedValue()) * TWO_PI)
+		float bodyA = (float) ((armBodyMotor.getNormalizedValues()[0]) * TWO_PI)
 				+ PI;
 		stroke(64, 64, 64);
 		ellipse(500, 200, 50, 50);
@@ -156,9 +156,9 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		dataStreams[1].write(bottom ? 1 : 0);
 		dataStreams[2].write(left ? 1 : 0);
 		dataStreams[3].write(right ? 1 : 0);
-		dataStreams[4].write(armHeadMotor.getNormalizedValue());
-		dataStreams[5].write(armMiddleMotor.getNormalizedValue());
-		dataStreams[6].write(armBodyMotor.getNormalizedValue());
+		dataStreams[4].write(armHeadMotor.getNormalizedValues()[0]);
+		dataStreams[5].write(armMiddleMotor.getNormalizedValues()[0]);
+		dataStreams[6].write(armBodyMotor.getNormalizedValues()[0]);
 
 		noStroke();
 		for (int n = 0; n < 7; n++) {

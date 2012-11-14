@@ -1,10 +1,10 @@
-package org.opendrawer;
+package org.opendrawer.nxtape;
 
 import java.awt.Color;
 
 import lejos.nxt.remote.RemoteMotor;
 
-public class MediatedMotor {
+public class MediatedMotor implements DataProvider {
 	private RemoteMotor remoteMotor;
 	private final String name;
 	private final Color colour;
@@ -87,7 +87,8 @@ public class MediatedMotor {
 		currentSpeed = maxSpeed;
 	}
 
-	public float getNormalizedValue() {
-		return (actualAngle - minAngle) / (maxAngle - minAngle);
+	@Override
+	public float[] getNormalizedValues() {
+		return new float[] {(actualAngle - minAngle) / (maxAngle - minAngle)};
 	}
 }
