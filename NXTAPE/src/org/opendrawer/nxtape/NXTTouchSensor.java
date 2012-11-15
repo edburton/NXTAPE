@@ -14,6 +14,7 @@ public class NXTTouchSensor implements GraphicalDataProvider {
 		this.name = name;
 	}
 
+	@Override
 	public float[] getNormalizedValues() {
 		return new float[] { on ? 1 : 0 };
 	}
@@ -46,7 +47,7 @@ public class NXTTouchSensor implements GraphicalDataProvider {
 		if (on)
 			g.fill(255, 255, 0);
 		else
-			g.fill(0);
+			g.fill(16);
 		g.strokeWeight(5);
 		g.stroke(64, 64, 64);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);

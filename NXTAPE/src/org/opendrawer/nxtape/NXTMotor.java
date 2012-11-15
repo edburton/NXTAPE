@@ -36,6 +36,7 @@ public class NXTMotor implements GraphicalDataProvider {
 		return restAngle;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -101,7 +102,7 @@ public class NXTMotor implements GraphicalDataProvider {
 		float radius = (Math.min(width, height) / 2) - 2.5f;
 		float xc = x + width / 2;
 		float yc = y + height / 2;
-		g.fill(0);
+		g.fill(16);
 		g.strokeWeight(5);
 		g.stroke(64, 64, 64);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);

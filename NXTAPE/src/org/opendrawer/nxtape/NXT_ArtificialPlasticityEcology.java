@@ -1,14 +1,11 @@
 package org.opendrawer.nxtape;
 
 import java.awt.Color;
-import java.util.ArrayList;
-
 import processing.core.*;
 import lejos.nxt.*;
 import lejos.pc.comm.*;
 import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
-import lejos.nxt.remote.RemoteMotor;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcology extends PApplet {
@@ -44,7 +41,8 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		for (int i = 0; i < NXTs.length; i++)
 			println(NXTs[i].name);
 
-		// touchTop = new TouchSensor(SensorPort.S1);
+		touchTop = new NXTTouchSensor(new TouchSensor(SensorPort.S1),
+				"Touch Top");
 		touchLeft = new NXTTouchSensor(new TouchSensor(SensorPort.S2),
 				"Touch Left");
 		touchBottom = new NXTTouchSensor(new TouchSensor(SensorPort.S3),
@@ -53,15 +51,14 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				"Touch Right");
 
 		armHeadMotor = new NXTMotor(Motor.A, "arm head motor", new Color(255,
-				0, 0), -180, 0, 0, 0.95f);
+				0, 0), -180, 0, 0, 0.96f);
 		armMiddleMotor = new NXTMotor(Motor.B, "arm midle motor", new Color(0,
-				255, 0), -60, 60, 0, 0.95f);
+				255, 0), -60, 60, 0, 0.96f);
 		armBodyMotor = new NXTMotor(Motor.C, "arm body motor", new Color(0, 0,
-				255), -60, 60, 0, 0.95f);
+				255), -60, 60, 0, 0.96f);
 
 		dataStreams = new GraphicalDataStream[dataStreamCount];
-		// dataStreams[0] = new GraphicalDataStream(dataStreamWidth,
-		// "top touch sensor",Color.HSBtoRGB(0f, 1.0f, 1.0f));
+		dataStreams[0] = new GraphicalDataStream(dataStreamWidth, touchTop);
 		dataStreams[1] = new GraphicalDataStream(dataStreamWidth, touchBottom);
 		dataStreams[2] = new GraphicalDataStream(dataStreamWidth, touchLeft);
 		dataStreams[3] = new GraphicalDataStream(dataStreamWidth, touchRight);
@@ -73,32 +70,33 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		println("---");
 	}
 
+	@Override
 	public void setup() {
 		setupNXT();
 		size(800, 600);
 		frameRate(50);
 		ellipseMode(CORNERS);
 		rectMode(CORNERS);
-		background(32);
+		background(0);
 		frame.setBackground(new java.awt.Color(0, 0, 0));
 	}
 
+	@Override
 	public void draw() {
-		background(32);
+		background(0);
 
-		// touchTop.step();
+		touchTop.step();
 		touchBottom.step();
 		touchLeft.step();
 		touchRight.step();
 
-		boolean top = false;// touchTop.isPressed();
+		boolean top = touchTop.getNormalizedValues()[0] != 0;
 		boolean bottom = touchBottom.getNormalizedValues()[0] != 0;
 		boolean left = touchLeft.getNormalizedValues()[0] != 0;
 		boolean right = touchRight.getNormalizedValues()[0] != 0;
 
 		if (top) {
 			armHeadMotor.accelerate(0.1f);
-
 		}
 		if (bottom) {
 			armHeadMotor.accelerate(-0.1f);
@@ -119,7 +117,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		armBodyMotor.step();
 		armMiddleMotor.step();
 
-		// dataStreams[0].write(top ? 1 : 0);
+		dataStreams[0].write(touchTop.getNormalizedValues());
 		dataStreams[1].write(touchBottom.getNormalizedValues());
 		dataStreams[2].write(touchRight.getNormalizedValues());
 		dataStreams[3].write(touchLeft.getNormalizedValues());
@@ -127,9 +125,9 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		dataStreams[5].write(armMiddleMotor.getNormalizedValues());
 		dataStreams[6].write(armBodyMotor.getNormalizedValues());
 
-		float height = 440 / 6;
-		for (int n = 1; n < 7; n++) {
-			float y = 20 + ((n - 1.0f) / 6) * (580);
+		float height = 440 / 7;
+		for (int n = 0; n < 7; n++) {
+			float y = 20 + (n / 7.0f) * (580);
 			dataStreams[n].drawAt(g, 20, y, 760, height);
 		}
 
