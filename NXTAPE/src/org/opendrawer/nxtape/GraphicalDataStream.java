@@ -42,9 +42,9 @@ public class GraphicalDataStream extends DataStream implements GraphicalObject {
 					float y1 = (y + height / 2) - v * height / 2;
 					if (started) {
 						g.fill(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
-						g.rect(Math.min(x1, xx) - 0.5f,
+						g.rect(Math.min(x1, xx) - 0.0f,
 								Math.min(y1, yy) - 2.5f,
-								Math.max(x1, xx) + 0.5f,
+								Math.max(x1, xx) + 0.0f,
 								Math.max(y1, yy) + 2.5f);
 					}
 					started = true;
