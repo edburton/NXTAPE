@@ -1,7 +1,7 @@
 package org.opendrawer.nxtape;
 
-import processing.core.PGraphics;
 import lejos.nxt.TouchSensor;
+import processing.core.PGraphics;
 
 public class NXTTouchSensor implements GraphicalDataProvider {
 	private final TouchSensor touchSensor;
@@ -31,7 +31,8 @@ public class NXTTouchSensor implements GraphicalDataProvider {
 
 	@Override
 	public void step() {
-		on = touchSensor.isPressed();
+		if (touchSensor != null)
+			on = touchSensor.isPressed();
 	}
 
 	@Override

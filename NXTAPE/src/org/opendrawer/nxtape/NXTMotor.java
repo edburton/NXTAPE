@@ -2,9 +2,8 @@ package org.opendrawer.nxtape;
 
 import java.awt.Color;
 
-import processing.core.PGraphics;
-
 import lejos.nxt.remote.RemoteMotor;
+import processing.core.PGraphics;
 
 public class NXTMotor implements GraphicalDataProvider {
 	private RemoteMotor remoteMotor;
@@ -55,7 +54,8 @@ public class NXTMotor implements GraphicalDataProvider {
 
 	@Override
 	public void step() {
-		actualAngle = remoteMotor.getTachoCount();
+		actualAngle = remoteMotor != null ? remoteMotor.getTachoCount()
+				: restAngle;
 		virtualAngle = actualAngle;
 		if (virtualSpeed != 0) {
 			virtualSpeed *= friction;
@@ -73,7 +73,7 @@ public class NXTMotor implements GraphicalDataProvider {
 			}
 		}
 		int iVirtualAngle = (int) virtualAngle;
-		if (iVirtualAngle != actualAngle)
+		if (remoteMotor != null && iVirtualAngle != actualAngle)
 			remoteMotor.rotateTo(iVirtualAngle, true);
 	}
 

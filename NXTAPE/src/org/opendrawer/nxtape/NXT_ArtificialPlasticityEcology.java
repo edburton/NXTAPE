@@ -1,61 +1,71 @@
 package org.opendrawer.nxtape;
 
 import java.awt.Color;
-import processing.core.*;
-import lejos.nxt.*;
-import lejos.pc.comm.*;
+
+import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
+import lejos.pc.comm.NXTComm;
+import lejos.pc.comm.NXTCommException;
+import lejos.pc.comm.NXTCommFactory;
+import lejos.pc.comm.NXTInfo;
+import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcology extends PApplet {
-	NXTConnectionManager NXTcm;
-	NXTInfo[] NXTs;
-	NXTTouchSensor touchTop;
-	NXTTouchSensor touchLeft;
-	NXTTouchSensor touchBottom;
-	NXTTouchSensor touchRight;
-	NXTMotor armHeadMotor;
-	NXTMotor armMiddleMotor;
-	NXTMotor armBodyMotor;
-	int debugCounter = 0;
-	int motorCentre = 0;
-
-	int dataStreamWidth = 256;
-	static int dataStreamCount = 7;
-	GraphicalDataStream[] dataStreams;
+	private NXTComm nxtComm;
+	private NXTInfo[] NXTs;
+	private NXTTouchSensor touchTop;
+	private NXTTouchSensor touchLeft;
+	private NXTTouchSensor touchBottom;
+	private NXTTouchSensor touchRight;
+	private NXTMotor armHeadMotor;
+	private NXTMotor armMiddleMotor;
+	private NXTMotor armBodyMotor;
+	private int debugCounter = 0;
+	private int dataStreamWidth = 256;
+	private static int dataStreamCount = 7;
+	private GraphicalDataStream[] dataStreams;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		PApplet.main(new String[] { "--present",
-				"org.opendrawer.nxtape.NXT_ArtificialPlasticityEcology" });
+		boolean present = false;
+		if (present)
+			PApplet.main(new String[] { "--present",
+					"org.opendrawer.nxtape.NXT_ArtificialPlasticityEcology" });
+		else
+			PApplet.main("org.opendrawer.nxtape.NXT_ArtificialPlasticityEcology");
 	}
 
 	private void setupNXT() {
-		NXTcm = new NXTConnectionManager();
-		println("-NXTConnectionManager instantiated-");
-		NXTs = NXTcm.search();
-		println("---");
-		for (int i = 0; i < NXTs.length; i++)
-			println(NXTs[i].name);
+		boolean oneNXTconnected = false;
+		try {
+			nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
+			NXTs = nxtComm.search("");
+		} catch (NXTCommException e) {
+			e.printStackTrace();
+		}
 
-		touchTop = new NXTTouchSensor(new TouchSensor(SensorPort.S1),
-				"Touch Top");
-		touchLeft = new NXTTouchSensor(new TouchSensor(SensorPort.S2),
-				"Touch Left");
-		touchBottom = new NXTTouchSensor(new TouchSensor(SensorPort.S3),
-				"Touch Bottom");
-		touchRight = new NXTTouchSensor(new TouchSensor(SensorPort.S4),
-				"Touch Right");
+		oneNXTconnected = NXTs != null && NXTs.length == 1;
+		if (!oneNXTconnected)
+			println("One NXT not found. Initiating Dummy mode");
+		touchTop = new NXTTouchSensor(oneNXTconnected ? new TouchSensor(
+				SensorPort.S1) : null, "Touch Top");
+		touchLeft = new NXTTouchSensor(oneNXTconnected ? new TouchSensor(
+				SensorPort.S2) : null, "Touch Left");
+		touchBottom = new NXTTouchSensor(oneNXTconnected ? new TouchSensor(
+				SensorPort.S3) : null, "Touch Bottom");
+		touchRight = new NXTTouchSensor(oneNXTconnected ? new TouchSensor(
+				SensorPort.S4) : null, "Touch Right");
 
-		armHeadMotor = new NXTMotor(Motor.A, "arm head motor", new Color(255,
-				0, 0), -180, 0, 0, 0.96f);
-		armMiddleMotor = new NXTMotor(Motor.B, "arm midle motor", new Color(0,
-				255, 0), -60, 60, 0, 0.96f);
-		armBodyMotor = new NXTMotor(Motor.C, "arm body motor", new Color(0, 0,
-				255), -60, 60, 0, 0.96f);
+		armHeadMotor = new NXTMotor(oneNXTconnected ? Motor.A : null,
+				"arm head motor", new Color(255, 0, 0), -180, 0, 0, 0.96f);
+		armMiddleMotor = new NXTMotor(oneNXTconnected ? Motor.B : null,
+				"arm midle motor", new Color(0, 255, 0), -60, 60, 0, 0.96f);
+		armBodyMotor = new NXTMotor(oneNXTconnected ? Motor.C : null,
+				"arm body motor", new Color(0, 0, 255), -60, 60, 0, 0.96f);
 
 		dataStreams = new GraphicalDataStream[dataStreamCount];
 		dataStreams[0] = new GraphicalDataStream(dataStreamWidth, touchTop);
@@ -66,8 +76,6 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		dataStreams[5] = new GraphicalDataStream(dataStreamWidth,
 				armMiddleMotor);
 		dataStreams[6] = new GraphicalDataStream(dataStreamWidth, armBodyMotor);
-
-		println("---");
 	}
 
 	@Override
