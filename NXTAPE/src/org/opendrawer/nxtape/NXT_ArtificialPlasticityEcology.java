@@ -26,12 +26,13 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private int dataStreamWidth = 256;
 	private static int dataStreamCount = 7;
 	private GraphicalDataStream[] dataStreams;
+	private boolean dummyMode = false;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		boolean present = false;
+		boolean present = true;
 		if (present)
 			PApplet.main(new String[] { "--present",
 					"org.opendrawer.nxtape.NXT_ArtificialPlasticityEcology" });
@@ -40,32 +41,32 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	}
 
 	private void setupNXT() {
-		boolean oneNXTconnected = false;
 		try {
 			nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
-			NXTs = nxtComm.search("");
+			NXTs = nxtComm.search(null);
 		} catch (NXTCommException e) {
 			e.printStackTrace();
 		}
+		dummyMode = NXTs.length != 1;
 
-		oneNXTconnected = NXTs != null && NXTs.length == 1;
-		if (!oneNXTconnected)
-			println("One NXT not found. Initiating Dummy mode");
-		touchTop = new NXTTouchSensor(oneNXTconnected ? new TouchSensor(
+		if (dummyMode)
+			println(NXTs.length + " NXTs found. Initiating Dummy mode");
+
+		touchTop = new NXTTouchSensor(!dummyMode ? new TouchSensor(
 				SensorPort.S1) : null, "Touch Top");
-		touchLeft = new NXTTouchSensor(oneNXTconnected ? new TouchSensor(
+		touchLeft = new NXTTouchSensor(!dummyMode ? new TouchSensor(
 				SensorPort.S2) : null, "Touch Left");
-		touchBottom = new NXTTouchSensor(oneNXTconnected ? new TouchSensor(
+		touchBottom = new NXTTouchSensor(!dummyMode ? new TouchSensor(
 				SensorPort.S3) : null, "Touch Bottom");
-		touchRight = new NXTTouchSensor(oneNXTconnected ? new TouchSensor(
+		touchRight = new NXTTouchSensor(!dummyMode ? new TouchSensor(
 				SensorPort.S4) : null, "Touch Right");
 
-		armHeadMotor = new NXTMotor(oneNXTconnected ? Motor.A : null,
-				"arm head motor", new Color(255, 0, 0), -180, 0, 0, 0.96f);
-		armMiddleMotor = new NXTMotor(oneNXTconnected ? Motor.B : null,
-				"arm midle motor", new Color(0, 255, 0), -60, 60, 0, 0.96f);
-		armBodyMotor = new NXTMotor(oneNXTconnected ? Motor.C : null,
-				"arm body motor", new Color(0, 0, 255), -60, 60, 0, 0.96f);
+		armHeadMotor = new NXTMotor(!dummyMode ? Motor.A : null,
+				"arm head motor", new Color(255, 0, 0), -180, 0, 0, 0.9f);
+		armMiddleMotor = new NXTMotor(!dummyMode ? Motor.B : null,
+				"arm midle motor", new Color(0, 255, 0), -60, 60, 0, 0.9f);
+		armBodyMotor = new NXTMotor(!dummyMode ? Motor.C : null,
+				"arm body motor", new Color(0, 0, 255), -60, 60, 0, 0.9f);
 
 		dataStreams = new GraphicalDataStream[dataStreamCount];
 		dataStreams[0] = new GraphicalDataStream(dataStreamWidth, touchTop);
@@ -92,11 +93,10 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	@Override
 	public void draw() {
 		background(0);
-
-		touchTop.step();
-		touchBottom.step();
-		touchLeft.step();
-		touchRight.step();
+		touchTop.startStep();
+		touchBottom.startStep();
+		touchLeft.startStep();
+		touchRight.startStep();
 
 		boolean top = touchTop.getNormalizedValues()[0] != 0;
 		boolean bottom = touchBottom.getNormalizedValues()[0] != 0;
@@ -104,26 +104,26 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		boolean right = touchRight.getNormalizedValues()[0] != 0;
 
 		if (top) {
-			armHeadMotor.accelerate(0.1f);
+			armHeadMotor.setInputChannels(new float[] { 0.01f });
 		}
 		if (bottom) {
-			armHeadMotor.accelerate(-0.1f);
+			armHeadMotor.setInputChannels(new float[] { -0.01f });
 		} else {
-			armHeadMotor.accelerate(0.01f);
+			armHeadMotor.setInputChannels(new float[] { 0.001f });
 		}
 		if (left) {
-			armMiddleMotor.accelerate(-0.1f);
-			armBodyMotor.accelerate(-0.1f);
+			armMiddleMotor.setInputChannels(new float[] { -0.01f });
+			armBodyMotor.setInputChannels(new float[] { -0.01f });
 		}
 		if (right) {
 
-			armMiddleMotor.accelerate(+0.1f);
-			armBodyMotor.accelerate(+0.1f);
+			armMiddleMotor.setInputChannels(new float[] { 0.01f });
+			armBodyMotor.setInputChannels(new float[] { 0.01f });
 		}
 
-		armHeadMotor.step();
-		armBodyMotor.step();
-		armMiddleMotor.step();
+		armHeadMotor.startStep();
+		armBodyMotor.startStep();
+		armMiddleMotor.startStep();
 
 		dataStreams[0].write(touchTop.getNormalizedValues());
 		dataStreams[1].write(touchBottom.getNormalizedValues());
@@ -141,5 +141,18 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 		if (++debugCounter % 1000 == 0)
 			println("frameRate: " + frameRate);
+
+		if (dummyMode) {
+			fill(255, 0, 0, (cos(debugCounter / 20.0f) + 1.0f) * 128);
+			text("NXT not found", 2, 12);
+		}
+
+		touchTop.finishStep();
+		touchBottom.finishStep();
+		touchLeft.finishStep();
+		touchRight.finishStep();
+		armHeadMotor.finishStep();
+		armBodyMotor.finishStep();
+		armMiddleMotor.finishStep();
 	}
 }

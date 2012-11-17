@@ -30,13 +30,13 @@ public class NXTTouchSensor implements GraphicalDataProvider {
 	}
 
 	@Override
-	public void step() {
+	public void startStep() {
 		if (touchSensor != null)
 			on = touchSensor.isPressed();
 	}
 
 	@Override
-	public int getChannels() {
+	public int getChannelCount() {
 		return 1;
 	}
 
@@ -52,6 +52,10 @@ public class NXTTouchSensor implements GraphicalDataProvider {
 		g.strokeWeight(5);
 		g.stroke(64, 64, 64);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
+	}
+
+	@Override
+	public void finishStep() {
 	}
 
 }

@@ -5,7 +5,7 @@ import java.awt.Color;
 import lejos.nxt.remote.RemoteMotor;
 import processing.core.PGraphics;
 
-public class NXTMotor implements GraphicalDataProvider {
+public class NXTMotor implements GraphicalDataProvider, InputProvider {
 	private RemoteMotor remoteMotor;
 	private final String name;
 	private final Color colour;
@@ -13,10 +13,11 @@ public class NXTMotor implements GraphicalDataProvider {
 	private final float maxAngle;
 	private final int restAngle;
 	private final float friction;
+	private float inputRate;
 	private float virtualAngle;
 	private float virtualSpeed;
 	private float actualAngle;
-	private final static int maxSpeed = 12;
+	private float maxInputRate = 0.01f;
 	private static String[] subTitles = new String[] { "Angle", "Speed" };
 
 	public NXTMotor(RemoteMotor remoteMotor, String name, Color colour,
@@ -28,7 +29,7 @@ public class NXTMotor implements GraphicalDataProvider {
 		this.maxAngle = maxAngle;
 		this.friction = friction;
 		this.restAngle = (int) (virtualAngle = actualAngle = restAngle);
-		virtualSpeed = 0;
+		inputRate = virtualSpeed = 0;
 	}
 
 	public int getRestAngle() {
@@ -53,7 +54,8 @@ public class NXTMotor implements GraphicalDataProvider {
 	}
 
 	@Override
-	public void step() {
+	public void startStep() {
+		virtualSpeed += inputRate;
 		actualAngle = remoteMotor != null ? remoteMotor.getTachoCount()
 				: restAngle;
 		virtualAngle = actualAngle;
@@ -63,7 +65,7 @@ public class NXTMotor implements GraphicalDataProvider {
 				virtualSpeed = 1;
 			else if (virtualSpeed < -1)
 				virtualSpeed = -1;
-			virtualAngle += virtualSpeed * maxSpeed;
+			virtualAngle += virtualSpeed * (maxAngle - minAngle);
 			if (virtualAngle < minAngle) {
 				virtualSpeed = 0;
 				virtualAngle = minAngle;
@@ -77,14 +79,20 @@ public class NXTMotor implements GraphicalDataProvider {
 			remoteMotor.rotateTo(iVirtualAngle, true);
 	}
 
-	public void accelerate(float rate) {
-		virtualSpeed += rate;
+	@Override
+	public void finishStep() {
+		inputRate = 0;
+	}
+
+	@Override
+	public void setInputChannels(float[] data) {
+		inputRate += data[0];
 	}
 
 	@Override
 	public float[] getNormalizedValues() {
-		return new float[] { (actualAngle - minAngle) / (maxAngle - minAngle),
-				virtualSpeed / -2 + 0.5f };
+		return new float[] { (actualAngle - restAngle) / (maxAngle - minAngle),
+				inputRate / maxInputRate };
 	}
 
 	@Override
@@ -93,7 +101,7 @@ public class NXTMotor implements GraphicalDataProvider {
 	}
 
 	@Override
-	public int getChannels() {// TODO Auto-generated method stub
+	public int getChannelCount() {// TODO Auto-generated method stub
 		return 2;
 	}
 
@@ -110,5 +118,10 @@ public class NXTMotor implements GraphicalDataProvider {
 		float a = (float) ((actualAngle / 360.0f) * (Math.PI * 2));
 		g.line(xc, yc, (float) (xc + Math.sin(a) * radius),
 				(float) (yc + Math.cos(a) * radius));
+	}
+
+	@Override
+	public int getInputChannelCount() {
+		return 1;
 	}
 }

@@ -7,7 +7,9 @@ public interface DataProvider {
 
 	public abstract String[] getChannelNames();
 
-	public abstract int getChannels();
+	public abstract int getChannelCount();
 
-	public abstract void step();
+	public abstract void startStep();
+
+	public abstract void finishStep();
 }

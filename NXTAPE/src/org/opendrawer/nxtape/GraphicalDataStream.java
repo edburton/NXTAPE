@@ -17,8 +17,11 @@ public class GraphicalDataStream extends DataStream implements GraphicalObject {
 	@Override
 	public void drawAt(PGraphics g, float x, float y, float width, float height) {
 		getGraphicalDataProvider().drawAt(g, x, y, height, height);
+		g.stroke(64, 64, 64);
+		g.strokeWeight(1);
+		g.line(x + height, y + height / 2, x + width, y + height / 2);
 		g.noStroke();
-		int nc = dataProvider.getChannels();
+		int nc = dataProvider.getChannelCount();
 		for (int c = nc - 1; c >= 0; c--) {
 			float xx = 0, yy = 0;
 			boolean started = false;
@@ -28,7 +31,15 @@ public class GraphicalDataStream extends DataStream implements GraphicalObject {
 				if (v != Float.NaN) {
 					float x1 = (x + height)
 							+ ((i / (float) dataWidth) * (width - height));
-					float y1 = (y + height) - v * height;
+
+					if ((totalWriteHead - i) % 25 == 0) {
+						g.stroke(64, 64, 64);
+						g.strokeWeight(1);
+						g.line(x1, y, x1, y + height);
+						g.noStroke();
+					}
+
+					float y1 = (y + height / 2) - v * height / 2;
 					if (started) {
 						g.fill(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
 						g.rect(Math.min(x1, xx) - 0.5f,

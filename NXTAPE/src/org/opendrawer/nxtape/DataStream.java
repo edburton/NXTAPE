@@ -4,14 +4,14 @@ public class DataStream {
 	protected final int width;
 	private float[][] data;
 	private int writeHead = 0;
-	private int totalWriteHead = 0;
+	protected int totalWriteHead = 0;
 	protected DataProvider dataProvider;
 
 	public DataStream(int width, DataProvider dataProvider) {
 		super();
 		this.width = width;
 		this.dataProvider = dataProvider;
-		data = new float[width][dataProvider.getChannels()];
+		data = new float[width][dataProvider.getChannelCount()];
 	}
 
 	public void write(float[] values) {
