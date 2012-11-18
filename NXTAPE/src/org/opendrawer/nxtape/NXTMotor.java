@@ -3,9 +3,8 @@ package org.opendrawer.nxtape;
 import java.awt.Color;
 
 import lejos.nxt.remote.RemoteMotor;
-import processing.core.PGraphics;
 
-public class NXTMotor implements GraphicalDataProvider, InputProvider {
+public class NXTMotor implements InputProvider {
 	private RemoteMotor remoteMotor;
 	private final String name;
 	private final Color colour;
@@ -106,22 +105,11 @@ public class NXTMotor implements GraphicalDataProvider, InputProvider {
 	}
 
 	@Override
-	public void drawAt(PGraphics g, float x, float y, float width, float height) {
-		float radius = (Math.min(width, height) / 2) - 2.5f;
-		float xc = x + width / 2;
-		float yc = y + height / 2;
-		g.fill(16);
-		g.strokeWeight(5);
-		g.stroke(64, 64, 64);
-		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
-		g.stroke(255, 255, 0);
-		float a = (float) ((actualAngle / 360.0f) * (Math.PI * 2));
-		g.line(xc, yc, (float) (xc + Math.sin(a) * radius),
-				(float) (yc + Math.cos(a) * radius));
-	}
-
-	@Override
 	public int getInputChannelCount() {
 		return 1;
+	}
+
+	public float getActualAngle() {
+		return actualAngle;
 	}
 }

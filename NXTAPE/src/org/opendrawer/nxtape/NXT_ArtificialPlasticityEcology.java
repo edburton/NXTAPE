@@ -25,14 +25,14 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private int debugCounter = 0;
 	private int dataStreamWidth = 256;
 	private static int dataStreamCount = 7;
-	private GraphicalDataStream[] dataStreams;
+	private DataStreamRenderer[] dataStreamGraphicalRenderers;
 	private boolean dummyMode = false;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		boolean present = true;
+		boolean present = false;
 		if (present)
 			PApplet.main(new String[] { "--present",
 					"org.opendrawer.nxtape.NXT_ArtificialPlasticityEcology" });
@@ -68,15 +68,46 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		armBodyMotor = new NXTMotor(!dummyMode ? Motor.C : null,
 				"arm body motor", new Color(0, 0, 255), -60, 60, 0, 0.9f);
 
-		dataStreams = new GraphicalDataStream[dataStreamCount];
-		dataStreams[0] = new GraphicalDataStream(dataStreamWidth, touchTop);
-		dataStreams[1] = new GraphicalDataStream(dataStreamWidth, touchBottom);
-		dataStreams[2] = new GraphicalDataStream(dataStreamWidth, touchLeft);
-		dataStreams[3] = new GraphicalDataStream(dataStreamWidth, touchRight);
-		dataStreams[4] = new GraphicalDataStream(dataStreamWidth, armHeadMotor);
-		dataStreams[5] = new GraphicalDataStream(dataStreamWidth,
-				armMiddleMotor);
-		dataStreams[6] = new GraphicalDataStream(dataStreamWidth, armBodyMotor);
+		// DataStreamGraphicalObject(DataStream dataStream,
+		// GraphicalObject dataProviderGraphicalObject, float x, float y,
+		// float width, float height)
+
+		float height = 440 / 7;
+
+		// float y = 20 + (n / 7.0f) * (580);
+		// dataStreams[n].drawAt(g, 20, y, 760, height);
+		float y = 20;
+		float spacing = 20;
+
+		dataStreamGraphicalRenderers = new DataStreamRenderer[dataStreamCount];
+
+		dataStreamGraphicalRenderers[0] = new DataStreamRenderer(
+				new DataStream(dataStreamWidth, touchTop),
+				new NXTTouchSensorRenderer(touchTop), 20, y, 760, height);
+		y += height + spacing;
+		dataStreamGraphicalRenderers[1] = new DataStreamRenderer(
+				new DataStream(dataStreamWidth, touchBottom),
+				new NXTTouchSensorRenderer(touchBottom), 20, y, 760, height);
+		y += height + spacing;
+		dataStreamGraphicalRenderers[2] = new DataStreamRenderer(
+				new DataStream(dataStreamWidth, touchLeft),
+				new NXTTouchSensorRenderer(touchLeft), 20, y, 760, height);
+		y += height + spacing;
+		dataStreamGraphicalRenderers[3] = new DataStreamRenderer(
+				new DataStream(dataStreamWidth, touchRight),
+				new NXTTouchSensorRenderer(touchRight), 20, y, 760, height);
+		y += height + spacing;
+		dataStreamGraphicalRenderers[4] = new DataStreamRenderer(
+				new DataStream(dataStreamWidth, armHeadMotor),
+				new NXTMotorRenderer(armHeadMotor), 20, y, 760, height);
+		y += height + spacing;
+		dataStreamGraphicalRenderers[5] = new DataStreamRenderer(
+				new DataStream(dataStreamWidth, armMiddleMotor),
+				new NXTMotorRenderer(armMiddleMotor), 20, y, 760, height);
+		y += height + spacing;
+		dataStreamGraphicalRenderers[6] = new DataStreamRenderer(
+				new DataStream(dataStreamWidth, armBodyMotor),
+				new NXTMotorRenderer(armBodyMotor), 20, y, 760, height);
 	}
 
 	@Override
@@ -125,18 +156,23 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		armBodyMotor.startStep();
 		armMiddleMotor.startStep();
 
-		dataStreams[0].write(touchTop.getNormalizedValues());
-		dataStreams[1].write(touchBottom.getNormalizedValues());
-		dataStreams[2].write(touchRight.getNormalizedValues());
-		dataStreams[3].write(touchLeft.getNormalizedValues());
-		dataStreams[4].write(armHeadMotor.getNormalizedValues());
-		dataStreams[5].write(armMiddleMotor.getNormalizedValues());
-		dataStreams[6].write(armBodyMotor.getNormalizedValues());
+		dataStreamGraphicalRenderers[0].getDataStream().write(
+				touchTop.getNormalizedValues());
+		dataStreamGraphicalRenderers[1].getDataStream().write(
+				touchBottom.getNormalizedValues());
+		dataStreamGraphicalRenderers[2].getDataStream().write(
+				touchRight.getNormalizedValues());
+		dataStreamGraphicalRenderers[3].getDataStream().write(
+				touchLeft.getNormalizedValues());
+		dataStreamGraphicalRenderers[4].getDataStream().write(
+				armHeadMotor.getNormalizedValues());
+		dataStreamGraphicalRenderers[5].getDataStream().write(
+				armMiddleMotor.getNormalizedValues());
+		dataStreamGraphicalRenderers[6].getDataStream().write(
+				armBodyMotor.getNormalizedValues());
 
-		float height = 440 / 7;
-		for (int n = 0; n < 7; n++) {
-			float y = 20 + (n / 7.0f) * (580);
-			dataStreams[n].drawAt(g, 20, y, 760, height);
+		for (int n = 0; n < dataStreamGraphicalRenderers.length; n++) {
+			dataStreamGraphicalRenderers[n].draw(g);
 		}
 
 		if (++debugCounter % 1000 == 0)
