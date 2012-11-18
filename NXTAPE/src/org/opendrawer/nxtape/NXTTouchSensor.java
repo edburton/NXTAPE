@@ -47,4 +47,8 @@ public class NXTTouchSensor implements DataProvider {
 		return on;
 	}
 
+	public void setOn(boolean on) {
+		this.on = on;
+	}
+
 }

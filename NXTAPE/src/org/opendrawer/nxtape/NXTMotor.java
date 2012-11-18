@@ -55,8 +55,8 @@ public class NXTMotor implements InputProvider {
 	@Override
 	public void startStep() {
 		virtualSpeed += inputRate;
-		actualAngle = remoteMotor != null ? remoteMotor.getTachoCount()
-				: restAngle;
+		if (remoteMotor != null)
+			actualAngle = remoteMotor.getTachoCount();
 		virtualAngle = actualAngle;
 		if (virtualSpeed != 0) {
 			virtualSpeed *= friction;
@@ -111,5 +111,9 @@ public class NXTMotor implements InputProvider {
 
 	public float getActualAngle() {
 		return actualAngle;
+	}
+
+	public void setActualAngle(float actualAngle) {
+		this.actualAngle = actualAngle;
 	}
 }

@@ -23,6 +23,10 @@ public abstract class Renderer {
 		this.height = height;
 	}
 
+	public boolean contains(float x1, float y1) {
+		return x1 >= x && y1 >= y && x1 <= x + width && y1 <= y + height;
+	}
+
 	public abstract void draw(PGraphics g);
 
 }

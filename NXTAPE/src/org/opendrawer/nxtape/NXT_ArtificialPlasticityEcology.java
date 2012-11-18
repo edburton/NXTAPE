@@ -28,6 +28,8 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private DataStreamRenderer[] dataStreamGraphicalRenderers;
 	private boolean dummyMode = false;
 
+	InteractiveRenderer mouseFocusedRenderer;
+
 	/**
 	 * @param args
 	 */
@@ -161,9 +163,9 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		dataStreamGraphicalRenderers[1].getDataStream().write(
 				touchBottom.getNormalizedValues());
 		dataStreamGraphicalRenderers[2].getDataStream().write(
-				touchRight.getNormalizedValues());
-		dataStreamGraphicalRenderers[3].getDataStream().write(
 				touchLeft.getNormalizedValues());
+		dataStreamGraphicalRenderers[3].getDataStream().write(
+				touchRight.getNormalizedValues());
 		dataStreamGraphicalRenderers[4].getDataStream().write(
 				armHeadMotor.getNormalizedValues());
 		dataStreamGraphicalRenderers[5].getDataStream().write(
@@ -190,5 +192,31 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		armHeadMotor.finishStep();
 		armBodyMotor.finishStep();
 		armMiddleMotor.finishStep();
+	}
+
+	public void mouseClicked() {
+		for (int n = 0; n < dataStreamGraphicalRenderers.length; n++)
+			if (dataStreamGraphicalRenderers[n].contains(mouseX, mouseY))
+				dataStreamGraphicalRenderers[n].mouseClicked(mouseX, mouseY);
+	}
+
+	public void mousePressed() {
+		for (int n = 0; n < dataStreamGraphicalRenderers.length; n++)
+			if (dataStreamGraphicalRenderers[n].contains(mouseX, mouseY)) {
+				mouseFocusedRenderer = dataStreamGraphicalRenderers[n];
+				mouseFocusedRenderer.mousePressed(mouseX, mouseY);
+			}
+	}
+
+	public void mouseDragged() {
+		if (mouseFocusedRenderer != null)
+			mouseFocusedRenderer.mouseDragged(mouseX, mouseY);
+	}
+
+	public void mouseReleased() {
+		if (mouseFocusedRenderer != null) {
+			mouseFocusedRenderer.mouseReleased(mouseX, mouseY);
+			mouseFocusedRenderer = null;
+		}
 	}
 }

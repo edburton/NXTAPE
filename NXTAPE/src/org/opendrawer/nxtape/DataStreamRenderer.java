@@ -4,17 +4,18 @@ import java.awt.Color;
 
 import processing.core.PGraphics;
 
-public class DataStreamRenderer extends Renderer {
+public class DataStreamRenderer extends InteractiveRenderer {
 	private DataStream dataStream;
-	private Renderer dataProviderRenderer;
+	private InteractiveRenderer dataProviderRenderer;
+	private InteractiveRenderer mouseFocusedRenderer;
 
 	public DataStreamRenderer(DataStream dataStream,
-			Renderer dataProviderGraphicalObject, float x, float y,
+			InteractiveRenderer dataProviderRenderer, float x, float y,
 			float width, float height) {
 		super(x, y, width, height);
 		this.dataStream = dataStream;
-		this.dataProviderRenderer = dataProviderGraphicalObject;
-		dataProviderGraphicalObject.setPosition(x, y, height, height);
+		this.dataProviderRenderer = dataProviderRenderer;
+		dataProviderRenderer.setPosition(x, y, height, height);
 	}
 
 	@Override
@@ -58,5 +59,29 @@ public class DataStreamRenderer extends Renderer {
 
 	public DataStream getDataStream() {
 		return dataStream;
+	}
+
+	public void mouseClicked(int mouseX, int mouseY) {
+		if (dataProviderRenderer.contains(mouseX, mouseY))
+			dataProviderRenderer.mouseClicked(mouseX, mouseY);
+	}
+
+	public void mousePressed(int mouseX, int mouseY) {
+		if (dataProviderRenderer.contains(mouseX, mouseY)) {
+			dataProviderRenderer.mousePressed(mouseX, mouseY);
+			mouseFocusedRenderer = dataProviderRenderer;
+		}
+	}
+
+	public void mouseDragged(int mouseX, int mouseY) {
+		if (mouseFocusedRenderer != null)
+			mouseFocusedRenderer.mouseDragged(mouseX, mouseY);
+	}
+
+	public void mouseReleased(int mouseX, int mouseY) {
+		if (mouseFocusedRenderer != null) {
+			mouseFocusedRenderer.mouseReleased(mouseX, mouseY);
+			mouseFocusedRenderer = null;
+		}
 	}
 }

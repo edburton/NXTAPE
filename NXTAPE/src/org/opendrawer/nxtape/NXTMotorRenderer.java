@@ -2,7 +2,7 @@ package org.opendrawer.nxtape;
 
 import processing.core.PGraphics;
 
-public class NXTMotorRenderer extends Renderer {
+public class NXTMotorRenderer extends InteractiveRenderer {
 	NXTMotor nxtMotor;
 
 	public NXTMotorRenderer(NXTMotor nxtMotor) {
@@ -23,5 +23,35 @@ public class NXTMotorRenderer extends Renderer {
 		float a = (float) ((nxtMotor.getActualAngle() / 360.0f) * (Math.PI * 2));
 		g.line(xc, yc, (float) (xc + Math.sin(a) * radius),
 				(float) (yc + Math.cos(a) * radius));
+	}
+
+	public boolean contains(float x1, float y1) {
+		float radius = (Math.min(width, height) / 2) - 2.5f;
+		float xc = x + width / 2;
+		float yc = y + height / 2;
+		float dx = x1 - xc;
+		float dy = y1 - yc;
+		return Math.sqrt(dx * dx + dy * dy) <= radius;
+	}
+
+	public void mouseClicked(int mouseX, int mouseY) {
+		float xc = x + width / 2;
+		float yc = y + height / 2;
+		float dx = mouseX - xc;
+		float dy = mouseY - yc;
+		float a = (float) (Math.atan2(dx, dy) * (360 / (Math.PI * 2)));
+		nxtMotor.setActualAngle(a);
+	}
+
+	public void mousePressed(int mouseX, int mouseY) {
+		mouseClicked(mouseX, mouseY);
+	}
+
+	public void mouseDragged(int mouseX, int mouseY) {
+		mouseClicked(mouseX, mouseY);
+	}
+
+	public void mouseReleased(int mouseX, int mouseY) {
+		mouseClicked(mouseX, mouseY);
 	}
 }
