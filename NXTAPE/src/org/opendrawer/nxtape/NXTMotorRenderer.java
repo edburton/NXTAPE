@@ -25,6 +25,7 @@ public class NXTMotorRenderer extends InteractiveRenderer {
 				(float) (yc + Math.cos(a) * radius));
 	}
 
+	@Override
 	public boolean contains(float x1, float y1) {
 		float radius = (Math.min(width, height) / 2) - 2.5f;
 		float xc = x + width / 2;
@@ -34,23 +35,27 @@ public class NXTMotorRenderer extends InteractiveRenderer {
 		return Math.sqrt(dx * dx + dy * dy) <= radius;
 	}
 
+	@Override
 	public void mouseClicked(int mouseX, int mouseY) {
 		float xc = x + width / 2;
 		float yc = y + height / 2;
 		float dx = mouseX - xc;
 		float dy = mouseY - yc;
 		float a = (float) (Math.atan2(dx, dy) * (360 / (Math.PI * 2)));
-		nxtMotor.setActualAngle(a);
+		nxtMotor.setActualAngle(Math.round(a));
 	}
 
+	@Override
 	public void mousePressed(int mouseX, int mouseY) {
 		mouseClicked(mouseX, mouseY);
 	}
 
+	@Override
 	public void mouseDragged(int mouseX, int mouseY) {
 		mouseClicked(mouseX, mouseY);
 	}
 
+	@Override
 	public void mouseReleased(int mouseX, int mouseY) {
 		mouseClicked(mouseX, mouseY);
 	}

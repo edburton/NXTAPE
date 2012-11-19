@@ -1,7 +1,5 @@
 package org.opendrawer.nxtape;
 
-import java.awt.Color;
-
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
@@ -64,11 +62,11 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				SensorPort.S4) : null, "Touch Right");
 
 		armHeadMotor = new NXTMotor(!dummyMode ? Motor.A : null,
-				"arm head motor", new Color(255, 0, 0), -180, 0, 0, 0.9f);
+				"arm head motor", -180, 0, 0, 0.9f);
 		armMiddleMotor = new NXTMotor(!dummyMode ? Motor.B : null,
-				"arm midle motor", new Color(0, 255, 0), -60, 60, 0, 0.9f);
+				"arm midle motor", -60, 60, 0, 0.9f);
 		armBodyMotor = new NXTMotor(!dummyMode ? Motor.C : null,
-				"arm body motor", new Color(0, 0, 255), -60, 60, 0, 0.9f);
+				"arm body motor", -60, 60, 0, 0.9f);
 
 		// DataStreamGraphicalObject(DataStream dataStream,
 		// GraphicalObject dataProviderGraphicalObject, float x, float y,
@@ -142,7 +140,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		if (bottom) {
 			armHeadMotor.setInputChannels(new float[] { -0.01f });
 		} else {
-			armHeadMotor.setInputChannels(new float[] { 0.001f });
+			armHeadMotor.setInputChannels(new float[] { 1 / 360.0f });
 		}
 		if (left) {
 			armMiddleMotor.setInputChannels(new float[] { -0.01f });
@@ -194,12 +192,14 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		armMiddleMotor.finishStep();
 	}
 
+	@Override
 	public void mouseClicked() {
 		for (int n = 0; n < dataStreamGraphicalRenderers.length; n++)
 			if (dataStreamGraphicalRenderers[n].contains(mouseX, mouseY))
 				dataStreamGraphicalRenderers[n].mouseClicked(mouseX, mouseY);
 	}
 
+	@Override
 	public void mousePressed() {
 		for (int n = 0; n < dataStreamGraphicalRenderers.length; n++)
 			if (dataStreamGraphicalRenderers[n].contains(mouseX, mouseY)) {
@@ -208,11 +208,13 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 			}
 	}
 
+	@Override
 	public void mouseDragged() {
 		if (mouseFocusedRenderer != null)
 			mouseFocusedRenderer.mouseDragged(mouseX, mouseY);
 	}
 
+	@Override
 	public void mouseReleased() {
 		if (mouseFocusedRenderer != null) {
 			mouseFocusedRenderer.mouseReleased(mouseX, mouseY);

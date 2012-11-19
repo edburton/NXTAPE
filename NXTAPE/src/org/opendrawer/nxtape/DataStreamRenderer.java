@@ -61,25 +61,32 @@ public class DataStreamRenderer extends InteractiveRenderer {
 		return dataStream;
 	}
 
+	@Override
 	public void mouseClicked(int mouseX, int mouseY) {
 		if (dataProviderRenderer.contains(mouseX, mouseY))
 			dataProviderRenderer.mouseClicked(mouseX, mouseY);
 	}
 
+	@Override
 	public void mousePressed(int mouseX, int mouseY) {
 		if (dataProviderRenderer.contains(mouseX, mouseY)) {
-			dataProviderRenderer.mousePressed(mouseX, mouseY);
 			mouseFocusedRenderer = dataProviderRenderer;
+			dataStream.getDataProvider().setInhihited(true);
+			mouseFocusedRenderer.mousePressed(mouseX, mouseY);
+
 		}
 	}
 
+	@Override
 	public void mouseDragged(int mouseX, int mouseY) {
 		if (mouseFocusedRenderer != null)
 			mouseFocusedRenderer.mouseDragged(mouseX, mouseY);
 	}
 
+	@Override
 	public void mouseReleased(int mouseX, int mouseY) {
 		if (mouseFocusedRenderer != null) {
+			dataStream.getDataProvider().setInhihited(false);
 			mouseFocusedRenderer.mouseReleased(mouseX, mouseY);
 			mouseFocusedRenderer = null;
 		}

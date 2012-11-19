@@ -7,6 +7,7 @@ public class NXTTouchSensor implements DataProvider {
 	private final String name;
 	private static String[] streamName = new String[] { "On/Off" };
 	private boolean on = false;
+	private boolean inhibited = false;
 
 	public NXTTouchSensor(TouchSensor touchSensor, String name) {
 		this.touchSensor = touchSensor;
@@ -30,7 +31,7 @@ public class NXTTouchSensor implements DataProvider {
 
 	@Override
 	public void startStep() {
-		if (touchSensor != null)
+		if (touchSensor != null && !inhibited)
 			on = touchSensor.isPressed();
 	}
 
@@ -51,4 +52,8 @@ public class NXTTouchSensor implements DataProvider {
 		this.on = on;
 	}
 
+	@Override
+	public void setInhihited(boolean inhibited) {
+		this.inhibited = inhibited;
+	}
 }

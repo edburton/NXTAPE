@@ -12,4 +12,6 @@ public interface DataProvider {
 	public abstract void startStep();
 
 	public abstract void finishStep();
+
+	public abstract void setInhihited(boolean inhibited);
 }

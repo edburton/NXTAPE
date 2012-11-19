@@ -24,6 +24,7 @@ public class NXTTouchSensorRenderer extends InteractiveRenderer {
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 	}
 
+	@Override
 	public boolean contains(float x1, float y1) {
 		float radius = (Math.min(width, height) / 2) - 2.5f;
 		float xc = x + width / 2;
@@ -33,6 +34,7 @@ public class NXTTouchSensorRenderer extends InteractiveRenderer {
 		return Math.sqrt(dx * dx + dy * dy) <= radius;
 	}
 
+	@Override
 	public void mouseClicked(int mouseX, int mouseY) {
 		nxtTouchSensor.setOn(!nxtTouchSensor.isOn());
 	}

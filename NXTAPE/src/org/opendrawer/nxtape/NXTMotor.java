@@ -1,33 +1,32 @@
 package org.opendrawer.nxtape;
 
-import java.awt.Color;
-
 import lejos.nxt.remote.RemoteMotor;
 
 public class NXTMotor implements InputProvider {
 	private RemoteMotor remoteMotor;
 	private final String name;
-	private final Color colour;
-	private final float minAngle;
-	private final float maxAngle;
+	private final int minAngle;
+	private final int maxAngle;
 	private final int restAngle;
 	private final float friction;
 	private float inputRate;
 	private float virtualAngle;
 	private float virtualSpeed;
-	private float actualAngle;
+	private float targetAngle;
+	private int actualAngle;
 	private float maxInputRate = 0.01f;
 	private static String[] subTitles = new String[] { "Angle", "Speed" };
+	private boolean inhibited = false;
 
-	public NXTMotor(RemoteMotor remoteMotor, String name, Color colour,
-			int minAngle, int maxAngle, int restAngle, float friction) {
+	public NXTMotor(RemoteMotor remoteMotor, String name, int minAngle,
+			int maxAngle, int restAngle, float friction) {
 		this.remoteMotor = remoteMotor;
 		this.name = name;
-		this.colour = colour;
 		this.minAngle = minAngle;
 		this.maxAngle = maxAngle;
 		this.friction = friction;
 		this.restAngle = (int) (virtualAngle = actualAngle = restAngle);
+		targetAngle = this.restAngle;
 		inputRate = virtualSpeed = 0;
 	}
 
@@ -40,10 +39,6 @@ public class NXTMotor implements InputProvider {
 		return name;
 	}
 
-	public Color getColour() {
-		return colour;
-	}
-
 	public float getMinAngle() {
 		return minAngle;
 	}
@@ -54,9 +49,22 @@ public class NXTMotor implements InputProvider {
 
 	@Override
 	public void startStep() {
-		virtualSpeed += inputRate;
+		if (inhibited) {
+			virtualSpeed = 0;
+			if (remoteMotor != null) {
+				int angle = remoteMotor.getTachoCount();
+				virtualAngle = angle;
+				int iActualAngle = Math.round(actualAngle);
+				if (angle != iActualAngle && iActualAngle != targetAngle) {
+					remoteMotor.rotateTo(iActualAngle, true);
+					targetAngle = iActualAngle;
+				}
+			}
+			return;
+		}
 		if (remoteMotor != null)
 			actualAngle = remoteMotor.getTachoCount();
+		virtualSpeed += inputRate;
 		virtualAngle = actualAngle;
 		if (virtualSpeed != 0) {
 			virtualSpeed *= friction;
@@ -73,9 +81,12 @@ public class NXTMotor implements InputProvider {
 				virtualAngle = maxAngle;
 			}
 		}
-		int iVirtualAngle = (int) virtualAngle;
-		if (remoteMotor != null && iVirtualAngle != actualAngle)
+		int iVirtualAngle = Math.round(virtualAngle);
+		if (remoteMotor != null && iVirtualAngle != actualAngle
+				&& iVirtualAngle != targetAngle) {
 			remoteMotor.rotateTo(iVirtualAngle, true);
+			targetAngle = iVirtualAngle;
+		}
 	}
 
 	@Override
@@ -90,7 +101,8 @@ public class NXTMotor implements InputProvider {
 
 	@Override
 	public float[] getNormalizedValues() {
-		return new float[] { (actualAngle - restAngle) / (maxAngle - minAngle),
+		return new float[] {
+				((float) actualAngle - restAngle) / (maxAngle - minAngle),
 				inputRate / maxInputRate };
 	}
 
@@ -113,7 +125,12 @@ public class NXTMotor implements InputProvider {
 		return actualAngle;
 	}
 
-	public void setActualAngle(float actualAngle) {
+	public void setActualAngle(int actualAngle) {
 		this.actualAngle = actualAngle;
+	}
+
+	@Override
+	public void setInhihited(boolean inhibited) {
+		this.inhibited = inhibited;
 	}
 }
