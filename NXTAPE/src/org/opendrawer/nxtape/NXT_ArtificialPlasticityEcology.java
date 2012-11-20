@@ -23,7 +23,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private NXTMotor armMiddleMotor;
 	private NXTMotor armBodyMotor;
 	private int debugCounter = 0;
-	private int dataStreamWidth = 128;
+	private int dataStreamWidth = 256;
 	private static int dataStreamCount = 7;
 	private DataStreamRenderer[] dataStreamGraphicalRenderers;
 	private float[][] sensoryData;
@@ -119,10 +119,12 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	@Override
 	public void setup() {
 		if (presentationMode)
-			size(displayWidth, displayHeight);
+			size(displayWidth, displayHeight, OPENGL);
 		else
-			size(displayWidth / 2, displayHeight / 2);
-		lineWidth = getHeight() / 256.0f;
+			size(displayWidth / 2, displayHeight / 2, OPENGL);
+		frameRate(200);
+		lineWidth = getHeight() / 128.0f;
+		smooth();
 		frameRate(50);
 		ellipseMode(CORNERS);
 		rectMode(CORNERS);
@@ -185,7 +187,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 			dataStreamGraphicalRenderers[n].draw(g);
 		}
 
-		if (++debugCounter % 1000 == 0)
+		if (++debugCounter % 100 == 0)
 			println("frameRate: " + frameRate);
 
 		if (dummyMode) {

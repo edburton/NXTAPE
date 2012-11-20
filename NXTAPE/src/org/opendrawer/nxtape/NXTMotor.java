@@ -90,7 +90,6 @@ public class NXTMotor implements InputProvider {
 				virtualAngle = maxAngle;
 			}
 		}
-		int iVirtualAngle = Math.round(virtualAngle);
 		if (remoteMotor != null) {
 			int speed = Math.round(topSpeed
 					* (Math.abs(virtualSpeed) / maxRate));
@@ -101,6 +100,7 @@ public class NXTMotor implements InputProvider {
 				currentSpeed = speed;
 			}
 		}
+		int iVirtualAngle = Math.round(virtualAngle);
 		if (remoteMotor != null && iVirtualAngle != actualAngle
 				&& iVirtualAngle != targetAngle) {
 			remoteMotor.rotateTo(iVirtualAngle, true);

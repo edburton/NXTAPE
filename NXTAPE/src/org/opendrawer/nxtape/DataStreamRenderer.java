@@ -24,12 +24,12 @@ public class DataStreamRenderer extends InteractiveRenderer {
 		g.stroke(64, 64, 64);
 		g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
 		g.line(x + height, y + height / 2, x + width, y + height / 2);
-		// g.noStroke();
 		int nc = dataStream.getDataProvider().getChannelCount();
 		for (int c = nc - 1; c >= 0; c--) {
 			float xx = 0, yy = 0;
 			boolean started = false;
 			int dataWidth = dataStream.getDataWidth();
+			g.stroke(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
 			for (int i = 0; i < dataWidth; i++) {
 				float v = dataStream.read(i, c);
 				if (v != Float.NaN) {
@@ -42,7 +42,7 @@ public class DataStreamRenderer extends InteractiveRenderer {
 						// Math.min(y1, yy) - 2.5f,
 						// Math.max(x1, xx) + 0.0f,
 						// Math.max(y1, yy) + 2.5f);
-						g.stroke(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
+
 						g.line(x1, y1, xx, yy);
 					}
 					started = true;
