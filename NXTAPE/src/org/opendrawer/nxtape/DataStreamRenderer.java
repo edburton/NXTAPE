@@ -22,9 +22,9 @@ public class DataStreamRenderer extends InteractiveRenderer {
 	public void draw(PGraphics g) {
 		dataProviderRenderer.draw(g);
 		g.stroke(64, 64, 64);
-		g.strokeWeight(1);
+		g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
 		g.line(x + height, y + height / 2, x + width, y + height / 2);
-		g.noStroke();
+		// g.noStroke();
 		int nc = dataStream.getDataProvider().getChannelCount();
 		for (int c = nc - 1; c >= 0; c--) {
 			float xx = 0, yy = 0;
@@ -37,11 +37,13 @@ public class DataStreamRenderer extends InteractiveRenderer {
 							+ ((i / (float) dataWidth) * (width - height));
 					float y1 = (y + height / 2) - v * height / 2;
 					if (started) {
-						g.fill(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
-						g.rect(Math.min(x1, xx) - 0.0f,
-								Math.min(y1, yy) - 2.5f,
-								Math.max(x1, xx) + 0.0f,
-								Math.max(y1, yy) + 2.5f);
+						// g.fill(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
+						// g.rect(Math.min(x1, xx) - 0.0f,
+						// Math.min(y1, yy) - 2.5f,
+						// Math.max(x1, xx) + 0.0f,
+						// Math.max(y1, yy) + 2.5f);
+						g.stroke(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
+						g.line(x1, y1, xx, yy);
 					}
 					started = true;
 					xx = x1;

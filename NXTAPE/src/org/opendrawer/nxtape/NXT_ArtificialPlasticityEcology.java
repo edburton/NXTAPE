@@ -11,6 +11,8 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcology extends PApplet {
+	private static final boolean presentationMode = false;
+
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
 	private NXTTouchSensor touchTop;
@@ -21,19 +23,19 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private NXTMotor armMiddleMotor;
 	private NXTMotor armBodyMotor;
 	private int debugCounter = 0;
-	private int dataStreamWidth = 256;
+	private int dataStreamWidth = 128;
 	private static int dataStreamCount = 7;
 	private DataStreamRenderer[] dataStreamGraphicalRenderers;
+	private float[][] sensoryData;
 	private boolean dummyMode = false;
-
-	InteractiveRenderer mouseFocusedRenderer;
+	public static float lineWidth;
+	private InteractiveRenderer mouseFocusedRenderer;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		boolean present = true;
-		if (present)
+		if (presentationMode)
 			PApplet.main(new String[] { "--present",
 					"org.opendrawer.nxtape.NXT_ArtificialPlasticityEcology" });
 		else
@@ -62,63 +64,71 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				SensorPort.S4) : null, "Touch Right");
 
 		armHeadMotor = new NXTMotor(!dummyMode ? Motor.A : null,
-				"arm head motor", -180, 0, 0, 0.9f);
+				"arm head motor", -180, 0, 0, 0.95f);
 		armMiddleMotor = new NXTMotor(!dummyMode ? Motor.B : null,
-				"arm midle motor", -60, 60, 0, 0.9f);
+				"arm midle motor", -60, 60, 0, 0.95f);
 		armBodyMotor = new NXTMotor(!dummyMode ? Motor.C : null,
-				"arm body motor", -60, 60, 0, 0.9f);
+				"arm body motor", -60, 60, 0, 0.95f);
 
-		// DataStreamGraphicalObject(DataStream dataStream,
-		// GraphicalObject dataProviderGraphicalObject, float x, float y,
-		// float width, float height)
-
-		float height = 440 / 7;
-
-		// float y = 20 + (n / 7.0f) * (580);
-		// dataStreams[n].drawAt(g, 20, y, 760, height);
-		float y = 20;
-		float spacing = 20;
+		float screenWidth = getWidth();
+		float screenHeight = getHeight();
+		float edgeMargin = screenWidth / 50;
+		float margin = screenWidth / 100;
+		float height = ((screenHeight - edgeMargin * 2) / 7) - margin;
+		float y = edgeMargin;
+		float width = screenWidth - edgeMargin * 2;
 
 		dataStreamGraphicalRenderers = new DataStreamRenderer[dataStreamCount];
 
 		dataStreamGraphicalRenderers[0] = new DataStreamRenderer(
 				new DataStream(dataStreamWidth, touchTop),
-				new NXTTouchSensorRenderer(touchTop), 20, y, 760, height);
-		y += height + spacing;
+				new NXTTouchSensorRenderer(touchTop), edgeMargin, y, width,
+				height);
+		y += height + margin;
 		dataStreamGraphicalRenderers[1] = new DataStreamRenderer(
 				new DataStream(dataStreamWidth, touchBottom),
-				new NXTTouchSensorRenderer(touchBottom), 20, y, 760, height);
-		y += height + spacing;
+				new NXTTouchSensorRenderer(touchBottom), edgeMargin, y, width,
+				height);
+		y += height + margin;
 		dataStreamGraphicalRenderers[2] = new DataStreamRenderer(
 				new DataStream(dataStreamWidth, touchLeft),
-				new NXTTouchSensorRenderer(touchLeft), 20, y, 760, height);
-		y += height + spacing;
+				new NXTTouchSensorRenderer(touchLeft), edgeMargin, y, width,
+				height);
+		y += height + margin;
 		dataStreamGraphicalRenderers[3] = new DataStreamRenderer(
 				new DataStream(dataStreamWidth, touchRight),
-				new NXTTouchSensorRenderer(touchRight), 20, y, 760, height);
-		y += height + spacing;
+				new NXTTouchSensorRenderer(touchRight), edgeMargin, y, width,
+				height);
+		y += height + margin;
 		dataStreamGraphicalRenderers[4] = new DataStreamRenderer(
 				new DataStream(dataStreamWidth, armHeadMotor),
-				new NXTMotorRenderer(armHeadMotor), 20, y, 760, height);
-		y += height + spacing;
+				new NXTMotorRenderer(armHeadMotor), edgeMargin, y, width,
+				height);
+		y += height + margin;
 		dataStreamGraphicalRenderers[5] = new DataStreamRenderer(
 				new DataStream(dataStreamWidth, armMiddleMotor),
-				new NXTMotorRenderer(armMiddleMotor), 20, y, 760, height);
-		y += height + spacing;
+				new NXTMotorRenderer(armMiddleMotor), edgeMargin, y, width,
+				height);
+		y += height + margin;
 		dataStreamGraphicalRenderers[6] = new DataStreamRenderer(
 				new DataStream(dataStreamWidth, armBodyMotor),
-				new NXTMotorRenderer(armBodyMotor), 20, y, 760, height);
+				new NXTMotorRenderer(armBodyMotor), edgeMargin, y, width,
+				height);
 	}
 
 	@Override
 	public void setup() {
-		setupNXT();
-		size(800, 600);
+		if (presentationMode)
+			size(displayWidth, displayHeight);
+		else
+			size(displayWidth / 2, displayHeight / 2);
+		lineWidth = getHeight() / 256.0f;
 		frameRate(50);
 		ellipseMode(CORNERS);
 		rectMode(CORNERS);
 		background(0);
 		frame.setBackground(new java.awt.Color(0, 0, 0));
+		setupNXT();
 	}
 
 	@Override
@@ -135,21 +145,21 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		boolean right = touchRight.getNormalizedValues()[0] != 0;
 
 		if (top) {
-			armHeadMotor.setInputChannels(new float[] { 0.01f });
+			armHeadMotor.setInputChannels(new float[] { 1.0f });
 		}
 		if (bottom) {
-			armHeadMotor.setInputChannels(new float[] { -0.01f });
+			armHeadMotor.setInputChannels(new float[] { -1.0f });
 		} else {
-			armHeadMotor.setInputChannels(new float[] { 1 / 360.0f });
+			armHeadMotor.setInputChannels(new float[] { 0.1f });
 		}
 		if (left) {
-			armMiddleMotor.setInputChannels(new float[] { -0.01f });
-			armBodyMotor.setInputChannels(new float[] { -0.01f });
+			armMiddleMotor.setInputChannels(new float[] { -1.0f });
+			armBodyMotor.setInputChannels(new float[] { -1.0f });
 		}
 		if (right) {
 
-			armMiddleMotor.setInputChannels(new float[] { 0.01f });
-			armBodyMotor.setInputChannels(new float[] { 0.01f });
+			armMiddleMotor.setInputChannels(new float[] { 1.0f });
+			armBodyMotor.setInputChannels(new float[] { 1.0f });
 		}
 
 		armHeadMotor.startStep();

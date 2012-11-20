@@ -12,21 +12,23 @@ public class NXTTouchSensorRenderer extends InteractiveRenderer {
 
 	@Override
 	public void draw(PGraphics g) {
-		float radius = (Math.min(width, height) / 2) - 2.5f;
+		float radius = (Math.min(width, height) / 2)
+				- NXT_ArtificialPlasticityEcology.lineWidth / 2;
 		float xc = x + width / 2;
 		float yc = y + height / 2;
 		if (nxtTouchSensor.isOn())
 			g.fill(255, 255, 0);
 		else
 			g.fill(16);
-		g.strokeWeight(5);
+		g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
 		g.stroke(64, 64, 64);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 	}
 
 	@Override
 	public boolean contains(float x1, float y1) {
-		float radius = (Math.min(width, height) / 2) - 2.5f;
+		float radius = (Math.min(width, height) / 2)
+				- NXT_ArtificialPlasticityEcology.lineWidth / 2;
 		float xc = x + width / 2;
 		float yc = y + height / 2;
 		float dx = x1 - xc;
