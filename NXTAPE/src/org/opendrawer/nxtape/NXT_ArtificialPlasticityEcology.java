@@ -32,7 +32,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		boolean present = false;
+		boolean present = true;
 		if (present)
 			PApplet.main(new String[] { "--present",
 					"org.opendrawer.nxtape.NXT_ArtificialPlasticityEcology" });
