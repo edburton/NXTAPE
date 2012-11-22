@@ -1,5 +1,7 @@
 package org.opendrawer.nxtape;
 
+import java.awt.Color;
+
 import processing.core.PGraphics;
 
 public class NXTAccelerometerRenderer extends InteractiveRenderer {
@@ -16,11 +18,21 @@ public class NXTAccelerometerRenderer extends InteractiveRenderer {
 				- NXT_ArtificialPlasticityEcology.lineWidth / 2;
 		float xc = x + width / 2;
 		float yc = y + height / 2;
-
 		g.fill(16);
 		g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
 		g.stroke(64, 64, 64);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
+		float[] values = nxtAccelerometer.getNormalizedValues();
+		for (int i = 0; i < 3; i++) {
+			g.stroke(Color.HSBtoRGB(i / 3.0f, 1.0f, 1.0f));
+			float a = ((float) Math.PI * (2 / 3.0f)) * i;
+			float rdx = (float) (Math.sin(a) * radius) * values[i];
+			float rdy = (float) (Math.cos(a) * radius) * values[i];
+			g.line(xc, yc, xc + rdx, yc + rdy);
+			float r = NXT_ArtificialPlasticityEcology.lineWidth / 2;
+			g.ellipse(xc + (rdx - r), yc + (rdy - r), xc + (rdx + r), yc
+					+ (rdy + r));
+		}
 	}
 
 	@Override

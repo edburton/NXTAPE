@@ -5,21 +5,20 @@ import lejos.nxt.addon.AccelHTSensor;
 public class NXTAccelerometer implements DataProvider {
 	private final AccelHTSensor accelerometer;
 	private final String name;
-	private static String[] streamName = new String[] { "X", "Y", "Z" };
+	private static String[] streamNames = new String[] { "X", "Y", "Z" };
 	private boolean inhibited = false;
-	private int[] values;
-	private float maxReasonableValue = 300;
+	private float values[];
+	private float maxExpectedValue = 256; // Arbitrary
 
 	public NXTAccelerometer(AccelHTSensor accelerometer, String name) {
 		this.accelerometer = accelerometer;
 		this.name = name;
-		values=new int[3];
+		values = new float[3];
 	}
 
 	@Override
 	public float[] getNormalizedValues() {
-		return new float[] { values[0] / maxReasonableValue,
-				values[1] / maxReasonableValue, values[2] / maxReasonableValue };
+		return values;
 	}
 
 	@Override
@@ -29,13 +28,17 @@ public class NXTAccelerometer implements DataProvider {
 
 	@Override
 	public String[] getChannelNames() {
-		return streamName;
+		return streamNames;
 	}
 
 	@Override
 	public void startStep() {
-		if (accelerometer != null && !inhibited)
-			accelerometer.getAllAccel(values, 0);
+		if (accelerometer != null && !inhibited) {
+			int[] intValues = new int[3];
+			accelerometer.getAllAccel(intValues, 0);
+			for (int i = 0; i < 3; i++)
+				values[i] = intValues[i] / maxExpectedValue;
+		}
 	}
 
 	@Override

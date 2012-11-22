@@ -6,12 +6,15 @@ public class DataStream {
 	private int writeHead = 0;
 	protected int totalWriteHead = 0;
 	protected DataProvider dataProvider;
+	protected int dataProviderChannel;
 
-	public DataStream(int width, DataProvider dataProvider) {
+	public DataStream(DataProvider dataProvider, int dataProviderChannel,
+			int dataWidth) {
 		super();
-		this.dataWidth = width;
+		this.dataWidth = dataWidth;
 		this.dataProvider = dataProvider;
-		data = new float[width];
+		this.dataProviderChannel = dataProviderChannel;
+		data = new float[dataWidth];
 	}
 
 	public void write(float value) {

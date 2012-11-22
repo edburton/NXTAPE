@@ -25,10 +25,9 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private NXTMotor armMiddleMotor;
 	private NXTMotor armBodyMotor;
 	private int debugCounter = 0;
-	private static final int dataStreamWidth = 256;
+	private int dataStreamWidth = 256;
 	private static int dataStreamCount = 7;
-	private DataStreamsRenderer[] dataStreamGraphicalRenderers;
-	private float[][] sensoryData;
+	private DataStreamBundleRenderer[] dataStreamBundleRenderers;
 	private boolean dummyMode = false;
 	public static float lineWidth;
 	private InteractiveRenderer mouseFocusedRenderer;
@@ -82,44 +81,45 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		float y = edgeMargin;
 		float width = screenWidth - edgeMargin * 2;
 
-		dataStreamGraphicalRenderers = new DataStreamsRenderer[dataStreamCount];
+		dataStreamBundleRenderers = new DataStreamBundleRenderer[dataStreamCount];
 
-		dataStreamGraphicalRenderers[0] = new DataStreamsRenderer(accelerometer,
-				dataStreamWidth, new NXTAccelerometerRenderer(accelerometer),
-				edgeMargin, y, width, height);
+		dataStreamBundleRenderers[0] = new DataStreamBundleRenderer(
+				new DataStreamBundle(accelerometer, dataStreamWidth),
+				new NXTAccelerometerRenderer(accelerometer), edgeMargin, y,
+				width, height);
 		y += height + margin;
-		// dataStreamGraphicalRenderers[0] = new DataStreamRenderer(
-		// new DataStream(dataStreamWidth, touchTop),
+		// dataStreamGraphicalRenderers[0] = new DataStreamBundleRenderer(
+		// new DataStreamBundle(touchTop, dataStreamWidth),
 		// new NXTTouchSensorRenderer(touchTop), edgeMargin, y, width,
 		// height);
 		// y += height + margin;
-		dataStreamGraphicalRenderers[1] = new DataStreamsRenderer(
-				new DataStream(dataStreamWidth, touchBottom),
+		dataStreamBundleRenderers[1] = new DataStreamBundleRenderer(
+				new DataStreamBundle(touchBottom, dataStreamWidth),
 				new NXTTouchSensorRenderer(touchBottom), edgeMargin, y, width,
 				height);
 		y += height + margin;
-		dataStreamGraphicalRenderers[2] = new DataStreamsRenderer(
-				new DataStream(dataStreamWidth, touchLeft),
+		dataStreamBundleRenderers[2] = new DataStreamBundleRenderer(
+				new DataStreamBundle(touchLeft, dataStreamWidth),
 				new NXTTouchSensorRenderer(touchLeft), edgeMargin, y, width,
 				height);
 		y += height + margin;
-		dataStreamGraphicalRenderers[3] = new DataStreamsRenderer(
-				new DataStream(dataStreamWidth, touchRight),
+		dataStreamBundleRenderers[3] = new DataStreamBundleRenderer(
+				new DataStreamBundle(touchRight, dataStreamWidth),
 				new NXTTouchSensorRenderer(touchRight), edgeMargin, y, width,
 				height);
 		y += height + margin;
-		dataStreamGraphicalRenderers[4] = new DataStreamsRenderer(
-				new DataStream(dataStreamWidth, armHeadMotor),
+		dataStreamBundleRenderers[4] = new DataStreamBundleRenderer(
+				new DataStreamBundle(armHeadMotor, dataStreamWidth),
 				new NXTMotorRenderer(armHeadMotor), edgeMargin, y, width,
 				height);
 		y += height + margin;
-		dataStreamGraphicalRenderers[5] = new DataStreamsRenderer(
-				new DataStream(dataStreamWidth, armMiddleMotor),
+		dataStreamBundleRenderers[5] = new DataStreamBundleRenderer(
+				new DataStreamBundle(armMiddleMotor, dataStreamWidth),
 				new NXTMotorRenderer(armMiddleMotor), edgeMargin, y, width,
 				height);
 		y += height + margin;
-		dataStreamGraphicalRenderers[6] = new DataStreamsRenderer(
-				new DataStream(dataStreamWidth, armBodyMotor),
+		dataStreamBundleRenderers[6] = new DataStreamBundleRenderer(
+				new DataStreamBundle(armBodyMotor, dataStreamWidth),
 				new NXTMotorRenderer(armBodyMotor), edgeMargin, y, width,
 				height);
 	}
@@ -177,25 +177,25 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		armBodyMotor.startStep();
 		armMiddleMotor.startStep();
 
-		dataStreamGraphicalRenderers[0].getDataStreams().write(
+		dataStreamBundleRenderers[0].getDataStreamBundle().write(
 				accelerometer.getNormalizedValues());
-		// dataStreamGraphicalRenderers[0].getDataStream().write(
+		// dataStreamGraphicalRenderers[0].getDataStreamBundle().write(
 		// touchTop.getNormalizedValues());
-		dataStreamGraphicalRenderers[1].getDataStreams().write(
+		dataStreamBundleRenderers[1].getDataStreamBundle().write(
 				touchBottom.getNormalizedValues());
-		dataStreamGraphicalRenderers[2].getDataStreams().write(
+		dataStreamBundleRenderers[2].getDataStreamBundle().write(
 				touchLeft.getNormalizedValues());
-		dataStreamGraphicalRenderers[3].getDataStreams().write(
+		dataStreamBundleRenderers[3].getDataStreamBundle().write(
 				touchRight.getNormalizedValues());
-		dataStreamGraphicalRenderers[4].getDataStreams().write(
+		dataStreamBundleRenderers[4].getDataStreamBundle().write(
 				armHeadMotor.getNormalizedValues());
-		dataStreamGraphicalRenderers[5].getDataStreams().write(
+		dataStreamBundleRenderers[5].getDataStreamBundle().write(
 				armMiddleMotor.getNormalizedValues());
-		dataStreamGraphicalRenderers[6].getDataStreams().write(
+		dataStreamBundleRenderers[6].getDataStreamBundle().write(
 				armBodyMotor.getNormalizedValues());
 
-		for (int n = 0; n < dataStreamGraphicalRenderers.length; n++) {
-			dataStreamGraphicalRenderers[n].draw(g);
+		for (int n = 0; n < dataStreamBundleRenderers.length; n++) {
+			dataStreamBundleRenderers[n].draw(g);
 		}
 
 		if (++debugCounter % 100 == 0)
@@ -218,16 +218,16 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 	@Override
 	public void mouseClicked() {
-		for (int n = 0; n < dataStreamGraphicalRenderers.length; n++)
-			if (dataStreamGraphicalRenderers[n].contains(mouseX, mouseY))
-				dataStreamGraphicalRenderers[n].mouseClicked(mouseX, mouseY);
+		for (int n = 0; n < dataStreamBundleRenderers.length; n++)
+			if (dataStreamBundleRenderers[n].contains(mouseX, mouseY))
+				dataStreamBundleRenderers[n].mouseClicked(mouseX, mouseY);
 	}
 
 	@Override
 	public void mousePressed() {
-		for (int n = 0; n < dataStreamGraphicalRenderers.length; n++)
-			if (dataStreamGraphicalRenderers[n].contains(mouseX, mouseY)) {
-				mouseFocusedRenderer = dataStreamGraphicalRenderers[n];
+		for (int n = 0; n < dataStreamBundleRenderers.length; n++)
+			if (dataStreamBundleRenderers[n].contains(mouseX, mouseY)) {
+				mouseFocusedRenderer = dataStreamBundleRenderers[n];
 				mouseFocusedRenderer.mousePressed(mouseX, mouseY);
 			}
 	}
