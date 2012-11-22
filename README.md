@@ -1,4 +1,4 @@
 NXTAPE
 ======
 
-Artificial Plasticity Ecology, Lego NXT prototype
+Artificial Plasticity Ecology, Lego NXT + Lejos + Processing prototype
