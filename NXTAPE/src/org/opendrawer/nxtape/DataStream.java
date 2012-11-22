@@ -2,7 +2,7 @@ package org.opendrawer.nxtape;
 
 public class DataStream {
 	protected final int dataWidth;
-	private float[][] data;
+	private float[] data;
 	private int writeHead = 0;
 	protected int totalWriteHead = 0;
 	protected DataProvider dataProvider;
@@ -11,31 +11,24 @@ public class DataStream {
 		super();
 		this.dataWidth = width;
 		this.dataProvider = dataProvider;
-		data = new float[width][dataProvider.getChannelCount()];
+		data = new float[width];
 	}
 
-	public void write(float[] values) {
-		data[writeHead] = values;
+	public void write(float value) {
+		data[writeHead] = value;
 		writeHead++;
 		totalWriteHead++;
 		if (writeHead >= dataWidth)
 			writeHead = 0;
 	}
 
-	public float[] read(int pastPosition) {
+	public float read(int pastPosition) {
 		if (pastPosition > dataWidth || pastPosition > totalWriteHead)
-			return null;
+			return Float.NaN;
 		int index = writeHead - (1 + pastPosition);
 		while (index < 0)
 			index += dataWidth;
 		return data[index];
-	}
-
-	public float read(int pastPosition, int channel) {
-		float[] v = read(pastPosition);
-		if (v == null)
-			return Float.NaN;
-		return v[channel];
 	}
 
 	public int getDataWidth() {

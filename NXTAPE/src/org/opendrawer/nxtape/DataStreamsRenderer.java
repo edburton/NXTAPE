@@ -4,34 +4,35 @@ import java.awt.Color;
 
 import processing.core.PGraphics;
 
-public class DataStreamRenderer extends InteractiveRenderer {
-	private DataStream dataStream;
+public class DataStreamsRenderer extends InteractiveRenderer {
+	private DataStream[] dataStreams;
 	private InteractiveRenderer dataProviderRenderer;
 	private InteractiveRenderer mouseFocusedRenderer;
 
-	public DataStreamRenderer(DataStream dataStream,
+	public DataStreamsRenderer(DataStream[] dataStreams,
 			InteractiveRenderer dataProviderRenderer, float x, float y,
 			float width, float height) {
 		super(x, y, width, height);
-		this.dataStream = dataStream;
+		this.dataStreams = dataStreams;
 		this.dataProviderRenderer = dataProviderRenderer;
 		dataProviderRenderer.setPosition(x, y, height, height);
 	}
 
+	
 	@Override
 	public void draw(PGraphics g) {
 		dataProviderRenderer.draw(g);
 		g.stroke(64, 64, 64);
 		g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
 		g.line(x + height, y + height / 2, x + width, y + height / 2);
-		int nc = dataStream.getDataProvider().getChannelCount();
+		int nc = dataStreams.length;
 		for (int c = nc - 1; c >= 0; c--) {
 			float xx = 0, yy = 0;
 			boolean started = false;
-			int dataWidth = dataStream.getDataWidth();
+			int dataWidth = dataStreams[c].getDataWidth();
 			g.stroke(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
 			for (int i = 0; i < dataWidth; i++) {
-				float v = dataStream.read(i, c);
+				float v = dataStreams[c].read(i);
 				if (v != Float.NaN) {
 					float x1 = (x + height)
 							+ ((i / (float) dataWidth) * (width - height));
@@ -59,8 +60,8 @@ public class DataStreamRenderer extends InteractiveRenderer {
 		dataProviderRenderer.setPosition(x, y, height, height);
 	}
 
-	public DataStream getDataStream() {
-		return dataStream;
+	public DataStream[] getDataStreams() {
+		return dataStreams;
 	}
 
 	@Override
@@ -73,7 +74,8 @@ public class DataStreamRenderer extends InteractiveRenderer {
 	public void mousePressed(int mouseX, int mouseY) {
 		if (dataProviderRenderer.contains(mouseX, mouseY)) {
 			mouseFocusedRenderer = dataProviderRenderer;
-			dataStream.getDataProvider().setInhihited(true);
+			for (int i = 0; i < dataStreams.length; i++)
+				dataStreams[i].getDataProvider().setInhihited(true);
 			mouseFocusedRenderer.mousePressed(mouseX, mouseY);
 
 		}
@@ -88,7 +90,8 @@ public class DataStreamRenderer extends InteractiveRenderer {
 	@Override
 	public void mouseReleased(int mouseX, int mouseY) {
 		if (mouseFocusedRenderer != null) {
-			dataStream.getDataProvider().setInhihited(false);
+			for (int i = 0; i < dataStreams.length; i++)
+				dataStreams[i].getDataProvider().setInhihited(false);
 			mouseFocusedRenderer.mouseReleased(mouseX, mouseY);
 			mouseFocusedRenderer = null;
 		}
