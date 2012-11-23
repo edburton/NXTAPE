@@ -17,19 +17,19 @@ public class DataStreamBundle {
 			dataStreams[i] = new DataStream(dataProvider, i, dataWidth);
 	}
 
-	public void write(float[] values) {
+	public void write(double[] values) {
 		for (int i = 0; i < dataStreams.length; i++)
 			dataStreams[i].write(values[i]);
 	}
 
-	public float[] read(int pastPosition) {
-		float[] values = new float[dataStreams.length];
+	public double[] read(int pastPosition) {
+		double[] values = new double[dataStreams.length];
 		for (int i = 0; i < dataStreams.length; i++)
 			values[i] = read(pastPosition, i);
 		return values;
 	}
 
-	public float read(int pastPosition, int channel) {
+	public double read(int pastPosition, int channel) {
 		return dataStreams[channel].read(pastPosition);
 	}
 

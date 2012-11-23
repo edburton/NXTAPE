@@ -22,12 +22,12 @@ public class NXTAccelerometerRenderer extends InteractiveRenderer {
 		g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
 		g.stroke(64, 64, 64);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
-		float[] values = nxtAccelerometer.getNormalizedValues();
+		double[] values = nxtAccelerometer.getNormalizedValues();
 		for (int i = 0; i < 3; i++) {
 			g.stroke(Color.HSBtoRGB(i / 3.0f, 1.0f, 1.0f));
 			float a = ((float) Math.PI * (2 / 3.0f)) * i;
-			float rdx = (float) (Math.sin(a) * radius) * values[i];
-			float rdy = (float) (Math.cos(a) * radius) * values[i];
+			float rdx = (float) ((Math.sin(a) * radius) * values[i]);
+			float rdy = (float) ((Math.cos(a) * radius) * values[i]);
 			g.line(xc, yc, xc + rdx, yc + rdy);
 			float r = NXT_ArtificialPlasticityEcology.lineWidth / 2;
 			g.ellipse(xc + (rdx - r), yc + (rdy - r), xc + (rdx + r), yc

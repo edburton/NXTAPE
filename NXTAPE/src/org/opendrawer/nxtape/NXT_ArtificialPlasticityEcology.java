@@ -3,8 +3,6 @@ package org.opendrawer.nxtape;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.opendrawer.dawinian.neurodynamics.DataStream;
-
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
@@ -13,6 +11,9 @@ import lejos.pc.comm.NXTComm;
 import lejos.pc.comm.NXTCommException;
 import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
+
+import org.opendrawer.dawinian.neurodynamics.DataStream;
+
 import processing.core.PApplet;
 
 @SuppressWarnings("serial")
@@ -163,21 +164,21 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		boolean right = touchRight.getNormalizedValues()[0] != 0;
 
 		// if (top) {
-		// armHeadMotor.setInputChannels(new float[] { 1.0f });
+		// armHeadMotor.setInputChannels(new double[] { 1.0d });
 		// }
 		if (bottom) {
-			armHeadMotor.setInputChannels(new float[] { -1.0f });
+			armHeadMotor.setInputChannels(new double[] { -1.0d });
 		} else {
-			armHeadMotor.setInputChannels(new float[] { 0.1f });
+			armHeadMotor.setInputChannels(new double[] { 0.1f });
 		}
 		if (left) {
-			armMiddleMotor.setInputChannels(new float[] { -1.0f });
-			armBodyMotor.setInputChannels(new float[] { -1.0f });
+			armMiddleMotor.setInputChannels(new double[] { -1.0f });
+			armBodyMotor.setInputChannels(new double[] { -1.0f });
 		}
 		if (right) {
 
-			armMiddleMotor.setInputChannels(new float[] { 1.0f });
-			armBodyMotor.setInputChannels(new float[] { 1.0f });
+			armMiddleMotor.setInputChannels(new double[] { 1.0f });
+			armBodyMotor.setInputChannels(new double[] { 1.0f });
 		}
 
 		armHeadMotor.startStep();

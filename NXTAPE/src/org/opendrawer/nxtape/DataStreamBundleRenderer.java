@@ -31,13 +31,13 @@ public class DataStreamBundleRenderer extends InteractiveRenderer {
 			int dataWidth = dataStreamBundle.getDataWidth();
 			g.stroke(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
 			for (int i = 0; i < dataWidth; i++) {
-				float v = dataStreamBundle.read(i, c);
+				double v = dataStreamBundle.read(i, c);
 				if (v != Float.NaN) {
 					float x1 = (x + height)
 							+ ((i / (float) dataWidth) * (width - height));
-					float y1 = (y + height / 2) - v * height / 2;
+					float y1 = (float) ((y + height / 2) - v * height / 2);
 					if (started) {
-						// g.fill(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
+						// g.fill(Color.HSBtoRGB(c / (double) nc, 1.0f, 1.0f));
 						// g.rect(Math.min(x1, xx) - 0.0f,
 						// Math.min(y1, yy) - 2.5f,
 						// Math.max(x1, xx) + 0.0f,

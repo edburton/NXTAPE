@@ -1,25 +1,25 @@
 package org.opendrawer.nxtape;
 
-import org.opendrawer.dawinian.neurodynamics.DataProvider;
-
 import lejos.nxt.addon.AccelHTSensor;
+
+import org.opendrawer.dawinian.neurodynamics.DataProvider;
 
 public class NXTAccelerometer implements DataProvider {
 	private final AccelHTSensor accelerometer;
 	private final String name;
 	private static String[] streamNames = new String[] { "X", "Y", "Z" };
 	private boolean inhibited = false;
-	private float values[];
-	private float maxExpectedValue = 256; // Arbitrary
+	private double values[];
+	private double maxExpectedValue = 256; // Arbitrary
 
 	public NXTAccelerometer(AccelHTSensor accelerometer, String name) {
 		this.accelerometer = accelerometer;
 		this.name = name;
-		values = new float[3];
+		values = new double[3];
 	}
 
 	@Override
-	public float[] getNormalizedValues() {
+	public double[] getNormalizedValues() {
 		return values;
 	}
 

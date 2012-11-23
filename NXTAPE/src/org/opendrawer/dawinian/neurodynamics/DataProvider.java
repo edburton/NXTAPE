@@ -3,7 +3,7 @@ package org.opendrawer.dawinian.neurodynamics;
 public interface DataProvider {
 	public abstract String getName();
 
-	public abstract float[] getNormalizedValues();
+	public abstract double[] getNormalizedValues();
 
 	public abstract String[] getChannelNames();
 

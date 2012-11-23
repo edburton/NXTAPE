@@ -2,7 +2,7 @@ package org.opendrawer.dawinian.neurodynamics;
 
 public class DataStream {
 	protected final int dataWidth;
-	private float[] data;
+	private double[] data;
 	private int writeHead = 0;
 	protected int totalWriteHead = 0;
 	protected DataProvider dataProvider;
@@ -14,20 +14,20 @@ public class DataStream {
 		this.dataWidth = dataWidth;
 		this.dataProvider = dataProvider;
 		this.dataProviderChannel = dataProviderChannel;
-		data = new float[dataWidth];
+		data = new double[dataWidth];
 	}
 
-	public void write(float value) {
-		data[writeHead] = value;
+	public void write(double values) {
+		data[writeHead] = values;
 		writeHead++;
 		totalWriteHead++;
 		if (writeHead >= dataWidth)
 			writeHead = 0;
 	}
 
-	public float read(int pastPosition) {
+	public double read(int pastPosition) {
 		if (pastPosition > dataWidth || pastPosition > totalWriteHead)
-			return Float.NaN;
+			return Double.NaN;
 		int index = writeHead - (1 + pastPosition);
 		while (index < 0)
 			index += dataWidth;

@@ -1,8 +1,8 @@
 package org.opendrawer.nxtape;
 
-import org.opendrawer.dawinian.neurodynamics.DataProvider;
-
 import lejos.nxt.TouchSensor;
+
+import org.opendrawer.dawinian.neurodynamics.DataProvider;
 
 public class NXTTouchSensor implements DataProvider {
 	private final TouchSensor touchSensor;
@@ -17,8 +17,8 @@ public class NXTTouchSensor implements DataProvider {
 	}
 
 	@Override
-	public float[] getNormalizedValues() {
-		return new float[] { on ? 1 : 0 };
+	public double[] getNormalizedValues() {
+		return new double[] { on ? 1 : 0 };
 	}
 
 	@Override
