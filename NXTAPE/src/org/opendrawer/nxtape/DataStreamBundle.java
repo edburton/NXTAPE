@@ -1,5 +1,8 @@
 package org.opendrawer.nxtape;
 
+import org.opendrawer.dawinian.neurodynamics.DataProvider;
+import org.opendrawer.dawinian.neurodynamics.DataStream;
+
 public class DataStreamBundle {
 	private DataProvider dataProvider;
 	private DataStream[] dataStreams;

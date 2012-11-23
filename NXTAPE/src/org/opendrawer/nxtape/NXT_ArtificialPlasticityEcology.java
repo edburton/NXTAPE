@@ -3,6 +3,8 @@ package org.opendrawer.nxtape;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.opendrawer.dawinian.neurodynamics.DataStream;
+
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
@@ -15,7 +17,7 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcology extends PApplet {
-	private static final boolean presentationMode = false;
+	private static final boolean presentationMode = true;
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;

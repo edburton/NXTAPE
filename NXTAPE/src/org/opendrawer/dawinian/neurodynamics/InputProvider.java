@@ -1,4 +1,4 @@
-package org.opendrawer.nxtape;
+package org.opendrawer.dawinian.neurodynamics;
 
 public interface InputProvider extends DataProvider {
 	public abstract int getInputChannelCount();

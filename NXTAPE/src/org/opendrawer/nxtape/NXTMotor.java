@@ -1,5 +1,7 @@
 package org.opendrawer.nxtape;
 
+import org.opendrawer.dawinian.neurodynamics.InputProvider;
+
 import lejos.nxt.remote.RemoteMotor;
 
 public class NXTMotor implements InputProvider {

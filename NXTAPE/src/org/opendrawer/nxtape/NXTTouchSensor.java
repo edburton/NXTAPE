@@ -1,5 +1,7 @@
 package org.opendrawer.nxtape;
 
+import org.opendrawer.dawinian.neurodynamics.DataProvider;
+
 import lejos.nxt.TouchSensor;
 
 public class NXTTouchSensor implements DataProvider {

@@ -1,4 +1,4 @@
-package org.opendrawer.nxtape;
+package org.opendrawer.dawinian.neurodynamics;
 
 public class DataStream {
 	protected final int dataWidth;
