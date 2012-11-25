@@ -41,4 +41,17 @@ public class DataStream {
 	public DataProvider getDataProvider() {
 		return dataProvider;
 	}
+
+	public String getName() {
+		return dataProvider.getName() + ':'
+				+ dataProvider.getChannelNames()[dataProviderChannel];
+	}
+
+	public int getDataType() {
+		return dataProvider.getChannelTypes()[dataProviderChannel];
+	}
+
+	public int getDataProviderChannel() {
+		return dataProviderChannel;
+	}
 }

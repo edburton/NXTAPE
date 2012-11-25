@@ -7,7 +7,9 @@ import org.opendrawer.dawinian.neurodynamics.DataProvider;
 public class NXTAccelerometer implements DataProvider {
 	private final AccelHTSensor accelerometer;
 	private final String name;
-	private static String[] streamNames = new String[] { "X", "Y", "Z" };
+	private static final String[] channelNames = new String[] { "X", "Y", "Z" };
+	private static final int[] channelTypes = new int[] { DataProvider.INPUT,
+			DataProvider.INPUT, DataProvider.INPUT };
 	private boolean inhibited = false;
 	private double values[];
 	private double maxExpectedValue = 256; // Arbitrary
@@ -30,11 +32,11 @@ public class NXTAccelerometer implements DataProvider {
 
 	@Override
 	public String[] getChannelNames() {
-		return streamNames;
+		return channelNames;
 	}
 
 	@Override
-	public void startStep() {
+	public void step() {
 		if (accelerometer != null && !inhibited) {
 			int[] intValues = new int[3];
 			accelerometer.getAllAccel(intValues, 0);
@@ -49,11 +51,12 @@ public class NXTAccelerometer implements DataProvider {
 	}
 
 	@Override
-	public void finishStep() {
+	public void setInhihited(boolean inhibited) {
+		this.inhibited = inhibited;
 	}
 
 	@Override
-	public void setInhihited(boolean inhibited) {
-		this.inhibited = inhibited;
+	public int[] getChannelTypes() {
+		return channelTypes;
 	}
 }

@@ -7,7 +7,8 @@ import org.opendrawer.dawinian.neurodynamics.DataProvider;
 public class NXTTouchSensor implements DataProvider {
 	private final TouchSensor touchSensor;
 	private final String name;
-	private static String[] streamName = new String[] { "On/Off" };
+	private static String[] channelNames = new String[] { "On/Off" };
+	private static int[] channelTypes = new int[] { DataProvider.INPUT };
 	private boolean on = false;
 	private boolean inhibited = false;
 
@@ -28,11 +29,16 @@ public class NXTTouchSensor implements DataProvider {
 
 	@Override
 	public String[] getChannelNames() {
-		return streamName;
+		return channelNames;
 	}
 
 	@Override
-	public void startStep() {
+	public int[] getChannelTypes() {
+		return channelTypes;
+	}
+
+	@Override
+	public void step() {
 		if (touchSensor != null && !inhibited)
 			on = touchSensor.isPressed();
 	}
@@ -40,10 +46,6 @@ public class NXTTouchSensor implements DataProvider {
 	@Override
 	public int getChannelCount() {
 		return 1;
-	}
-
-	@Override
-	public void finishStep() {
 	}
 
 	public boolean isOn() {

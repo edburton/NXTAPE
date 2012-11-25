@@ -2,9 +2,10 @@ package org.opendrawer.nxtape;
 
 import lejos.nxt.remote.RemoteMotor;
 
-import org.opendrawer.dawinian.neurodynamics.InputProvider;
+import org.opendrawer.dawinian.neurodynamics.DataProvider;
+import org.opendrawer.dawinian.neurodynamics.OutputProvider;
 
-public class NXTMotor implements InputProvider {
+public class NXTMotor implements OutputProvider {
 	private RemoteMotor remoteMotor;
 	private final String name;
 	private final int minAngle;
@@ -18,7 +19,9 @@ public class NXTMotor implements InputProvider {
 	private int actualAngle;
 	private double maxInputRate = 1;
 	private double maxRate = 10.0f;
-	private static String[] subTitles = new String[] { "Angle", "Speed" };
+	private static String[] channelNames = new String[] { "Impulse", "Angle" };
+	private static final int[] channelTypes = new int[] { DataProvider.OUTPUT,
+			DataProvider.INPUT };
 	private boolean inhibited = false;
 	private double topSpeed;
 	private int currentSpeed;
@@ -59,7 +62,7 @@ public class NXTMotor implements InputProvider {
 	}
 
 	@Override
-	public void startStep() {
+	public void step() {
 		if (inhibited) {
 			virtualSpeed = 0;
 			if (remoteMotor != null) {
@@ -111,34 +114,24 @@ public class NXTMotor implements InputProvider {
 	}
 
 	@Override
-	public void finishStep() {
-		inputRate = 0;
-	}
-
-	@Override
-	public void setInputChannels(double[] data) {
-		inputRate += data[0];
+	public void setOutputChannel(double data, int dataChannel) {
+		inputRate = data;
 	}
 
 	@Override
 	public double[] getNormalizedValues() {
-		return new double[] { inputRate / maxInputRate, virtualSpeed / maxRate,
+		return new double[] { inputRate,
 				((double) actualAngle - restAngle) / (maxAngle - minAngle) };
 	}
 
 	@Override
 	public String[] getChannelNames() {
-		return subTitles;
+		return channelNames;
 	}
 
 	@Override
-	public int getChannelCount() {// TODO Auto-generated method stub
-		return 3;
-	}
-
-	@Override
-	public int getInputChannelCount() {
-		return 1;
+	public int getChannelCount() {
+		return 2;
 	}
 
 	public double getActualAngle() {
@@ -152,5 +145,10 @@ public class NXTMotor implements InputProvider {
 	@Override
 	public void setInhihited(boolean inhibited) {
 		this.inhibited = inhibited;
+	}
+
+	@Override
+	public int[] getChannelTypes() {
+		return channelTypes;
 	}
 }

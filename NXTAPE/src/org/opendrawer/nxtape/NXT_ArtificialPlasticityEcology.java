@@ -12,13 +12,14 @@ import lejos.pc.comm.NXTCommException;
 import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
-import org.opendrawer.dawinian.neurodynamics.DataStream;
+import org.opendrawer.dawinian.neurodynamics.DataStreamBundle;
+import org.opendrawer.dawinian.neurodynamics.DataStreamCore;
 
 import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcology extends PApplet {
-	private static final boolean presentationMode = true;
+	private static final boolean presentationMode = false;
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
@@ -32,15 +33,15 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private NXTMotor armBodyMotor;
 	private int debugCounter = 0;
 	private int dataStreamWidth = 256;
-	private static int dataStreamCount = 7;
+	private final DataStreamCore dataStreamCore = new DataStreamCore();
 	private List<DataStreamBundleRenderer> dataStreamBundleRenderers = new ArrayList<DataStreamBundleRenderer>();
 	private boolean dummyMode = false;
 	public static float lineWidth;
 	private InteractiveRenderer mouseFocusedRenderer;
-
-	private List<DataStream> SensorimotorDataStreams = new ArrayList<DataStream>();
-	private List<DataStream> SensoryDataStreams = new ArrayList<DataStream>();
-	private List<DataStream> MotorOutputDataStreams = new ArrayList<DataStream>();
+	private static final String touch_left_name = "Touch Left";
+	private static final String touch_bottom_name = "Touch Bottom";
+	private static final String touch_right_name = "Touch Right";
+	private static final String accelerometer_name = "Accelerometer";
 
 	/**
 	 * @param args
@@ -66,15 +67,15 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 			println(NXTs.length + " NXTs found. Initiating Dummy mode");
 
 		accelerometer = new NXTAccelerometer(!dummyMode ? new AccelHTSensor(
-				SensorPort.S1) : null, "Accelerometer");
+				SensorPort.S1) : null, accelerometer_name);
 		// touchTop = new NXTTouchSensor(!dummyMode ? new TouchSensor(
 		// SensorPort.S1) : null, "Touch Top");
 		touchLeft = new NXTTouchSensor(!dummyMode ? new TouchSensor(
-				SensorPort.S2) : null, "Touch Left");
+				SensorPort.S2) : null, touch_left_name);
 		touchBottom = new NXTTouchSensor(!dummyMode ? new TouchSensor(
-				SensorPort.S3) : null, "Touch Bottom");
+				SensorPort.S3) : null, touch_bottom_name);
 		touchRight = new NXTTouchSensor(!dummyMode ? new TouchSensor(
-				SensorPort.S4) : null, "Touch Right");
+				SensorPort.S4) : null, touch_right_name);
 
 		armHeadMotor = new NXTMotor(!dummyMode ? Motor.A : null,
 				"arm head motor", -180, 0, 0, 0.95f);
@@ -130,6 +131,14 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				new DataStreamBundle(armBodyMotor, dataStreamWidth),
 				new NXTMotorRenderer(armBodyMotor), edgeMargin, y, width,
 				height));
+
+		for (int i = 0; i < dataStreamBundleRenderers.size(); i++)
+			dataStreamCore.addDataStreamBundle(dataStreamBundleRenderers.get(i)
+					.getDataStreamBundle());
+		dataStreamCore.prepareDataStreams();
+
+		System.out.println(dataStreamCore
+				.getDataStreamByName("accelerometer:X"));
 	}
 
 	@Override
@@ -152,11 +161,6 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	@Override
 	public void draw() {
 		background(0);
-		accelerometer.startStep();
-		// touchTop.startStep();
-		touchBottom.startStep();
-		touchLeft.startStep();
-		touchRight.startStep();
 
 		// boolean top = touchTop.getNormalizedValues()[0] != 0;
 		boolean bottom = touchBottom.getNormalizedValues()[0] != 0;
@@ -167,32 +171,24 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		// armHeadMotor.setInputChannels(new double[] { 1.0d });
 		// }
 		if (bottom) {
-			armHeadMotor.setInputChannels(new double[] { -1.0d });
+			armHeadMotor.setOutputChannel(-1.0d, 0);
 		} else {
-			armHeadMotor.setInputChannels(new double[] { 0.1f });
+			armHeadMotor.setOutputChannel(0.1d, 0);
 		}
 		if (left) {
-			armMiddleMotor.setInputChannels(new double[] { -1.0f });
-			armBodyMotor.setInputChannels(new double[] { -1.0f });
+			armMiddleMotor.setOutputChannel(-1.0d, 0);
+			armBodyMotor.setOutputChannel(-1.0d, 0);
+		} else {
+			if (right) {
+				armMiddleMotor.setOutputChannel(1.0d, 0);
+				armBodyMotor.setOutputChannel(1.0d, 0);
+			} else {
+				armMiddleMotor.setOutputChannel(0d, 0);
+				armBodyMotor.setOutputChannel(0d, 0);
+			}
 		}
-		if (right) {
 
-			armMiddleMotor.setInputChannels(new double[] { 1.0f });
-			armBodyMotor.setInputChannels(new double[] { 1.0f });
-		}
-
-		armHeadMotor.startStep();
-		armBodyMotor.startStep();
-		armMiddleMotor.startStep();
-
-		for (int i = 0; i < dataStreamBundleRenderers.size(); i++) {
-			dataStreamBundleRenderers
-					.get(i)
-					.getDataStreamBundle()
-					.write(dataStreamBundleRenderers.get(i)
-							.getDataStreamBundle().getDataProvider()
-							.getNormalizedValues());
-		}
+		dataStreamCore.step();
 
 		for (int i = 0; i < dataStreamBundleRenderers.size(); i++) {
 			dataStreamBundleRenderers.get(i).draw(g);
@@ -205,15 +201,6 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 			fill(255, 0, 0, (cos(debugCounter / 20.0f) + 1.0f) * 128);
 			text("NXT not found", 2, 12);
 		}
-
-		accelerometer.finishStep();
-		// touchTop.finishStep();
-		touchBottom.finishStep();
-		touchLeft.finishStep();
-		touchRight.finishStep();
-		armHeadMotor.finishStep();
-		armBodyMotor.finishStep();
-		armMiddleMotor.finishStep();
 	}
 
 	@Override

@@ -1,36 +1,35 @@
-package org.opendrawer.nxtape;
+package org.opendrawer.dawinian.neurodynamics;
 
-import org.opendrawer.dawinian.neurodynamics.DataProvider;
-import org.opendrawer.dawinian.neurodynamics.DataStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataStreamBundle {
 	private DataProvider dataProvider;
-	private DataStream[] dataStreams;
+	private List<DataStream> dataStreams = new ArrayList<DataStream>();
 	private int dataWidth;
 
 	public DataStreamBundle(DataProvider dataProvider, int dataWidth) {
 		this.dataProvider = dataProvider;
 		this.dataWidth = dataWidth;
 		int channels = dataProvider.getChannelCount();
-		dataStreams = new DataStream[channels];
 		for (int i = 0; i < channels; i++)
-			dataStreams[i] = new DataStream(dataProvider, i, dataWidth);
+			dataStreams.add(new DataStream(dataProvider, i, dataWidth));
 	}
 
 	public void write(double[] values) {
-		for (int i = 0; i < dataStreams.length; i++)
-			dataStreams[i].write(values[i]);
+		for (int i = 0; i < dataStreams.size(); i++)
+			dataStreams.get(i).write(values[i]);
 	}
 
 	public double[] read(int pastPosition) {
-		double[] values = new double[dataStreams.length];
-		for (int i = 0; i < dataStreams.length; i++)
+		double[] values = new double[dataStreams.size()];
+		for (int i = 0; i < dataStreams.size(); i++)
 			values[i] = read(pastPosition, i);
 		return values;
 	}
 
 	public double read(int pastPosition, int channel) {
-		return dataStreams[channel].read(pastPosition);
+		return dataStreams.get(channel).read(pastPosition);
 	}
 
 	public int getDataWidth() {
@@ -39,5 +38,9 @@ public class DataStreamBundle {
 
 	public DataProvider getDataProvider() {
 		return dataProvider;
+	}
+
+	public List<DataStream> getDataStreams() {
+		return dataStreams;
 	}
 }

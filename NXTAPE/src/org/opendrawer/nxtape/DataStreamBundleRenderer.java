@@ -2,6 +2,8 @@ package org.opendrawer.nxtape;
 
 import java.awt.Color;
 
+import org.opendrawer.dawinian.neurodynamics.DataStreamBundle;
+
 import processing.core.PGraphics;
 
 public class DataStreamBundleRenderer extends InteractiveRenderer {
