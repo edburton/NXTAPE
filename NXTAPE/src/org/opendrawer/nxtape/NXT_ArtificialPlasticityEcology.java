@@ -24,6 +24,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
 	private NXTAccelerometer accelerometer;
+	// private NXTCompass compass;
 	// private NXTTouchSensor touchTop;
 	private NXTTouchSensor touchLeft;
 	private NXTTouchSensor touchBottom;
@@ -42,6 +43,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private static final String touch_bottom_name = "Touch Bottom";
 	private static final String touch_right_name = "Touch Right";
 	private static final String accelerometer_name = "Accelerometer";
+	private static final String compass_name = "Compass";
 
 	/**
 	 * @param args
@@ -68,6 +70,8 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 		accelerometer = new NXTAccelerometer(!dummyMode ? new AccelHTSensor(
 				SensorPort.S1) : null, accelerometer_name);
+		// compass = new NXTCompass(!dummyMode ? new CompassHTSensor(
+		// SensorPort.S3) : null, compass_name);
 		// touchTop = new NXTTouchSensor(!dummyMode ? new TouchSensor(
 		// SensorPort.S1) : null, "Touch Top");
 		touchLeft = new NXTTouchSensor(!dummyMode ? new TouchSensor(
@@ -78,11 +82,11 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				SensorPort.S4) : null, touch_right_name);
 
 		armHeadMotor = new NXTMotor(!dummyMode ? Motor.A : null,
-				"arm head motor", -180, 0, 0, 0.95f);
+				"arm head motor", -180, 0, 0, 0.9f);
 		armMiddleMotor = new NXTMotor(!dummyMode ? Motor.B : null,
-				"arm midle motor", -60, 60, 0, 0.95f);
+				"arm midle motor", -60, 60, 0, 0.9f);
 		armBodyMotor = new NXTMotor(!dummyMode ? Motor.C : null,
-				"arm body motor", -60, 60, 0, 0.95f);
+				"arm body motor", -60, 60, 0, 0.9f);
 
 		float screenWidth = getWidth();
 		float screenHeight = getHeight();
@@ -97,10 +101,15 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				new NXTAccelerometerRenderer(accelerometer), edgeMargin, y,
 				width, height));
 		y += height + margin;
-		// dataStreamGraphicalRenderers[0] = new DataStreamBundleRenderer(
+		// dataStreamBundleRenderers.add(new DataStreamBundleRenderer(
+		// new DataStreamBundle(compass, dataStreamWidth),
+		// new NXTCompassRenderer(compass), edgeMargin, y,
+		// width, height));
+		// y += height + margin;
+		// dataStreamBundleRenderers.add(new DataStreamBundleRenderer(
 		// new DataStreamBundle(touchTop, dataStreamWidth),
 		// new NXTTouchSensorRenderer(touchTop), edgeMargin, y, width,
-		// height);
+		// height));
 		// y += height + margin;
 		dataStreamBundleRenderers.add(new DataStreamBundleRenderer(
 				new DataStreamBundle(touchBottom, dataStreamWidth),
@@ -136,9 +145,6 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 			dataStreamCore.addDataStreamBundle(dataStreamBundleRenderers.get(i)
 					.getDataStreamBundle());
 		dataStreamCore.prepareDataStreams();
-
-		System.out.println(dataStreamCore
-				.getDataStreamByName("accelerometer:X"));
 	}
 
 	@Override
@@ -162,33 +168,38 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	public void draw() {
 		background(0);
 
+		dataStreamCore.stepInputs();
+
 		// boolean top = touchTop.getNormalizedValues()[0] != 0;
 		boolean bottom = touchBottom.getNormalizedValues()[0] != 0;
 		boolean left = touchLeft.getNormalizedValues()[0] != 0;
 		boolean right = touchRight.getNormalizedValues()[0] != 0;
 
+		armHeadMotor.setOutputChannel(0.0d, 0);
+		armMiddleMotor.setOutputChannel(0.0d, 0);
+		armBodyMotor.setOutputChannel(0.0d, 0);
+
+		double angle = accelerometer.getNormalizedValues()[1];
+		// double direction = compass.getNormalizedValues()[0];
+
+		armHeadMotor.setOutputChannel(-angle, 0);
+		// armMiddleMotor.setOutputChannel(-direction, 0);
 		// if (top) {
-		// armHeadMotor.setInputChannels(new double[] { 1.0d });
+		// armHeadMotor.setOutputChannel(1.0d, 0);
 		// }
 		if (bottom) {
 			armHeadMotor.setOutputChannel(-1.0d, 0);
-		} else {
-			armHeadMotor.setOutputChannel(0.1d, 0);
 		}
 		if (left) {
 			armMiddleMotor.setOutputChannel(-1.0d, 0);
 			armBodyMotor.setOutputChannel(-1.0d, 0);
-		} else {
-			if (right) {
-				armMiddleMotor.setOutputChannel(1.0d, 0);
-				armBodyMotor.setOutputChannel(1.0d, 0);
-			} else {
-				armMiddleMotor.setOutputChannel(0d, 0);
-				armBodyMotor.setOutputChannel(0d, 0);
-			}
+		}
+		if (right) {
+			armMiddleMotor.setOutputChannel(1.0d, 0);
+			armBodyMotor.setOutputChannel(1.0d, 0);
 		}
 
-		dataStreamCore.step();
+		dataStreamCore.stepOutputs();
 
 		for (int i = 0; i < dataStreamBundleRenderers.size(); i++) {
 			dataStreamBundleRenderers.get(i).draw(g);

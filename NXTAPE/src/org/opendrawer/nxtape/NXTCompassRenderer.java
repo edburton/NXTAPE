@@ -2,12 +2,12 @@ package org.opendrawer.nxtape;
 
 import processing.core.PGraphics;
 
-public class NXTMotorRenderer extends InteractiveRenderer {
-	NXTMotor nxtMotor;
+public class NXTCompassRenderer extends InteractiveRenderer {
+	NXTCompass nxtCompass;
 
-	public NXTMotorRenderer(NXTMotor nxtMotor) {
+	public NXTCompassRenderer(NXTCompass nxtCompass) {
 		super();
-		this.nxtMotor = nxtMotor;
+		this.nxtCompass = nxtCompass;
 	}
 
 	@Override
@@ -21,7 +21,7 @@ public class NXTMotorRenderer extends InteractiveRenderer {
 		g.stroke(64, 64, 64);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 		g.stroke(255, 255, 0);
-		float a = (float) ((nxtMotor.getNormalizedValues()[1]) * (Math.PI * 2));
+		float a = (float) ((nxtCompass.getNormalizedValues()[0]) * (Math.PI * 2));
 		g.line(xc, yc, (float) (xc + Math.sin(a) * radius),
 				(float) (yc + Math.cos(a) * radius));
 	}
@@ -39,26 +39,6 @@ public class NXTMotorRenderer extends InteractiveRenderer {
 
 	@Override
 	public void mouseClicked(int mouseX, int mouseY) {
-		float xc = x + width / 2;
-		float yc = y + height / 2;
-		float dx = mouseX - xc;
-		float dy = mouseY - yc;
-		float a = (float) (Math.atan2(dx, dy) * (360 / (Math.PI * 2)));
-		nxtMotor.setActualAngle(Math.round(a));
-	}
 
-	@Override
-	public void mousePressed(int mouseX, int mouseY) {
-		mouseClicked(mouseX, mouseY);
-	}
-
-	@Override
-	public void mouseDragged(int mouseX, int mouseY) {
-		mouseClicked(mouseX, mouseY);
-	}
-
-	@Override
-	public void mouseReleased(int mouseX, int mouseY) {
-		mouseClicked(mouseX, mouseY);
 	}
 }

@@ -6,8 +6,8 @@ import java.util.List;
 public class DataStreamCore {
 	private List<DataStreamBundle> dataStreamBundles = new ArrayList<DataStreamBundle>();
 	private List<DataStream> allDataStreams = new ArrayList<DataStream>();
-	private List<DataStream> inputDataStreams = new ArrayList<DataStream>();
-	private List<DataStream> outputDataStreams = new ArrayList<DataStream>();
+	private List<DataProvider> outputDataProviders = new ArrayList<DataProvider>();
+	private List<DataProvider> inputOnlyDataProviders = new ArrayList<DataProvider>();
 
 	public void prepareDataStreams() {
 		for (int i = 0; i < dataStreamBundles.size(); i++)
@@ -16,10 +16,17 @@ public class DataStreamCore {
 		for (int i = 0; i < allDataStreams.size(); i++) {
 			DataStream dataStream = allDataStreams.get(i);
 			int type = dataStream.getDataType();
-			if (type == DataProvider.INPUT)
-				inputDataStreams.add(dataStream);
 			if (type == DataProvider.OUTPUT)
-				outputDataStreams.add(dataStream);
+				if (!outputDataProviders.contains(dataStream.getDataProvider()))
+					outputDataProviders.add(dataStream.getDataProvider());
+		}
+		for (int i = 0; i < allDataStreams.size(); i++) {
+			DataStream dataStream = allDataStreams.get(i);
+			if (!outputDataProviders.contains(dataStream.getDataProvider())) {
+				if (!inputOnlyDataProviders.contains(dataStream
+						.getDataProvider()))
+					inputOnlyDataProviders.add(dataStream.getDataProvider());
+			}
 		}
 	}
 
@@ -36,15 +43,29 @@ public class DataStreamCore {
 		return null;
 	}
 
-	public void step() {
-		for (int i = 0; i < dataStreamBundles.size(); i++)
-			dataStreamBundles.get(i).getDataProvider().step();
+	public void stepInputs() {
+		for (int i = 0; i < inputOnlyDataProviders.size(); i++)
+			inputOnlyDataProviders.get(i).step();
 
 		for (int i = 0; i < allDataStreams.size(); i++) {
 			DataStream dataStream = allDataStreams.get(i);
-			dataStream
-					.write(dataStream.getDataProvider().getNormalizedValues()[dataStream
-							.getDataProviderChannel()]);
+			if (inputOnlyDataProviders.contains(dataStream.getDataProvider()))
+				dataStream.write(dataStream.getDataProvider()
+						.getNormalizedValues()[dataStream
+						.getDataProviderChannel()]);
+		}
+	}
+
+	public void stepOutputs() {
+		for (int i = 0; i < outputDataProviders.size(); i++)
+			outputDataProviders.get(i).step();
+
+		for (int i = 0; i < allDataStreams.size(); i++) {
+			DataStream dataStream = allDataStreams.get(i);
+			if (outputDataProviders.contains(dataStream.getDataProvider()))
+				dataStream.write(dataStream.getDataProvider()
+						.getNormalizedValues()[dataStream
+						.getDataProviderChannel()]);
 		}
 	}
 }

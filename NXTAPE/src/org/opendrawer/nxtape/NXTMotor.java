@@ -17,8 +17,8 @@ public class NXTMotor implements OutputProvider {
 	private double virtualSpeed;
 	private double targetAngle;
 	private int actualAngle;
-	private double maxInputRate = 1;
-	private double maxRate = 10.0f;
+	private double maxInputRate = 1f;
+	private double maxRate = 40.0f;
 	private static String[] channelNames = new String[] { "Impulse", "Angle" };
 	private static final int[] channelTypes = new int[] { DataProvider.OUTPUT,
 			DataProvider.INPUT };
@@ -37,7 +37,7 @@ public class NXTMotor implements OutputProvider {
 		targetAngle = this.restAngle;
 		inputRate = virtualSpeed = 0;
 		if (remoteMotor != null) {
-			topSpeed = remoteMotor.getSpeed() / 4;
+			topSpeed = remoteMotor.getSpeed();
 			currentSpeed = (int) topSpeed;
 			remoteMotor.setSpeed(currentSpeed);
 			remoteMotor.rotateTo(restAngle, true);
@@ -81,7 +81,6 @@ public class NXTMotor implements OutputProvider {
 		virtualSpeed += inputRate * maxInputRate;
 		virtualAngle = (actualAngle + virtualAngle) / 2;
 		if (virtualSpeed != 0) {
-			virtualSpeed *= friction;
 			if (virtualSpeed > maxRate)
 				virtualSpeed = maxRate;
 			else if (virtualSpeed < -maxRate)
@@ -111,11 +110,16 @@ public class NXTMotor implements OutputProvider {
 			remoteMotor.rotateTo(iVirtualAngle, true);
 			targetAngle = iVirtualAngle;
 		}
+		virtualSpeed *= friction;
 	}
 
 	@Override
 	public void setOutputChannel(double data, int dataChannel) {
 		inputRate = data;
+		if (inputRate < -1)
+			inputRate = -1;
+		else if (inputRate > 1)
+			inputRate = 1;
 	}
 
 	@Override

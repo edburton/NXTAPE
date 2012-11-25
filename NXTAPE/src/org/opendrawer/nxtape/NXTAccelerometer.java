@@ -12,7 +12,7 @@ public class NXTAccelerometer implements DataProvider {
 			DataProvider.INPUT, DataProvider.INPUT };
 	private boolean inhibited = false;
 	private double values[];
-	private double maxExpectedValue = 256; // Arbitrary
+	private float maxExpectedValue = 256; // Arbitrary
 
 	public NXTAccelerometer(AccelHTSensor accelerometer, String name) {
 		this.accelerometer = accelerometer;
