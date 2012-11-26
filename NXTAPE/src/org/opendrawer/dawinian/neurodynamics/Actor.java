@@ -1,11 +1,9 @@
 package org.opendrawer.dawinian.neurodynamics;
 
-public class Actor extends Map {
+public class Actor extends DataStreamBundleMap {
 
-	@Override
-	public double[] map(float[] input) {
-		// TODO Auto-generated method stub
-		return null;
+	public Actor(DataStreamBundle inputDataStreamBundle,
+			DataStreamBundle outputDataStreamBundle) {
+		super(inputDataStreamBundle, outputDataStreamBundle);
 	}
-
 }

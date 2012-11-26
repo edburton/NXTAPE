@@ -3,7 +3,7 @@ package org.opendrawer.nxtape;
 public abstract class InteractiveRenderer extends Renderer {
 
 	public InteractiveRenderer() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public InteractiveRenderer(float x, float y, float width, float height) {

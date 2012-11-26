@@ -14,6 +14,7 @@ import lejos.pc.comm.NXTInfo;
 
 import org.opendrawer.dawinian.neurodynamics.DataStreamCore;
 import org.opendrawer.dawinian.neurodynamics.HomogeneousDataStreamBundle;
+import org.opendrawer.dawinian.neurodynamics.Reflex;
 
 import processing.core.PApplet;
 
@@ -96,11 +97,20 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		float y = edgeMargin;
 		float width = screenWidth - edgeMargin * 2;
 
+		HomogeneousDataStreamBundle bottomDataStreamBundle;
+		HomogeneousDataStreamBundle leftDataStreamBundle;
+		HomogeneousDataStreamBundle rightDataStreamBundle;
+		HomogeneousDataStreamBundle accelerometerDataStreamBundle;
+		HomogeneousDataStreamBundle armHeadMotorDataStreamBundle;
+		HomogeneousDataStreamBundle armMiddleMotorDataStreamBundle;
+		HomogeneousDataStreamBundle armBodyMotorDataStreamBundle;
+
 		homogeneousDataStreamBundleRenderers
 				.add(new HomogeneousDataStreamBundleRenderer(
-						new HomogeneousDataStreamBundle(accelerometer,
-								dataStreamWidth), new NXTAccelerometerRenderer(
-								accelerometer), edgeMargin, y, width, height));
+						accelerometerDataStreamBundle = new HomogeneousDataStreamBundle(
+								accelerometer, dataStreamWidth),
+						new NXTAccelerometerRenderer(accelerometer),
+						edgeMargin, y, width, height));
 		y += height + margin;
 		// homogeneousDataStreamBundleRenderers.add(new
 		// HomogeneousDataStreamBundleRenderer(
@@ -114,46 +124,68 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		// new NXTTouchSensorRenderer(touchTop), edgeMargin, y, width,
 		// height));
 		// y += height + margin;
+
 		homogeneousDataStreamBundleRenderers
 				.add(new HomogeneousDataStreamBundleRenderer(
-						new HomogeneousDataStreamBundle(touchBottom,
-								dataStreamWidth), new NXTTouchSensorRenderer(
-								touchBottom), edgeMargin, y, width, height));
+						bottomDataStreamBundle = new HomogeneousDataStreamBundle(
+								touchBottom, dataStreamWidth),
+						new NXTTouchSensorRenderer(touchBottom), edgeMargin, y,
+						width, height));
 		y += height + margin;
 		homogeneousDataStreamBundleRenderers
 				.add(new HomogeneousDataStreamBundleRenderer(
-						new HomogeneousDataStreamBundle(touchLeft,
-								dataStreamWidth), new NXTTouchSensorRenderer(
-								touchLeft), edgeMargin, y, width, height));
+						leftDataStreamBundle = new HomogeneousDataStreamBundle(
+								touchLeft, dataStreamWidth),
+						new NXTTouchSensorRenderer(touchLeft), edgeMargin, y,
+						width, height));
 		y += height + margin;
 		homogeneousDataStreamBundleRenderers
 				.add(new HomogeneousDataStreamBundleRenderer(
-						new HomogeneousDataStreamBundle(touchRight,
-								dataStreamWidth), new NXTTouchSensorRenderer(
-								touchRight), edgeMargin, y, width, height));
+						rightDataStreamBundle = new HomogeneousDataStreamBundle(
+								touchRight, dataStreamWidth),
+						new NXTTouchSensorRenderer(touchRight), edgeMargin, y,
+						width, height));
 		y += height + margin;
 		homogeneousDataStreamBundleRenderers
 				.add(new HomogeneousDataStreamBundleRenderer(
-						new HomogeneousDataStreamBundle(armHeadMotor,
-								dataStreamWidth), new NXTMotorRenderer(
-								armHeadMotor), edgeMargin, y, width, height));
+						armHeadMotorDataStreamBundle = new HomogeneousDataStreamBundle(
+								armHeadMotor, dataStreamWidth),
+						new NXTMotorRenderer(armHeadMotor), edgeMargin, y,
+						width, height));
 		y += height + margin;
 		homogeneousDataStreamBundleRenderers
 				.add(new HomogeneousDataStreamBundleRenderer(
-						new HomogeneousDataStreamBundle(armMiddleMotor,
-								dataStreamWidth), new NXTMotorRenderer(
-								armMiddleMotor), edgeMargin, y, width, height));
+						armMiddleMotorDataStreamBundle = new HomogeneousDataStreamBundle(
+								armMiddleMotor, dataStreamWidth),
+						new NXTMotorRenderer(armMiddleMotor), edgeMargin, y,
+						width, height));
 		y += height + margin;
 		homogeneousDataStreamBundleRenderers
 				.add(new HomogeneousDataStreamBundleRenderer(
-						new HomogeneousDataStreamBundle(armBodyMotor,
-								dataStreamWidth), new NXTMotorRenderer(
-								armBodyMotor), edgeMargin, y, width, height));
+						armBodyMotorDataStreamBundle = new HomogeneousDataStreamBundle(
+								armBodyMotor, dataStreamWidth),
+						new NXTMotorRenderer(armBodyMotor), edgeMargin, y,
+						width, height));
 
 		for (int i = 0; i < homogeneousDataStreamBundleRenderers.size(); i++)
 			dataStreamCore
 					.addDataStreamBundle(homogeneousDataStreamBundleRenderers
 							.get(i).getDataStreamBundle());
+
+		dataStreamCore.addReflex(new Reflex(accelerometerDataStreamBundle,
+				armHeadMotorDataStreamBundle, 1, 0, -1));
+
+		dataStreamCore.addReflex(new Reflex(bottomDataStreamBundle,
+				armHeadMotorDataStreamBundle, 0, 0, -1));
+		dataStreamCore.addReflex(new Reflex(leftDataStreamBundle,
+				armMiddleMotorDataStreamBundle, 0, 0, -0.5d));
+		dataStreamCore.addReflex(new Reflex(rightDataStreamBundle,
+				armMiddleMotorDataStreamBundle, 0, 0, 0.5d));
+		dataStreamCore.addReflex(new Reflex(leftDataStreamBundle,
+				armBodyMotorDataStreamBundle, 0, 0, -0.5d));
+		dataStreamCore.addReflex(new Reflex(rightDataStreamBundle,
+				armBodyMotorDataStreamBundle, 0, 0, 0.5d));
+
 		dataStreamCore.prepareDataStreams();
 	}
 
@@ -180,34 +212,9 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 		dataStreamCore.stepInputs();
 
-		// boolean top = touchTop.getNormalizedValues()[0] != 0;
-		boolean bottom = touchBottom.getNormalizedValues()[0] != 0;
-		boolean left = touchLeft.getNormalizedValues()[0] != 0;
-		boolean right = touchRight.getNormalizedValues()[0] != 0;
-
 		armHeadMotor.setOutputChannel(0.0d, 0);
 		armMiddleMotor.setOutputChannel(0.0d, 0);
 		armBodyMotor.setOutputChannel(0.0d, 0);
-
-		double angle = accelerometer.getNormalizedValues()[1];
-		// double direction = compass.getNormalizedValues()[0];
-
-		armHeadMotor.setOutputChannel(-angle, 0);
-		// armMiddleMotor.setOutputChannel(-direction, 0);
-		// if (top) {
-		// armHeadMotor.setOutputChannel(1.0d, 0);
-		// }
-		if (bottom) {
-			armHeadMotor.setOutputChannel(-1.0d, 0);
-		}
-		if (left) {
-			armMiddleMotor.setOutputChannel(-1.0d, 0);
-			armBodyMotor.setOutputChannel(-1.0d, 0);
-		}
-		if (right) {
-			armMiddleMotor.setOutputChannel(1.0d, 0);
-			armBodyMotor.setOutputChannel(1.0d, 0);
-		}
 
 		dataStreamCore.stepOutputs();
 
