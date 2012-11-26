@@ -210,13 +210,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	public void draw() {
 		background(0);
 
-		dataStreamCore.stepInputs();
-
-		armHeadMotor.setOutputChannel(0.0d, 0);
-		armMiddleMotor.setOutputChannel(0.0d, 0);
-		armBodyMotor.setOutputChannel(0.0d, 0);
-
-		dataStreamCore.stepOutputs();
+		dataStreamCore.step();
 
 		for (int i = 0; i < homogeneousDataStreamBundleRenderers.size(); i++) {
 			homogeneousDataStreamBundleRenderers.get(i).draw(g);

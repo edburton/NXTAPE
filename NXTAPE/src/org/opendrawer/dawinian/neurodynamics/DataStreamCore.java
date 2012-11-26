@@ -6,7 +6,7 @@ import java.util.List;
 public class DataStreamCore {
 	private List<DataStreamBundle> dataStreamBundles = new ArrayList<DataStreamBundle>();
 	private List<DataStream> allDataStreams = new ArrayList<DataStream>();
-	private List<DataProvider> outputDataProviders = new ArrayList<DataProvider>();
+	private List<OutputDataProvider> outputDataProviders = new ArrayList<OutputDataProvider>();
 	private List<DataProvider> inputOnlyDataProviders = new ArrayList<DataProvider>();
 	private List<Reflex> reflexes = new ArrayList<Reflex>();
 
@@ -19,7 +19,8 @@ public class DataStreamCore {
 			int type = dataStream.getDataType();
 			if (type == DataProvider.OUTPUT)
 				if (!outputDataProviders.contains(dataStream.getDataProvider()))
-					outputDataProviders.add(dataStream.getDataProvider());
+					outputDataProviders.add((OutputDataProvider) dataStream
+							.getDataProvider());
 		}
 		for (int i = 0; i < allDataStreams.size(); i++) {
 			DataStream dataStream = allDataStreams.get(i);
@@ -47,8 +48,13 @@ public class DataStreamCore {
 		}
 		return null;
 	}
+	
+	public void step() {
+		stepInputs();
+		stepOutputs();
+	}
 
-	public void stepInputs() {
+	private void stepInputs() {
 		for (int i = 0; i < inputOnlyDataProviders.size(); i++)
 			inputOnlyDataProviders.get(i).step();
 
@@ -61,7 +67,13 @@ public class DataStreamCore {
 		}
 	}
 
-	public void stepOutputs() {
+	private void stepOutputs() {
+		for (int i = 0; i < outputDataProviders.size(); i++) {
+			int channels = outputDataProviders.get(i).getChannelCount();
+			for (int n = 0; n < channels; n++)
+				outputDataProviders.get(i).setOutputChannel(0, n);
+		}
+
 		for (int i = 0; i < reflexes.size(); i++)
 			reflexes.get(i).map();
 

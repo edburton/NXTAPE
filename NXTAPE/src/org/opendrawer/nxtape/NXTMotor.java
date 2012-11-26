@@ -3,9 +3,9 @@ package org.opendrawer.nxtape;
 import lejos.nxt.remote.RemoteMotor;
 
 import org.opendrawer.dawinian.neurodynamics.DataProvider;
-import org.opendrawer.dawinian.neurodynamics.OutputProvider;
+import org.opendrawer.dawinian.neurodynamics.OutputDataProvider;
 
-public class NXTMotor implements OutputProvider {
+public class NXTMotor implements OutputDataProvider {
 	private RemoteMotor remoteMotor;
 	private final String name;
 	private final int minAngle;

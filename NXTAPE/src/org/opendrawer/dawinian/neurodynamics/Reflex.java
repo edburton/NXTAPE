@@ -4,7 +4,7 @@ public class Reflex extends DataStreamBundleMap {
 	private int inputChannel;
 	private int outputChannel;
 	private double weight;
-	private OutputProvider outputProvider;
+	private OutputDataProvider outputDataProvider;
 
 	public Reflex(DataStreamBundle inputDataStreamBundle,
 			HomogeneousDataStreamBundle outputDataStreamBundle,
@@ -13,7 +13,7 @@ public class Reflex extends DataStreamBundleMap {
 		this.inputChannel = inputChannel;
 		this.outputChannel = outputChannel;
 		this.weight = weight;
-		outputProvider = (OutputProvider) outputDataStreamBundle
+		outputDataProvider = (OutputDataProvider) outputDataStreamBundle
 				.getDataProvider();
 	}
 
@@ -22,8 +22,8 @@ public class Reflex extends DataStreamBundleMap {
 		double input = inputDataStreamBundle.getDataStreams().get(inputChannel)
 				.read(0);
 		double output = input * weight;
-		double[] outputs = outputProvider.getNormalizedValues();
+		double[] outputs = outputDataProvider.getNormalizedValues();
 		output = outputs[outputChannel] + output;
-		outputProvider.setOutputChannel(output, outputChannel);
+		outputDataProvider.setOutputChannel(output, outputChannel);
 	}
 }
