@@ -15,6 +15,7 @@ public class NXTCompassRenderer extends NXTRenderer {
 	@Override
 	public void draw(PGraphics g) {
 		super.draw(g);
+		g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
 		float radius = (Math.min(width, height) / 2);
 		float xc = x + width / 2;
 		float yc = y + height / 2;

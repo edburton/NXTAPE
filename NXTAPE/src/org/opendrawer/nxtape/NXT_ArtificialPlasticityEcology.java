@@ -20,7 +20,7 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcology extends PApplet {
-	private static final boolean presentationMode = false;
+	private static final boolean presentationMode = true;
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
@@ -66,7 +66,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		else
 			size(1024, 768, OPENGL);
 		frameRate(200);
-		lineMarginWidth = getHeight() / 256.0f;
+		lineMarginWidth = getHeight() / 384.0f;
 		lineWidth = lineMarginWidth * 1.70710678118655f;
 		smooth();
 		frameRate(50);

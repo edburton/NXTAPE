@@ -27,6 +27,8 @@ public class NXTAccelerometerRenderer extends NXTRenderer {
 		g.fill(16);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 		double[] values = nxtAccelerometer.getNormalizedValues();
+		g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
+		float r = NXT_ArtificialPlasticityEcology.lineMarginWidth * 2;
 		for (int i = 0; i < 3; i++) {
 			int c = Color.HSBtoRGB(i / 3.0f, 1.0f, 1.0f);
 			g.stroke(c);
@@ -35,7 +37,6 @@ public class NXTAccelerometerRenderer extends NXTRenderer {
 			float rdx = (float) ((Math.sin(a) * radius) * values[i]);
 			float rdy = (float) ((Math.cos(a) * radius) * values[i]);
 			g.line(xc, yc, xc + rdx, yc + rdy);
-			float r = NXT_ArtificialPlasticityEcology.lineMarginWidth;
 			g.noStroke();
 			g.ellipse(xc + (rdx - r), yc + (rdy - r), xc + (rdx + r), yc
 					+ (rdy + r));
