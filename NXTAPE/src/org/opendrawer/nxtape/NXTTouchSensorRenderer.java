@@ -1,8 +1,10 @@
 package org.opendrawer.nxtape;
 
+import org.opendrawer.dawinian.neurodynamics.DataProvider;
+
 import processing.core.PGraphics;
 
-public class NXTTouchSensorRenderer extends InteractiveRenderer {
+public class NXTTouchSensorRenderer extends NXTRenderer {
 	NXTTouchSensor nxtTouchSensor;
 
 	public NXTTouchSensorRenderer(NXTTouchSensor nxtTouchSensor) {
@@ -39,5 +41,10 @@ public class NXTTouchSensorRenderer extends InteractiveRenderer {
 	@Override
 	public void mouseClicked(int mouseX, int mouseY) {
 		nxtTouchSensor.setOn(!nxtTouchSensor.isOn());
+	}
+
+	@Override
+	public DataProvider getDataProvider() {
+		return nxtTouchSensor;
 	}
 }

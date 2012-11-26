@@ -2,9 +2,11 @@ package org.opendrawer.nxtape;
 
 import java.awt.Color;
 
+import org.opendrawer.dawinian.neurodynamics.DataProvider;
+
 import processing.core.PGraphics;
 
-public class NXTAccelerometerRenderer extends InteractiveRenderer {
+public class NXTAccelerometerRenderer extends NXTRenderer {
 	NXTAccelerometer nxtAccelerometer;
 
 	public NXTAccelerometerRenderer(NXTAccelerometer nxtAccelerometer) {
@@ -47,7 +49,7 @@ public class NXTAccelerometerRenderer extends InteractiveRenderer {
 	}
 
 	@Override
-	public void mouseClicked(int mouseX, int mouseY) {
-
+	public DataProvider getDataProvider() {
+		return nxtAccelerometer;
 	}
 }

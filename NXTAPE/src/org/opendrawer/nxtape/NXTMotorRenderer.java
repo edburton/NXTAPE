@@ -1,8 +1,10 @@
 package org.opendrawer.nxtape;
 
+import org.opendrawer.dawinian.neurodynamics.DataProvider;
+
 import processing.core.PGraphics;
 
-public class NXTMotorRenderer extends InteractiveRenderer {
+public class NXTMotorRenderer extends NXTRenderer {
 	NXTMotor nxtMotor;
 
 	public NXTMotorRenderer(NXTMotor nxtMotor) {
@@ -60,5 +62,10 @@ public class NXTMotorRenderer extends InteractiveRenderer {
 	@Override
 	public void mouseReleased(int mouseX, int mouseY) {
 		mouseClicked(mouseX, mouseY);
+	}
+
+	@Override
+	public DataProvider getDataProvider() {
+		return nxtMotor;
 	}
 }

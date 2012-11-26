@@ -1,8 +1,10 @@
 package org.opendrawer.nxtape;
 
+import org.opendrawer.dawinian.neurodynamics.DataProvider;
+
 import processing.core.PGraphics;
 
-public class NXTCompassRenderer extends InteractiveRenderer {
+public class NXTCompassRenderer extends NXTRenderer {
 	NXTCompass nxtCompass;
 
 	public NXTCompassRenderer(NXTCompass nxtCompass) {
@@ -40,5 +42,10 @@ public class NXTCompassRenderer extends InteractiveRenderer {
 	@Override
 	public void mouseClicked(int mouseX, int mouseY) {
 
+	}
+
+	@Override
+	public DataProvider getDataProvider() {
+		return nxtCompass;
 	}
 }
