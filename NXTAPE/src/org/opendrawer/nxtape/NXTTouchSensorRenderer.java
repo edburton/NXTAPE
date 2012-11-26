@@ -47,4 +47,19 @@ public class NXTTouchSensorRenderer extends NXTRenderer {
 	public DataProvider getDataProvider() {
 		return nxtTouchSensor;
 	}
+
+	@Override
+	public void mousePressed(int mouseX, int mouseY) {
+
+	}
+
+	@Override
+	public void mouseDragged(int mouseX, int mouseY) {
+
+	}
+
+	@Override
+	public void mouseReleased(int mouseX, int mouseY) {
+
+	}
 }

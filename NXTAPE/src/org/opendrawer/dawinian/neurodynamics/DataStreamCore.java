@@ -48,7 +48,7 @@ public class DataStreamCore {
 		}
 		return null;
 	}
-	
+
 	public void step() {
 		stepInputs();
 		stepOutputs();

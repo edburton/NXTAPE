@@ -4,7 +4,8 @@ import org.opendrawer.dawinian.neurodynamics.DataProvider;
 
 import processing.core.PGraphics;
 
-public abstract class NXTRenderer extends InteractiveRenderer {
+public abstract class NXTRenderer extends Renderer implements
+		InteractiveRenderer {
 
 	public NXTRenderer() {
 
@@ -18,5 +19,4 @@ public abstract class NXTRenderer extends InteractiveRenderer {
 	public abstract void draw(PGraphics g);
 
 	public abstract DataProvider getDataProvider();
-
 }

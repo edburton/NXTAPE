@@ -13,4 +13,12 @@ public abstract class DataStreamBundleMap {
 	public void map() {
 
 	}
+
+	public DataStreamBundle getInputDataStreamBundle() {
+		return inputDataStreamBundle;
+	}
+
+	public DataStreamBundle getOutputDataStreamBundle() {
+		return outputDataStreamBundle;
+	}
 }

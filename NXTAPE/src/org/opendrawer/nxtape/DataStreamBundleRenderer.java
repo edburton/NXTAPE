@@ -6,7 +6,7 @@ import org.opendrawer.dawinian.neurodynamics.DataStreamBundle;
 
 import processing.core.PGraphics;
 
-public class DataStreamBundleRenderer extends InteractiveRenderer {
+public class DataStreamBundleRenderer extends Renderer {
 
 	protected DataStreamBundle dataStreamBundle;
 
@@ -51,29 +51,8 @@ public class DataStreamBundleRenderer extends InteractiveRenderer {
 		return x;
 	}
 
-	@Override
-	public void setPosition(float x, float y, float width, float height) {
-		super.setPosition(x, y, width, height);
-	}
-
 	public DataStreamBundle getDataStreamBundle() {
 		return dataStreamBundle;
-	}
-
-	@Override
-	public void mouseClicked(int mouseX, int mouseY) {
-	}
-
-	@Override
-	public void mousePressed(int mouseX, int mouseY) {
-	}
-
-	@Override
-	public void mouseDragged(int mouseX, int mouseY) {
-	}
-
-	@Override
-	public void mouseReleased(int mouseX, int mouseY) {
 	}
 
 }
