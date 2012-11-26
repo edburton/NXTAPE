@@ -12,8 +12,8 @@ import lejos.pc.comm.NXTCommException;
 import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
-import org.opendrawer.dawinian.neurodynamics.DataStreamBundle;
 import org.opendrawer.dawinian.neurodynamics.DataStreamCore;
+import org.opendrawer.dawinian.neurodynamics.HomogeneousDataStreamBundle;
 
 import processing.core.PApplet;
 
@@ -35,7 +35,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private int debugCounter = 0;
 	private int dataStreamWidth = 256;
 	private final DataStreamCore dataStreamCore = new DataStreamCore();
-	private List<DataStreamBundleRenderer> dataStreamBundleRenderers = new ArrayList<DataStreamBundleRenderer>();
+	private List<HomogeneousDataStreamBundleRenderer> homogeneousDataStreamBundleRenderers = new ArrayList<HomogeneousDataStreamBundleRenderer>();
 	private boolean dummyMode = false;
 	public static float lineWidth;
 	private InteractiveRenderer mouseFocusedRenderer;
@@ -96,54 +96,64 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		float y = edgeMargin;
 		float width = screenWidth - edgeMargin * 2;
 
-		dataStreamBundleRenderers.add(new DataStreamBundleRenderer(
-				new DataStreamBundle(accelerometer, dataStreamWidth),
-				new NXTAccelerometerRenderer(accelerometer), edgeMargin, y,
-				width, height));
+		homogeneousDataStreamBundleRenderers
+				.add(new HomogeneousDataStreamBundleRenderer(
+						new HomogeneousDataStreamBundle(accelerometer,
+								dataStreamWidth), new NXTAccelerometerRenderer(
+								accelerometer), edgeMargin, y, width, height));
 		y += height + margin;
-		// dataStreamBundleRenderers.add(new DataStreamBundleRenderer(
+		// homogeneousDataStreamBundleRenderers.add(new
+		// HomogeneousDataStreamBundleRenderer(
 		// new DataStreamBundle(compass, dataStreamWidth),
 		// new NXTCompassRenderer(compass), edgeMargin, y,
 		// width, height));
 		// y += height + margin;
-		// dataStreamBundleRenderers.add(new DataStreamBundleRenderer(
+		// homogeneousDataStreamBundleRenderers.add(new
+		// HomogeneousDataStreamBundleRenderer(
 		// new DataStreamBundle(touchTop, dataStreamWidth),
 		// new NXTTouchSensorRenderer(touchTop), edgeMargin, y, width,
 		// height));
 		// y += height + margin;
-		dataStreamBundleRenderers.add(new DataStreamBundleRenderer(
-				new DataStreamBundle(touchBottom, dataStreamWidth),
-				new NXTTouchSensorRenderer(touchBottom), edgeMargin, y, width,
-				height));
+		homogeneousDataStreamBundleRenderers
+				.add(new HomogeneousDataStreamBundleRenderer(
+						new HomogeneousDataStreamBundle(touchBottom,
+								dataStreamWidth), new NXTTouchSensorRenderer(
+								touchBottom), edgeMargin, y, width, height));
 		y += height + margin;
-		dataStreamBundleRenderers.add(new DataStreamBundleRenderer(
-				new DataStreamBundle(touchLeft, dataStreamWidth),
-				new NXTTouchSensorRenderer(touchLeft), edgeMargin, y, width,
-				height));
+		homogeneousDataStreamBundleRenderers
+				.add(new HomogeneousDataStreamBundleRenderer(
+						new HomogeneousDataStreamBundle(touchLeft,
+								dataStreamWidth), new NXTTouchSensorRenderer(
+								touchLeft), edgeMargin, y, width, height));
 		y += height + margin;
-		dataStreamBundleRenderers.add(new DataStreamBundleRenderer(
-				new DataStreamBundle(touchRight, dataStreamWidth),
-				new NXTTouchSensorRenderer(touchRight), edgeMargin, y, width,
-				height));
+		homogeneousDataStreamBundleRenderers
+				.add(new HomogeneousDataStreamBundleRenderer(
+						new HomogeneousDataStreamBundle(touchRight,
+								dataStreamWidth), new NXTTouchSensorRenderer(
+								touchRight), edgeMargin, y, width, height));
 		y += height + margin;
-		dataStreamBundleRenderers.add(new DataStreamBundleRenderer(
-				new DataStreamBundle(armHeadMotor, dataStreamWidth),
-				new NXTMotorRenderer(armHeadMotor), edgeMargin, y, width,
-				height));
+		homogeneousDataStreamBundleRenderers
+				.add(new HomogeneousDataStreamBundleRenderer(
+						new HomogeneousDataStreamBundle(armHeadMotor,
+								dataStreamWidth), new NXTMotorRenderer(
+								armHeadMotor), edgeMargin, y, width, height));
 		y += height + margin;
-		dataStreamBundleRenderers.add(new DataStreamBundleRenderer(
-				new DataStreamBundle(armMiddleMotor, dataStreamWidth),
-				new NXTMotorRenderer(armMiddleMotor), edgeMargin, y, width,
-				height));
+		homogeneousDataStreamBundleRenderers
+				.add(new HomogeneousDataStreamBundleRenderer(
+						new HomogeneousDataStreamBundle(armMiddleMotor,
+								dataStreamWidth), new NXTMotorRenderer(
+								armMiddleMotor), edgeMargin, y, width, height));
 		y += height + margin;
-		dataStreamBundleRenderers.add(new DataStreamBundleRenderer(
-				new DataStreamBundle(armBodyMotor, dataStreamWidth),
-				new NXTMotorRenderer(armBodyMotor), edgeMargin, y, width,
-				height));
+		homogeneousDataStreamBundleRenderers
+				.add(new HomogeneousDataStreamBundleRenderer(
+						new HomogeneousDataStreamBundle(armBodyMotor,
+								dataStreamWidth), new NXTMotorRenderer(
+								armBodyMotor), edgeMargin, y, width, height));
 
-		for (int i = 0; i < dataStreamBundleRenderers.size(); i++)
-			dataStreamCore.addDataStreamBundle(dataStreamBundleRenderers.get(i)
-					.getDataStreamBundle());
+		for (int i = 0; i < homogeneousDataStreamBundleRenderers.size(); i++)
+			dataStreamCore
+					.addDataStreamBundle(homogeneousDataStreamBundleRenderers
+							.get(i).getDataStreamBundle());
 		dataStreamCore.prepareDataStreams();
 	}
 
@@ -201,8 +211,8 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 		dataStreamCore.stepOutputs();
 
-		for (int i = 0; i < dataStreamBundleRenderers.size(); i++) {
-			dataStreamBundleRenderers.get(i).draw(g);
+		for (int i = 0; i < homogeneousDataStreamBundleRenderers.size(); i++) {
+			homogeneousDataStreamBundleRenderers.get(i).draw(g);
 		}
 
 		if (++debugCounter % 100 == 0)
@@ -216,16 +226,20 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 	@Override
 	public void mouseClicked() {
-		for (int i = 0; i < dataStreamBundleRenderers.size(); i++)
-			if (dataStreamBundleRenderers.get(i).contains(mouseX, mouseY))
-				dataStreamBundleRenderers.get(i).mouseClicked(mouseX, mouseY);
+		for (int i = 0; i < homogeneousDataStreamBundleRenderers.size(); i++)
+			if (homogeneousDataStreamBundleRenderers.get(i).contains(mouseX,
+					mouseY))
+				homogeneousDataStreamBundleRenderers.get(i).mouseClicked(
+						mouseX, mouseY);
 	}
 
 	@Override
 	public void mousePressed() {
-		for (int i = 0; i < dataStreamBundleRenderers.size(); i++)
-			if (dataStreamBundleRenderers.get(i).contains(mouseX, mouseY)) {
-				mouseFocusedRenderer = dataStreamBundleRenderers.get(i);
+		for (int i = 0; i < homogeneousDataStreamBundleRenderers.size(); i++)
+			if (homogeneousDataStreamBundleRenderers.get(i).contains(mouseX,
+					mouseY)) {
+				mouseFocusedRenderer = homogeneousDataStreamBundleRenderers
+						.get(i);
 				mouseFocusedRenderer.mousePressed(mouseX, mouseY);
 			}
 	}

@@ -4,16 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataStreamBundle {
-	private DataProvider dataProvider;
-	private List<DataStream> dataStreams = new ArrayList<DataStream>();
-	private int dataWidth;
+	protected List<DataStream> dataStreams = new ArrayList<DataStream>();
+	protected int dataWidth;
 
-	public DataStreamBundle(DataProvider dataProvider, int dataWidth) {
-		this.dataProvider = dataProvider;
+	public DataStreamBundle(int dataWidth) {
 		this.dataWidth = dataWidth;
-		int channels = dataProvider.getChannelCount();
-		for (int i = 0; i < channels; i++)
-			dataStreams.add(new DataStream(dataProvider, i, dataWidth));
 	}
 
 	public void write(double[] values) {
@@ -36,11 +31,15 @@ public class DataStreamBundle {
 		return dataWidth;
 	}
 
-	public DataProvider getDataProvider() {
-		return dataProvider;
-	}
-
 	public List<DataStream> getDataStreams() {
 		return dataStreams;
+	}
+
+	public void AddDataStream(DataStream dataStream) {
+		dataStreams.add(dataStream);
+	}
+
+	public void RemoveDataStream(DataStream dataStream) {
+		dataStreams.remove(dataStream);
 	}
 }

@@ -1,8 +1,8 @@
 package org.opendrawer.dawinian.neurodynamics;
 
-public class Reflex extends Actor {
+public class Reflex extends Map {
 
-	public Reflex() {
+	public Reflex(DataStream input, DataStream output, double weight) {
 
 	}
 

@@ -1,5 +1,7 @@
 package org.opendrawer.dawinian.neurodynamics;
 
-public class Predictor extends Map {
+import org.encog.neural.networks.training.propagation.back.Backpropagation;
 
+public class Predictor extends Map {
+	Backpropagation network;
 }

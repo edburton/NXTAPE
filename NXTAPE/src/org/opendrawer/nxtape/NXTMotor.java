@@ -78,8 +78,11 @@ public class NXTMotor implements OutputProvider {
 		}
 		if (remoteMotor != null)
 			actualAngle = remoteMotor.getTachoCount();
+		int iVirtualAngle = (int) Math.round(virtualAngle);
+		if (Math.abs(actualAngle - iVirtualAngle) > 1) {
+			iVirtualAngle += actualAngle - iVirtualAngle;
+		}
 		virtualSpeed += inputRate * maxInputRate;
-		virtualAngle = (actualAngle + virtualAngle) / 2;
 		if (virtualSpeed != 0) {
 			if (virtualSpeed > maxRate)
 				virtualSpeed = maxRate;
@@ -87,10 +90,10 @@ public class NXTMotor implements OutputProvider {
 				virtualSpeed = -maxRate;
 			virtualAngle += virtualSpeed;
 			if (virtualAngle < minAngle) {
-				virtualSpeed = 0;
+				virtualSpeed = Math.abs(virtualSpeed);
 				virtualAngle = minAngle;
 			} else if (virtualAngle > maxAngle) {
-				virtualSpeed = 0;
+				virtualSpeed = -Math.abs(virtualSpeed);
 				virtualAngle = maxAngle;
 			}
 		}
@@ -104,7 +107,7 @@ public class NXTMotor implements OutputProvider {
 				currentSpeed = speed;
 			}
 		}
-		int iVirtualAngle = (int) Math.round(virtualAngle);
+		iVirtualAngle = (int) Math.round(virtualAngle);
 		if (remoteMotor != null && iVirtualAngle != actualAngle
 				&& iVirtualAngle != targetAngle) {
 			remoteMotor.rotateTo(iVirtualAngle, true);
