@@ -2,7 +2,7 @@ package org.opendrawer.nxtape;
 
 import processing.core.PGraphics;
 
-public abstract class Renderer {
+public class Renderer {
 	protected float x, y, width, height;
 
 	public Renderer() {
@@ -27,6 +27,8 @@ public abstract class Renderer {
 		return x1 >= x && y1 >= y && x1 <= x + width && y1 <= y + height;
 	}
 
-	public abstract void draw(PGraphics g);
+	public void draw(PGraphics g) {
+
+	}
 
 }

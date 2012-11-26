@@ -21,8 +21,8 @@ public class HomogeneousDataStreamBundleRenderer extends
 
 	@Override
 	public void draw(PGraphics g) {
-		dataProviderRenderer.draw(g);
 		super.draw(g);
+		dataProviderRenderer.draw(g);
 	}
 
 	@Override

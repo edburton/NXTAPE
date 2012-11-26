@@ -22,28 +22,28 @@ public class DataStreamBundleRenderer extends Renderer {
 
 	@Override
 	public void draw(PGraphics g) {
+		super.draw(g);
+		g.noFill();
 		g.stroke(64, 64, 64);
 		g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
 		g.line(getStreamLeft(), y + height / 2, x + width, y + height / 2);
 		int nc = dataStreamBundle.getDataStreams().size();
+		float graphHeight = height - NXT_ArtificialPlasticityEcology.lineWidth
+				/ 2.0f;
 		for (int c = nc - 1; c >= 0; c--) {
-			float xx = 0, yy = 0;
-			boolean started = false;
 			int dataWidth = dataStreamBundle.getDataWidth();
 			g.stroke(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
+			g.beginShape();
 			for (int i = 0; i < dataWidth; i++) {
 				double v = dataStreamBundle.read(i, c);
 				if (v != Float.NaN) {
 					float x1 = (getStreamLeft())
 							+ ((i / (float) (dataWidth - 1)) * (width - (getStreamLeft() - x)));
-					float y1 = (float) ((y + height / 2) - v * height / 2);
-					if (started)
-						g.line(x1, y1, xx, yy);
-					started = true;
-					xx = x1;
-					yy = y1;
+					float y1 = (float) ((y + height / 2) - v * graphHeight / 2);
+					g.vertex(x1, y1);
 				}
 			}
+			g.endShape();
 		}
 	}
 

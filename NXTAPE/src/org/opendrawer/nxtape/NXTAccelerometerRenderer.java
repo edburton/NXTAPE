@@ -16,22 +16,27 @@ public class NXTAccelerometerRenderer extends NXTRenderer {
 
 	@Override
 	public void draw(PGraphics g) {
-		float radius = (Math.min(width, height) / 2)
-				- NXT_ArtificialPlasticityEcology.lineWidth / 2;
+		super.draw(g);
+		float radius = (Math.min(width, height) / 2);
 		float xc = x + width / 2;
 		float yc = y + height / 2;
+		g.noStroke();
+		g.fill(64, 64, 64);
+		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
+		radius -= NXT_ArtificialPlasticityEcology.lineMarginWidth;
 		g.fill(16);
-		g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
-		g.stroke(64, 64, 64);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 		double[] values = nxtAccelerometer.getNormalizedValues();
 		for (int i = 0; i < 3; i++) {
-			g.stroke(Color.HSBtoRGB(i / 3.0f, 1.0f, 1.0f));
+			int c = Color.HSBtoRGB(i / 3.0f, 1.0f, 1.0f);
+			g.stroke(c);
+			g.fill(c);
 			float a = ((float) Math.PI * (2 / 3.0f)) * i;
 			float rdx = (float) ((Math.sin(a) * radius) * values[i]);
 			float rdy = (float) ((Math.cos(a) * radius) * values[i]);
 			g.line(xc, yc, xc + rdx, yc + rdy);
-			float r = NXT_ArtificialPlasticityEcology.lineWidth / 2;
+			float r = NXT_ArtificialPlasticityEcology.lineMarginWidth;
+			g.noStroke();
 			g.ellipse(xc + (rdx - r), yc + (rdy - r), xc + (rdx + r), yc
 					+ (rdy + r));
 		}
@@ -40,7 +45,7 @@ public class NXTAccelerometerRenderer extends NXTRenderer {
 	@Override
 	public boolean contains(float x1, float y1) {
 		float radius = (Math.min(width, height) / 2)
-				- NXT_ArtificialPlasticityEcology.lineWidth / 2;
+				- NXT_ArtificialPlasticityEcology.lineMarginWidth / 2;
 		float xc = x + width / 2;
 		float yc = y + height / 2;
 		float dx = x1 - xc;

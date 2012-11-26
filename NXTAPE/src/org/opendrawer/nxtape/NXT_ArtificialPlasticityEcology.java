@@ -34,17 +34,19 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private NXTMotor armMiddleMotor;
 	private NXTMotor armBodyMotor;
 	private int debugCounter = 0;
-	private int dataStreamWidth = 256;
+	private int dataStreamWidth = 100;
 	private final DataStreamCore dataStreamCore = new DataStreamCore();
 	private List<HomogeneousDataStreamBundleRenderer> homogeneousDataStreamBundleRenderers = new ArrayList<HomogeneousDataStreamBundleRenderer>();
 	private boolean dummyMode = false;
 	public static float lineWidth;
+	public static float lineMarginWidth;
 	private InteractiveRenderer mouseFocusedRenderer;
 	private static final String touch_left_name = "Touch Left";
 	private static final String touch_bottom_name = "Touch Bottom";
 	private static final String touch_right_name = "Touch Right";
 	private static final String accelerometer_name = "Accelerometer";
-	private static final String compass_name = "Compass";
+	// private static final String compass_name = "Compass";
+	private List<DataStreamBundleMapRenderer> dataStreamBundleMapRenderers = new ArrayList<DataStreamBundleMapRenderer>();
 
 	/**
 	 * @param args
@@ -55,6 +57,24 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 					"org.opendrawer.nxtape.NXT_ArtificialPlasticityEcology" });
 		else
 			PApplet.main("org.opendrawer.nxtape.NXT_ArtificialPlasticityEcology");
+	}
+
+	@Override
+	public void setup() {
+		if (presentationMode)
+			size(displayWidth, displayHeight, OPENGL);
+		else
+			size(1024, 768, OPENGL);
+		frameRate(200);
+		lineMarginWidth = getHeight() / 256.0f;
+		lineWidth = lineMarginWidth * 1.70710678118655f;
+		smooth();
+		frameRate(50);
+		ellipseMode(CORNERS);
+		rectMode(CORNERS);
+		background(0);
+		frame.setBackground(new java.awt.Color(0, 0, 0));
+		setupNXT();
 	}
 
 	private void setupNXT() {
@@ -95,7 +115,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		float margin = screenWidth / 100;
 		float height = ((screenHeight - edgeMargin * 2) / 7) - margin;
 		float y = edgeMargin;
-		float width = screenWidth - edgeMargin * 2;
+		float width = (screenWidth - (screenWidth / 4)) + edgeMargin;
 
 		HomogeneousDataStreamBundle bottomDataStreamBundle;
 		HomogeneousDataStreamBundle leftDataStreamBundle;
@@ -172,38 +192,57 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 					.addDataStreamBundle(homogeneousDataStreamBundleRenderers
 							.get(i).getDataStreamBundle());
 
-		dataStreamCore.addReflex(new Reflex(accelerometerDataStreamBundle,
-				armHeadMotorDataStreamBundle, 1, 0, -1));
+		Reflex accelerometerReflex;
+		Reflex bottomReflexM;
+		Reflex leftReflexM;
+		Reflex rightReflexM;
+		Reflex leftReflexB;
+		Reflex rightReflexB;
 
-		dataStreamCore.addReflex(new Reflex(bottomDataStreamBundle,
-				armHeadMotorDataStreamBundle, 0, 0, -1));
-		dataStreamCore.addReflex(new Reflex(leftDataStreamBundle,
+		dataStreamCore.addReflex(accelerometerReflex = new Reflex(
+				accelerometerDataStreamBundle, armHeadMotorDataStreamBundle, 1,
+				0, -1));
+
+		dataStreamCore
+				.addReflex(bottomReflexM = new Reflex(bottomDataStreamBundle,
+						armHeadMotorDataStreamBundle, 0, 0, -1));
+		dataStreamCore.addReflex(leftReflexM = new Reflex(leftDataStreamBundle,
 				armMiddleMotorDataStreamBundle, 0, 0, -0.5d));
-		dataStreamCore.addReflex(new Reflex(rightDataStreamBundle,
-				armMiddleMotorDataStreamBundle, 0, 0, 0.5d));
-		dataStreamCore.addReflex(new Reflex(leftDataStreamBundle,
+		dataStreamCore.addReflex(rightReflexM = new Reflex(
+				rightDataStreamBundle, armMiddleMotorDataStreamBundle, 0, 0,
+				0.5d));
+		dataStreamCore.addReflex(leftReflexB = new Reflex(leftDataStreamBundle,
 				armBodyMotorDataStreamBundle, 0, 0, -0.5d));
-		dataStreamCore.addReflex(new Reflex(rightDataStreamBundle,
-				armBodyMotorDataStreamBundle, 0, 0, 0.5d));
+		dataStreamCore
+				.addReflex(rightReflexB = new Reflex(rightDataStreamBundle,
+						armBodyMotorDataStreamBundle, 0, 0, 0.5d));
 
 		dataStreamCore.prepareDataStreams();
-	}
 
-	@Override
-	public void setup() {
-		if (presentationMode)
-			size(displayWidth, displayHeight, OPENGL);
-		else
-			size(displayWidth / 2, displayHeight / 2, OPENGL);
-		frameRate(200);
-		lineWidth = getHeight() / 128.0f;
-		smooth();
-		frameRate(50);
-		ellipseMode(CORNERS);
-		rectMode(CORNERS);
-		background(0);
-		frame.setBackground(new java.awt.Color(0, 0, 0));
-		setupNXT();
+		y = edgeMargin;
+		width = (screenWidth - edgeMargin * 2) / 6;
+		float x = (screenWidth - edgeMargin) - width;
+		margin = screenWidth / 100;
+		height = ((((screenHeight - edgeMargin * 2))) / 6) - margin;
+
+		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
+				accelerometerReflex, x, y, width, height));
+		y += height + margin;
+		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
+				bottomReflexM, x, y, width, height));
+		y += height + margin;
+		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
+				leftReflexM, x, y, width, height));
+		y += height + margin;
+		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
+				rightReflexM, x, y, width, height));
+		y += height + margin;
+		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
+				leftReflexB, x, y, width, height));
+		y += height + margin;
+		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
+				rightReflexB, x, y, width, height));
+		y += height + margin;
 	}
 
 	@Override
@@ -214,6 +253,11 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 		for (int i = 0; i < homogeneousDataStreamBundleRenderers.size(); i++) {
 			homogeneousDataStreamBundleRenderers.get(i).draw(g);
+		}
+
+		for (int i = 0; i < dataStreamBundleMapRenderers.size(); i++) {
+
+			dataStreamBundleMapRenderers.get(i).draw(g);
 		}
 
 		if (++debugCounter % 100 == 0)

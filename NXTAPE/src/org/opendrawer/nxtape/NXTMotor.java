@@ -145,8 +145,8 @@ public class NXTMotor implements OutputDataProvider {
 		return actualAngle;
 	}
 
-	public void setActualAngle(int actualAngle) {
-		this.actualAngle = actualAngle;
+	public void setGUIAngle(int actualAngle) {
+		this.actualAngle = (int) (restAngle + ((actualAngle / 360.0) * (maxAngle - minAngle)));
 	}
 
 	@Override
