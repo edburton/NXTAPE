@@ -12,11 +12,18 @@ public class HomogeneousDataStreamBundleRenderer extends
 
 	public HomogeneousDataStreamBundleRenderer(
 			HomogeneousDataStreamBundle dataStreamBundle,
+			NXTRenderer dataProviderRenderer) {
+		super(dataStreamBundle);
+		this.dataProviderRenderer = dataProviderRenderer;
+	}
+
+	public HomogeneousDataStreamBundleRenderer(
+			HomogeneousDataStreamBundle dataStreamBundle,
 			NXTRenderer dataProviderRenderer, float x, float y, float width,
 			float height) {
 		super(dataStreamBundle, x, y, width, height);
 		this.dataProviderRenderer = dataProviderRenderer;
-		setPosition(x, y, width, height);
+		setVisibleAt(x, y, width, height);
 	}
 
 	@Override
@@ -31,9 +38,9 @@ public class HomogeneousDataStreamBundleRenderer extends
 	}
 
 	@Override
-	public void setPosition(float x, float y, float width, float height) {
-		super.setPosition(x, y, width, height);
-		dataProviderRenderer.setPosition(x, y, height, height);
+	public void setVisibleAt(float x, float y, float width, float height) {
+		super.setVisibleAt(x, y, width, height);
+		dataProviderRenderer.setVisibleAt(x, y, height, height);
 	}
 
 	@Override

@@ -20,7 +20,7 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcology extends PApplet {
-	private static final boolean presentationMode = true;
+	private static final boolean presentationMode = false;
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
@@ -34,7 +34,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private NXTMotor armMiddleMotor;
 	private NXTMotor armBodyMotor;
 	private int debugCounter = 0;
-	private int dataStreamWidth = 100;
+	private int dataStreamWidth = 64;
 	private final DataStreamCore dataStreamCore = new DataStreamCore();
 	private List<HomogeneousDataStreamBundleRenderer> homogeneousDataStreamBundleRenderers = new ArrayList<HomogeneousDataStreamBundleRenderer>();
 	private boolean dummyMode = false;
@@ -109,14 +109,6 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		armBodyMotor = new NXTMotor(!dummyMode ? Motor.C : null,
 				"arm body motor", -60, 60, 0, 0.9f);
 
-		float screenWidth = getWidth();
-		float screenHeight = getHeight();
-		float edgeMargin = screenWidth / 50;
-		float margin = screenWidth / 100;
-		float height = ((screenHeight - edgeMargin * 2) / 7) - margin;
-		float y = edgeMargin;
-		float width = (screenWidth - (screenWidth / 4)) + edgeMargin;
-
 		HomogeneousDataStreamBundle bottomDataStreamBundle;
 		HomogeneousDataStreamBundle leftDataStreamBundle;
 		HomogeneousDataStreamBundle rightDataStreamBundle;
@@ -129,9 +121,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				.add(new HomogeneousDataStreamBundleRenderer(
 						accelerometerDataStreamBundle = new HomogeneousDataStreamBundle(
 								accelerometer, dataStreamWidth),
-						new NXTAccelerometerRenderer(accelerometer),
-						edgeMargin, y, width, height));
-		y += height + margin;
+						new NXTAccelerometerRenderer(accelerometer)));
 		// homogeneousDataStreamBundleRenderers.add(new
 		// HomogeneousDataStreamBundleRenderer(
 		// new DataStreamBundle(compass, dataStreamWidth),
@@ -149,43 +139,32 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				.add(new HomogeneousDataStreamBundleRenderer(
 						bottomDataStreamBundle = new HomogeneousDataStreamBundle(
 								touchBottom, dataStreamWidth),
-						new NXTTouchSensorRenderer(touchBottom), edgeMargin, y,
-						width, height));
-		y += height + margin;
+						new NXTTouchSensorRenderer(touchBottom)));
 		homogeneousDataStreamBundleRenderers
 				.add(new HomogeneousDataStreamBundleRenderer(
 						leftDataStreamBundle = new HomogeneousDataStreamBundle(
 								touchLeft, dataStreamWidth),
-						new NXTTouchSensorRenderer(touchLeft), edgeMargin, y,
-						width, height));
-		y += height + margin;
+						new NXTTouchSensorRenderer(touchLeft)));
 		homogeneousDataStreamBundleRenderers
 				.add(new HomogeneousDataStreamBundleRenderer(
 						rightDataStreamBundle = new HomogeneousDataStreamBundle(
 								touchRight, dataStreamWidth),
-						new NXTTouchSensorRenderer(touchRight), edgeMargin, y,
-						width, height));
-		y += height + margin;
+						new NXTTouchSensorRenderer(touchRight)));
 		homogeneousDataStreamBundleRenderers
 				.add(new HomogeneousDataStreamBundleRenderer(
 						armHeadMotorDataStreamBundle = new HomogeneousDataStreamBundle(
 								armHeadMotor, dataStreamWidth),
-						new NXTMotorRenderer(armHeadMotor), edgeMargin, y,
-						width, height));
-		y += height + margin;
+						new NXTMotorRenderer(armHeadMotor)));
 		homogeneousDataStreamBundleRenderers
 				.add(new HomogeneousDataStreamBundleRenderer(
 						armMiddleMotorDataStreamBundle = new HomogeneousDataStreamBundle(
 								armMiddleMotor, dataStreamWidth),
-						new NXTMotorRenderer(armMiddleMotor), edgeMargin, y,
-						width, height));
-		y += height + margin;
+						new NXTMotorRenderer(armMiddleMotor)));
 		homogeneousDataStreamBundleRenderers
 				.add(new HomogeneousDataStreamBundleRenderer(
 						armBodyMotorDataStreamBundle = new HomogeneousDataStreamBundle(
 								armBodyMotor, dataStreamWidth),
-						new NXTMotorRenderer(armBodyMotor), edgeMargin, y,
-						width, height));
+						new NXTMotorRenderer(armBodyMotor)));
 
 		for (int i = 0; i < homogeneousDataStreamBundleRenderers.size(); i++)
 			dataStreamCore
@@ -202,7 +181,6 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		dataStreamCore.addReflex(accelerometerReflex = new Reflex(
 				accelerometerDataStreamBundle, armHeadMotorDataStreamBundle, 1,
 				0, -1));
-
 		dataStreamCore
 				.addReflex(bottomReflexM = new Reflex(bottomDataStreamBundle,
 						armHeadMotorDataStreamBundle, 0, 0, -1));
@@ -217,7 +195,34 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				.addReflex(rightReflexB = new Reflex(rightDataStreamBundle,
 						armBodyMotorDataStreamBundle, 0, 0, 0.5d));
 
+		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
+				accelerometerReflex));
+		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
+				bottomReflexM));
+		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
+				leftReflexM));
+		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
+				rightReflexM));
+		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
+				leftReflexB));
+		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
+				rightReflexB));
+
 		dataStreamCore.prepareDataStreams();
+
+		float screenWidth = getWidth();
+		float screenHeight = getHeight();
+		float edgeMargin = screenWidth / 50;
+		float margin = screenWidth / 100;
+		float height = ((screenHeight - edgeMargin * 2) / 7) - margin;
+		float y = edgeMargin;
+		float width = (screenWidth - (screenWidth / 4)) + edgeMargin;
+
+		for (int i = 0; i < homogeneousDataStreamBundleRenderers.size(); i++) {
+			homogeneousDataStreamBundleRenderers.get(i).setVisibleAt(
+					edgeMargin, y, width, height);
+			y += height + margin;
+		}
 
 		y = edgeMargin;
 		width = (screenWidth - edgeMargin * 2) / 6;
@@ -225,24 +230,11 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		margin = screenWidth / 100;
 		height = ((((screenHeight - edgeMargin * 2))) / 6) - margin;
 
-		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
-				accelerometerReflex, x, y, width, height));
-		y += height + margin;
-		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
-				bottomReflexM, x, y, width, height));
-		y += height + margin;
-		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
-				leftReflexM, x, y, width, height));
-		y += height + margin;
-		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
-				rightReflexM, x, y, width, height));
-		y += height + margin;
-		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
-				leftReflexB, x, y, width, height));
-		y += height + margin;
-		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
-				rightReflexB, x, y, width, height));
-		y += height + margin;
+		for (int i = 0; i < dataStreamBundleMapRenderers.size(); i++) {
+			dataStreamBundleMapRenderers.get(i).setVisibleAt(x, y, width,
+					height);
+			y += height + margin;
+		}
 	}
 
 	@Override

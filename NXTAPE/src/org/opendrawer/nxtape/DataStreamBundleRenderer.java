@@ -10,9 +10,14 @@ public class DataStreamBundleRenderer extends Renderer {
 
 	protected DataStreamBundle dataStreamBundle;
 
+	public DataStreamBundleRenderer(DataStreamBundle dataStreamBundle) {
+		super();
+		this.dataStreamBundle = dataStreamBundle;
+	}
+
 	public DataStreamBundleRenderer(DataStreamBundle dataStreamBundle, float x,
 			float y, float width, float height) {
-		super(x, y, width, height);
+		super();
 		this.dataStreamBundle = dataStreamBundle;
 	}
 

@@ -11,13 +11,21 @@ public class DataStreamBundleMapRenderer extends Renderer {
 
 	public DataStreamBundleMapRenderer(DataStreamBundleMap dataStreamBundleMap,
 			float x, float y, float width, float height) {
-		super(x, y, width, height);
+		super();
 		inputDataStreamBundleRenderer = new DataStreamBundleRenderer(
-				dataStreamBundleMap.getInputDataStreamBundle(), x, y,
-				width / 2, height);
+				dataStreamBundleMap.getInputDataStreamBundle());
 		outputDataStreamBundleRenderer = new DataStreamBundleRenderer(
-				dataStreamBundleMap.getOutputDataStreamBundle(), x + width / 2,
-				y, width / 2, height);
+				dataStreamBundleMap.getOutputDataStreamBundle());
+		setVisibleAt(x, y, width, height);
+
+	}
+
+	public DataStreamBundleMapRenderer(DataStreamBundleMap dataStreamBundleMap) {
+		super();
+		inputDataStreamBundleRenderer = new DataStreamBundleRenderer(
+				dataStreamBundleMap.getInputDataStreamBundle());
+		outputDataStreamBundleRenderer = new DataStreamBundleRenderer(
+				dataStreamBundleMap.getOutputDataStreamBundle());
 	}
 
 	@Override
@@ -46,10 +54,10 @@ public class DataStreamBundleMapRenderer extends Renderer {
 	}
 
 	@Override
-	public void setPosition(float x, float y, float width, float height) {
-		super.setPosition(x, y, width, height);
-		inputDataStreamBundleRenderer.setPosition(x, y, width / 2, height);
-		outputDataStreamBundleRenderer.setPosition(x + width / 2, y, width / 2,
-				height);
+	public void setVisibleAt(float x, float y, float width, float height) {
+		super.setVisibleAt(x, y, width, height);
+		inputDataStreamBundleRenderer.setVisibleAt(x, y, width / 2, height);
+		outputDataStreamBundleRenderer.setVisibleAt(x + width / 2, y,
+				width / 2, height);
 	}
 }

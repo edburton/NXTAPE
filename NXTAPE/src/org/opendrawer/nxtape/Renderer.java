@@ -4,23 +4,22 @@ import processing.core.PGraphics;
 
 public class Renderer {
 	protected float x, y, width, height;
+	protected boolean visible = false;
 
 	public Renderer() {
 
 	}
 
 	public Renderer(float x, float y, float width, float height) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
+		setVisibleAt(x, y, width, height);
 	}
 
-	public void setPosition(float x, float y, float width, float height) {
+	public void setVisibleAt(float x, float y, float width, float height) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		visible = true;
 	}
 
 	public boolean contains(float x1, float y1) {
@@ -29,6 +28,14 @@ public class Renderer {
 
 	public void draw(PGraphics g) {
 
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 
 }
