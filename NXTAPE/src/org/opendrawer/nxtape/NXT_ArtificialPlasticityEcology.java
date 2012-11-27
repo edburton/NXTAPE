@@ -222,8 +222,14 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 			actorRenderers.add(renderer);
 		}
 
-		for (int i = 0; i < 20; i++) {
-			Predictor predictor = new Predictor(null, null);
+		int r = 0;
+		for (int i = 0; i < 30; i++) {
+			r = (int) Math.floor(random(0, reflexRenderers.size()));
+			DataStreamBundleMapRenderer reflex = reflexRenderers.get(r);
+			Predictor predictor = new Predictor(reflex
+					.getInputDataStreamBundleRenderer().getDataStreamBundle(),
+					reflex.getOutputDataStreamBundleRenderer()
+							.getDataStreamBundle());
 			dataStreamCore.addPredictor(predictor);
 			DataStreamBundleMapRenderer renderer = new DataStreamBundleMapRenderer(
 					predictor);

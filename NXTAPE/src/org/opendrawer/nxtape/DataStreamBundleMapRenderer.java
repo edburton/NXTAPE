@@ -87,4 +87,12 @@ public class DataStreamBundleMapRenderer extends Renderer {
 				- (NXT_ArtificialPlasticityEcology.lineMarginWidth * 3f),
 				height - NXT_ArtificialPlasticityEcology.lineMarginWidth * 2);
 	}
+
+	public DataStreamBundleRenderer getInputDataStreamBundleRenderer() {
+		return inputDataStreamBundleRenderer;
+	}
+
+	public DataStreamBundleRenderer getOutputDataStreamBundleRenderer() {
+		return outputDataStreamBundleRenderer;
+	}
 }
