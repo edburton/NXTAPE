@@ -1,5 +1,6 @@
 package org.opendrawer.nxtape;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,10 @@ import lejos.pc.comm.NXTCommException;
 import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
+import org.opendrawer.dawinian.neurodynamics.Actor;
 import org.opendrawer.dawinian.neurodynamics.DataStreamCore;
 import org.opendrawer.dawinian.neurodynamics.HomogeneousDataStreamBundle;
+import org.opendrawer.dawinian.neurodynamics.Predictor;
 import org.opendrawer.dawinian.neurodynamics.Reflex;
 
 import processing.core.PApplet;
@@ -111,6 +114,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		List<HomogeneousDataStreamBundleRenderer> homogeneousDataStreamBundleRenderers = new ArrayList<HomogeneousDataStreamBundleRenderer>();
 		List<DataStreamBundleMapRenderer> reflexRenderers = new ArrayList<DataStreamBundleMapRenderer>();
 		List<DataStreamBundleMapRenderer> predictorRenderers = new ArrayList<DataStreamBundleMapRenderer>();
+		List<DataStreamBundleMapRenderer> actorRenderers = new ArrayList<DataStreamBundleMapRenderer>();
 
 		HomogeneousDataStreamBundle bottomDataStreamBundle;
 		HomogeneousDataStreamBundle leftDataStreamBundle;
@@ -206,50 +210,66 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		reflexRenderers.add(new DataStreamBundleMapRenderer(leftReflexB));
 		reflexRenderers.add(new DataStreamBundleMapRenderer(rightReflexB));
 
+		for (int i = 0; i < reflexRenderers.size(); i++)
+			reflexRenderers.get(i).setKeyColor(new Color(0, 128, 0));
+
+		for (int i = 0; i < 5; i++) {
+			Actor actor = new Actor(null, null);
+			dataStreamCore.addActor(actor);
+			DataStreamBundleMapRenderer renderer = new DataStreamBundleMapRenderer(
+					actor);
+			renderer.setKeyColor(new Color(128, 64, 0));
+			actorRenderers.add(renderer);
+		}
+
+		for (int i = 0; i < 15; i++) {
+			Predictor predictor = new Predictor(null, null);
+			dataStreamCore.addPredictor(predictor);
+			DataStreamBundleMapRenderer renderer = new DataStreamBundleMapRenderer(
+					predictor);
+			renderer.setKeyColor(new Color(0, 0, 128));
+			predictorRenderers.add(renderer);
+		}
+
 		dataStreamCore.prepareDataStreams();
+
+		renderers.addAll(homogeneousDataStreamBundleRenderers);
+		renderers.addAll(reflexRenderers);
+		renderers.addAll(actorRenderers);
+		renderers.addAll(predictorRenderers);
 
 		float screenWidth = getWidth();
 		float screenHeight = getHeight();
 		float edgeMargin = screenWidth / 50;
-		float margin = screenWidth / 100;
-		float height = ((screenHeight - edgeMargin * 2) / 7) - margin;
-		float y = edgeMargin;
-		float width = (screenWidth - (screenWidth / 4)) + edgeMargin;
+		float margin = edgeMargin / 2;
+		int gridWidth = (int) Math.ceil(Math.pow(renderers.size(), 1 / 3.0d));
+		int gridHeight = (int) Math.floor(Math.pow(renderers.size(), 2 / 3.0d));
 
-		for (int i = 0; i < homogeneousDataStreamBundleRenderers.size(); i++) {
-			homogeneousDataStreamBundleRenderers.get(i).setVisibleAt(
-					edgeMargin, y, width, height);
-			y += height + margin;
+		float width = ((screenWidth - edgeMargin * 2) / gridWidth) - margin;
+		float height = ((screenHeight - edgeMargin * 2) / gridHeight) - margin;
+
+		int c = 0;
+
+		for (int gx = 0; gx < gridWidth; gx++) {
+			for (int gy = 0; gy < gridHeight; gy++) {
+				if (c < renderers.size()) {
+					float x = edgeMargin + gx * (width + margin);
+					float y = edgeMargin + gy * (height + margin);
+					renderers.get(c++).setVisibleAt(x, y, width, height);
+				}
+			}
 		}
-
-		y = edgeMargin;
-		width = (screenWidth - edgeMargin * 2) / 6;
-		float x = (screenWidth - edgeMargin) - width;
-		margin = screenWidth / 100;
-		height = ((((screenHeight - edgeMargin * 2))) / 6) - margin;
-
-		for (int i = 0; i < reflexRenderers.size(); i++) {
-			reflexRenderers.get(i).setVisibleAt(x, y, width, height);
-			y += height + margin;
-		}
-
-		renderers.addAll(homogeneousDataStreamBundleRenderers);
-		renderers.addAll(reflexRenderers);
 	}
 
 	@Override
 	public void draw() {
-		background(0);
-
 		dataStreamCore.step();
-
+		background(0);
 		for (int i = 0; i < renderers.size(); i++) {
 			renderers.get(i).draw(g);
 		}
-
 		if (++debugCounter % 100 == 0)
 			println("frameRate: " + frameRate);
-
 		if (dummyMode) {
 			fill(255, 0, 0, (cos(debugCounter / 20.0f) + 1.0f) * 128);
 			text("NXT not found", 2, 12);

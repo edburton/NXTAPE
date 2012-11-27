@@ -1,10 +1,13 @@
 package org.opendrawer.nxtape;
 
+import java.awt.Color;
+
 import processing.core.PGraphics;
 
 public class Renderer {
 	protected float x, y, width, height;
 	protected boolean visible = false;
+	protected Color keyColor = new Color(128, 128, 128);
 
 	public Renderer() {
 
@@ -48,5 +51,9 @@ public class Renderer {
 	}
 
 	public void mouseReleased(int mouseX, int mouseY) {
+	}
+
+	public void setKeyColor(Color keyColor) {
+		this.keyColor = keyColor;
 	}
 }

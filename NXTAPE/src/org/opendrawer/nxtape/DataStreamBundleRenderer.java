@@ -28,11 +28,12 @@ public class DataStreamBundleRenderer extends Renderer {
 	@Override
 	public void draw(PGraphics g) {
 		super.draw(g);
-		g.noFill();
-		g.stroke(64, 64, 64);
-		g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
-		g.line(getStreamLeft(), y + height / 2, x + width, y + height / 2);
 		if (dataStreamBundle != null) {
+			g.noFill();
+			g.stroke(64, 64, 64);
+			g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
+			g.line(getStreamLeft(), y + height / 2, x + width, y + height / 2);
+
 			int nc = dataStreamBundle.getDataStreams().size();
 			float graphHeight = height
 					- NXT_ArtificialPlasticityEcology.lineWidth / 2.0f;

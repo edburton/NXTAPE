@@ -12,20 +12,24 @@ public class DataStreamBundleMapRenderer extends Renderer {
 	public DataStreamBundleMapRenderer(DataStreamBundleMap dataStreamBundleMap,
 			float x, float y, float width, float height) {
 		super();
-		inputDataStreamBundleRenderer = new DataStreamBundleRenderer(
-				dataStreamBundleMap.getInputDataStreamBundle());
-		outputDataStreamBundleRenderer = new DataStreamBundleRenderer(
-				dataStreamBundleMap.getOutputDataStreamBundle());
+		if (dataStreamBundleMap != null) {
+			inputDataStreamBundleRenderer = new DataStreamBundleRenderer(
+					dataStreamBundleMap.getInputDataStreamBundle());
+			outputDataStreamBundleRenderer = new DataStreamBundleRenderer(
+					dataStreamBundleMap.getOutputDataStreamBundle());
+		}
 		setVisibleAt(x, y, width, height);
 
 	}
 
 	public DataStreamBundleMapRenderer(DataStreamBundleMap dataStreamBundleMap) {
 		super();
-		inputDataStreamBundleRenderer = new DataStreamBundleRenderer(
-				dataStreamBundleMap.getInputDataStreamBundle());
-		outputDataStreamBundleRenderer = new DataStreamBundleRenderer(
-				dataStreamBundleMap.getOutputDataStreamBundle());
+		if (dataStreamBundleMap != null) {
+			inputDataStreamBundleRenderer = new DataStreamBundleRenderer(
+					dataStreamBundleMap.getInputDataStreamBundle());
+			outputDataStreamBundleRenderer = new DataStreamBundleRenderer(
+					dataStreamBundleMap.getOutputDataStreamBundle());
+		}
 	}
 
 	@Override
@@ -33,20 +37,24 @@ public class DataStreamBundleMapRenderer extends Renderer {
 		super.draw(g);
 
 		g.noStroke();
-		g.fill(0, 128, 0);
+		g.fill(keyColor.getRed(), keyColor.getGreen(), keyColor.getBlue());
 		g.rect(x, y, x + width, y + height);
-		g.fill(0, 32, 0);
+		g.fill(keyColor.getRed() / 2, keyColor.getGreen() / 2,
+				keyColor.getBlue() / 2);
 		g.rect(x + NXT_ArtificialPlasticityEcology.lineMarginWidth, y
 				+ NXT_ArtificialPlasticityEcology.lineMarginWidth, x + width
 				- NXT_ArtificialPlasticityEcology.lineMarginWidth, y + height
 				- NXT_ArtificialPlasticityEcology.lineMarginWidth);
-
-		g.stroke(0, 128, 0);
-		g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
-		g.line(x + width / 2, y, x + width / 2, y + height);
-
-		inputDataStreamBundleRenderer.draw(g);
-		outputDataStreamBundleRenderer.draw(g);
+		if (inputDataStreamBundleRenderer != null
+				|| outputDataStreamBundleRenderer != null) {
+			g.stroke(0, 128, 0);
+			g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
+			g.line(x + width / 2, y, x + width / 2, y + height);
+			if (inputDataStreamBundleRenderer != null)
+				inputDataStreamBundleRenderer.draw(g);
+			if (outputDataStreamBundleRenderer != null)
+				outputDataStreamBundleRenderer.draw(g);
+		}
 	}
 
 	protected float getStreamLeft() {
