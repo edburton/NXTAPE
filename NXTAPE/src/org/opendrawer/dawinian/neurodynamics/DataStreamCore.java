@@ -9,6 +9,8 @@ public class DataStreamCore {
 	private List<OutputDataProvider> outputDataProviders = new ArrayList<OutputDataProvider>();
 	private List<DataProvider> inputOnlyDataProviders = new ArrayList<DataProvider>();
 	private List<Reflex> reflexes = new ArrayList<Reflex>();
+	private List<Actor> actors = new ArrayList<Actor>();
+	private List<Predictor> predictors = new ArrayList<Predictor>();
 
 	public void prepareDataStreams() {
 		for (int i = 0; i < dataStreamBundles.size(); i++)
@@ -34,6 +36,14 @@ public class DataStreamCore {
 
 	public void addReflex(Reflex reflex) {
 		reflexes.add(reflex);
+	}
+
+	public void addActor(Actor actor) {
+		actors.add(actor);
+	}
+
+	public void addPredictor(Predictor predictor) {
+		predictors.add(predictor);
 	}
 
 	public void addDataStreamBundle(DataStreamBundle dataStreamBundle) {

@@ -5,7 +5,7 @@ import org.opendrawer.dawinian.neurodynamics.HomogeneousDataStreamBundle;
 import processing.core.PGraphics;
 
 public class HomogeneousDataStreamBundleRenderer extends
-		DataStreamBundleRenderer implements InteractiveRenderer {
+		DataStreamBundleRenderer {
 
 	NXTRenderer dataProviderRenderer;
 	NXTRenderer mouseFocusedRenderer;

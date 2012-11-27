@@ -36,17 +36,16 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private int debugCounter = 0;
 	private int dataStreamWidth = 64;
 	private final DataStreamCore dataStreamCore = new DataStreamCore();
-	private List<HomogeneousDataStreamBundleRenderer> homogeneousDataStreamBundleRenderers = new ArrayList<HomogeneousDataStreamBundleRenderer>();
 	private boolean dummyMode = false;
 	public static float lineWidth;
 	public static float lineMarginWidth;
-	private InteractiveRenderer mouseFocusedRenderer;
+	private Renderer mouseFocusedRenderer;
 	private static final String touch_left_name = "Touch Left";
 	private static final String touch_bottom_name = "Touch Bottom";
 	private static final String touch_right_name = "Touch Right";
 	private static final String accelerometer_name = "Accelerometer";
 	// private static final String compass_name = "Compass";
-	private List<DataStreamBundleMapRenderer> dataStreamBundleMapRenderers = new ArrayList<DataStreamBundleMapRenderer>();
+	private List<Renderer> renderers = new ArrayList<Renderer>();
 
 	/**
 	 * @param args
@@ -108,6 +107,10 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				"arm midle motor", -60, 60, 0, 0.9f);
 		armBodyMotor = new NXTMotor(!dummyMode ? Motor.C : null,
 				"arm body motor", -60, 60, 0, 0.9f);
+
+		List<HomogeneousDataStreamBundleRenderer> homogeneousDataStreamBundleRenderers = new ArrayList<HomogeneousDataStreamBundleRenderer>();
+		List<DataStreamBundleMapRenderer> reflexRenderers = new ArrayList<DataStreamBundleMapRenderer>();
+		List<DataStreamBundleMapRenderer> predictorRenderers = new ArrayList<DataStreamBundleMapRenderer>();
 
 		HomogeneousDataStreamBundle bottomDataStreamBundle;
 		HomogeneousDataStreamBundle leftDataStreamBundle;
@@ -195,18 +198,13 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				.addReflex(rightReflexB = new Reflex(rightDataStreamBundle,
 						armBodyMotorDataStreamBundle, 0, 0, 0.5d));
 
-		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
-				accelerometerReflex));
-		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
-				bottomReflexM));
-		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
-				leftReflexM));
-		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
-				rightReflexM));
-		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
-				leftReflexB));
-		dataStreamBundleMapRenderers.add(new DataStreamBundleMapRenderer(
-				rightReflexB));
+		reflexRenderers
+				.add(new DataStreamBundleMapRenderer(accelerometerReflex));
+		reflexRenderers.add(new DataStreamBundleMapRenderer(bottomReflexM));
+		reflexRenderers.add(new DataStreamBundleMapRenderer(leftReflexM));
+		reflexRenderers.add(new DataStreamBundleMapRenderer(rightReflexM));
+		reflexRenderers.add(new DataStreamBundleMapRenderer(leftReflexB));
+		reflexRenderers.add(new DataStreamBundleMapRenderer(rightReflexB));
 
 		dataStreamCore.prepareDataStreams();
 
@@ -230,11 +228,13 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		margin = screenWidth / 100;
 		height = ((((screenHeight - edgeMargin * 2))) / 6) - margin;
 
-		for (int i = 0; i < dataStreamBundleMapRenderers.size(); i++) {
-			dataStreamBundleMapRenderers.get(i).setVisibleAt(x, y, width,
-					height);
+		for (int i = 0; i < reflexRenderers.size(); i++) {
+			reflexRenderers.get(i).setVisibleAt(x, y, width, height);
 			y += height + margin;
 		}
+
+		renderers.addAll(homogeneousDataStreamBundleRenderers);
+		renderers.addAll(reflexRenderers);
 	}
 
 	@Override
@@ -243,13 +243,8 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 		dataStreamCore.step();
 
-		for (int i = 0; i < homogeneousDataStreamBundleRenderers.size(); i++) {
-			homogeneousDataStreamBundleRenderers.get(i).draw(g);
-		}
-
-		for (int i = 0; i < dataStreamBundleMapRenderers.size(); i++) {
-
-			dataStreamBundleMapRenderers.get(i).draw(g);
+		for (int i = 0; i < renderers.size(); i++) {
+			renderers.get(i).draw(g);
 		}
 
 		if (++debugCounter % 100 == 0)
@@ -263,20 +258,16 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 	@Override
 	public void mouseClicked() {
-		for (int i = 0; i < homogeneousDataStreamBundleRenderers.size(); i++)
-			if (homogeneousDataStreamBundleRenderers.get(i).contains(mouseX,
-					mouseY))
-				homogeneousDataStreamBundleRenderers.get(i).mouseClicked(
-						mouseX, mouseY);
+		for (int i = 0; i < renderers.size(); i++)
+			if (renderers.get(i).contains(mouseX, mouseY))
+				renderers.get(i).mouseClicked(mouseX, mouseY);
 	}
 
 	@Override
 	public void mousePressed() {
-		for (int i = 0; i < homogeneousDataStreamBundleRenderers.size(); i++)
-			if (homogeneousDataStreamBundleRenderers.get(i).contains(mouseX,
-					mouseY)) {
-				mouseFocusedRenderer = homogeneousDataStreamBundleRenderers
-						.get(i);
+		for (int i = 0; i < renderers.size(); i++)
+			if (renderers.get(i).contains(mouseX, mouseY)) {
+				mouseFocusedRenderer = renderers.get(i);
 				mouseFocusedRenderer.mousePressed(mouseX, mouseY);
 			}
 	}

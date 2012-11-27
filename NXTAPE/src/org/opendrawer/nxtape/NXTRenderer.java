@@ -2,8 +2,7 @@ package org.opendrawer.nxtape;
 
 import org.opendrawer.dawinian.neurodynamics.DataProvider;
 
-public abstract class NXTRenderer extends Renderer implements
-		InteractiveRenderer {
+public abstract class NXTRenderer extends Renderer {
 
 	public NXTRenderer() {
 
