@@ -85,7 +85,7 @@ public class DataStreamCore {
 		}
 
 		for (int i = 0; i < reflexes.size(); i++)
-			reflexes.get(i).map();
+			reflexes.get(i).activate();
 
 		for (int i = 0; i < outputDataProviders.size(); i++)
 			outputDataProviders.get(i).step();

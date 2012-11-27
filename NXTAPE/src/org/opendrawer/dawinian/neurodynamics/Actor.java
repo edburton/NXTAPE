@@ -1,6 +1,6 @@
 package org.opendrawer.dawinian.neurodynamics;
 
-public class Actor extends DataStreamBundleMap {
+public class Actor extends DataStreamBundleList {
 
 	public Actor(DataStreamBundle inputDataStreamBundle,
 			DataStreamBundle outputDataStreamBundle) {

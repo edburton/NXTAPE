@@ -1,6 +1,6 @@
 package org.opendrawer.dawinian.neurodynamics;
 
-public class MotorUnit extends DataStreamBundleMap {
+public class MotorUnit extends DataStreamBundleList {
 
 	public MotorUnit(DataStreamBundle inputDataStreamBundle,
 			DataStreamBundle outputDataStreamBundle) {

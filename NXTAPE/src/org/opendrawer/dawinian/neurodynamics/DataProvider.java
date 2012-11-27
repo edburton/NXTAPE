@@ -1,6 +1,7 @@
 package org.opendrawer.dawinian.neurodynamics;
 
 public interface DataProvider {
+	public static final int NULL = 0;
 	public static final int INPUT = 1;
 	public static final int OUTPUT = 2;
 

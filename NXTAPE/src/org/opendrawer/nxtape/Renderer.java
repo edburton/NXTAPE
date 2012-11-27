@@ -7,7 +7,7 @@ import processing.core.PGraphics;
 public class Renderer {
 	protected float x, y, width, height;
 	protected boolean visible = false;
-	protected Color keyColor = new Color(128, 128, 128);
+	protected Color keyColor = null;
 
 	public Renderer() {
 
@@ -30,7 +30,19 @@ public class Renderer {
 	}
 
 	public void draw(PGraphics g) {
-
+		if (keyColor != null) {
+			g.noStroke();
+			g.fill(keyColor.getRed(), keyColor.getGreen(), keyColor.getBlue());
+			g.rect(x, y, x + width, y + height);
+			g.fill(keyColor.getRed() / 2, keyColor.getGreen() / 2,
+					keyColor.getBlue() / 2);
+			g.rect(x + NXT_ArtificialPlasticityEcology.lineMarginWidth, y
+					+ NXT_ArtificialPlasticityEcology.lineMarginWidth,
+					(x + width)
+							- NXT_ArtificialPlasticityEcology.lineMarginWidth,
+					(y + height)
+							- NXT_ArtificialPlasticityEcology.lineMarginWidth);
+		}
 	}
 
 	public boolean isVisible() {

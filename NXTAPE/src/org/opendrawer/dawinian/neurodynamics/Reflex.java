@@ -1,6 +1,6 @@
 package org.opendrawer.dawinian.neurodynamics;
 
-public class Reflex extends DataStreamBundleMap {
+public class Reflex extends DataStreamBundleList {
 	private int inputChannel;
 	private int outputChannel;
 	private double weight;
@@ -17,10 +17,9 @@ public class Reflex extends DataStreamBundleMap {
 				.getDataProvider();
 	}
 
-	@Override
-	public void map() {
-		double input = inputDataStreamBundle.getDataStreams().get(inputChannel)
-				.read(0);
+	public void activate() {
+		double input = dataStreamBundles.get(0).getDataStreams()
+				.get(inputChannel).read(0);
 		double output = input * weight;
 		double[] outputs = outputDataProvider.getNormalizedValues();
 		output = outputs[outputChannel] + output;

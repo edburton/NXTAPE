@@ -23,7 +23,7 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcology extends PApplet {
-	private static final boolean presentationMode = false;
+	private static final boolean presentationMode = true;
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
@@ -112,9 +112,9 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				"arm body motor", -60, 60, 0, 0.9f);
 
 		List<HomogeneousDataStreamBundleRenderer> homogeneousDataStreamBundleRenderers = new ArrayList<HomogeneousDataStreamBundleRenderer>();
-		List<DataStreamBundleMapRenderer> reflexRenderers = new ArrayList<DataStreamBundleMapRenderer>();
-		List<DataStreamBundleMapRenderer> predictorRenderers = new ArrayList<DataStreamBundleMapRenderer>();
-		List<DataStreamBundleMapRenderer> actorRenderers = new ArrayList<DataStreamBundleMapRenderer>();
+		List<DataStreamBundleListRenderer> reflexRenderers = new ArrayList<DataStreamBundleListRenderer>();
+		List<DataStreamBundleListRenderer> predictorRenderers = new ArrayList<DataStreamBundleListRenderer>();
+		List<DataStreamBundleListRenderer> actorRenderers = new ArrayList<DataStreamBundleListRenderer>();
 
 		HomogeneousDataStreamBundle bottomDataStreamBundle;
 		HomogeneousDataStreamBundle leftDataStreamBundle;
@@ -202,13 +202,13 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				.addReflex(rightReflexB = new Reflex(rightDataStreamBundle,
 						armBodyMotorDataStreamBundle, 0, 0, 0.5d));
 
-		reflexRenderers
-				.add(new DataStreamBundleMapRenderer(accelerometerReflex));
-		reflexRenderers.add(new DataStreamBundleMapRenderer(bottomReflexM));
-		reflexRenderers.add(new DataStreamBundleMapRenderer(leftReflexM));
-		reflexRenderers.add(new DataStreamBundleMapRenderer(rightReflexM));
-		reflexRenderers.add(new DataStreamBundleMapRenderer(leftReflexB));
-		reflexRenderers.add(new DataStreamBundleMapRenderer(rightReflexB));
+		reflexRenderers.add(new DataStreamBundleListRenderer(
+				accelerometerReflex));
+		reflexRenderers.add(new DataStreamBundleListRenderer(bottomReflexM));
+		reflexRenderers.add(new DataStreamBundleListRenderer(leftReflexM));
+		reflexRenderers.add(new DataStreamBundleListRenderer(rightReflexM));
+		reflexRenderers.add(new DataStreamBundleListRenderer(leftReflexB));
+		reflexRenderers.add(new DataStreamBundleListRenderer(rightReflexB));
 
 		for (int i = 0; i < reflexRenderers.size(); i++)
 			reflexRenderers.get(i).setKeyColor(new Color(0, 128, 0));
@@ -216,7 +216,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		for (int i = 0; i < 5; i++) {
 			Actor actor = new Actor(null, null);
 			dataStreamCore.addActor(actor);
-			DataStreamBundleMapRenderer renderer = new DataStreamBundleMapRenderer(
+			DataStreamBundleListRenderer renderer = new DataStreamBundleListRenderer(
 					actor);
 			renderer.setKeyColor(new Color(128, 64, 0));
 			actorRenderers.add(renderer);
@@ -225,13 +225,14 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		int r = 0;
 		for (int i = 0; i < 30; i++) {
 			r = (int) Math.floor(random(0, reflexRenderers.size()));
-			DataStreamBundleMapRenderer reflex = reflexRenderers.get(r);
+			DataStreamBundleListRenderer reflex = reflexRenderers.get(r);
 			Predictor predictor = new Predictor(reflex
-					.getInputDataStreamBundleRenderer().getDataStreamBundle(),
-					reflex.getOutputDataStreamBundleRenderer()
-							.getDataStreamBundle());
+					.getDataStreamBundleRenderers().get(0)
+					.getDataStreamBundle(), reflex
+					.getDataStreamBundleRenderers().get(1)
+					.getDataStreamBundle());
 			dataStreamCore.addPredictor(predictor);
-			DataStreamBundleMapRenderer renderer = new DataStreamBundleMapRenderer(
+			DataStreamBundleListRenderer renderer = new DataStreamBundleListRenderer(
 					predictor);
 			renderer.setKeyColor(new Color(0, 0, 128));
 			predictorRenderers.add(renderer);
