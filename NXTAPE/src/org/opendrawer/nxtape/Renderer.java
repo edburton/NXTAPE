@@ -34,8 +34,8 @@ public class Renderer {
 			g.noStroke();
 			g.fill(keyColor.getRed(), keyColor.getGreen(), keyColor.getBlue());
 			g.rect(x, y, x + width, y + height);
-			g.fill(keyColor.getRed() / 2, keyColor.getGreen() / 2,
-					keyColor.getBlue() / 2);
+			g.fill(keyColor.getRed() / 4, keyColor.getGreen() / 4,
+					keyColor.getBlue() / 4);
 			g.rect(x + NXT_ArtificialPlasticityEcology.lineMarginWidth, y
 					+ NXT_ArtificialPlasticityEcology.lineMarginWidth,
 					(x + width)

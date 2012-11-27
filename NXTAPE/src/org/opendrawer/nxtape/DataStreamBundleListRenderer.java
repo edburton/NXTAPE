@@ -48,9 +48,11 @@ public class DataStreamBundleListRenderer extends Renderer {
 
 	@Override
 	public void draw(PGraphics g) {
-		super.draw(g);
-		for (int i = 0; i < dataStreamBundleRenderers.size(); i++)
-			dataStreamBundleRenderers.get(i).draw(g);
+		if (dataStreamBundleRenderers.size() == 0)
+			super.draw(g);
+		else
+			for (int i = 0; i < dataStreamBundleRenderers.size(); i++)
+				dataStreamBundleRenderers.get(i).draw(g);
 	}
 
 	protected float getStreamLeft() {

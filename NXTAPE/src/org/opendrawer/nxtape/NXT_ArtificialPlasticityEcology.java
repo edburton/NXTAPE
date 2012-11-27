@@ -23,7 +23,7 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcology extends PApplet {
-	private static final boolean presentationMode = true;
+	private static final boolean presentationMode = false;
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
@@ -217,7 +217,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 			Actor actor = new Actor(null, null);
 			dataStreamCore.addActor(actor);
 			DataStreamBundleListRenderer renderer = new DataStreamBundleListRenderer(
-					actor);
+					null);
 			renderer.setKeyColor(new Color(128, 64, 0));
 			actorRenderers.add(renderer);
 		}
