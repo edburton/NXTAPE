@@ -222,7 +222,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 			actorRenderers.add(renderer);
 		}
 
-		for (int i = 0; i < 15; i++) {
+		for (int i = 0; i < 20; i++) {
 			Predictor predictor = new Predictor(null, null);
 			dataStreamCore.addPredictor(predictor);
 			DataStreamBundleMapRenderer renderer = new DataStreamBundleMapRenderer(
@@ -240,13 +240,15 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 		float screenWidth = getWidth();
 		float screenHeight = getHeight();
-		float edgeMargin = screenWidth / 50;
-		float margin = edgeMargin / 2;
+		float edgeMargin = NXT_ArtificialPlasticityEcology.lineMarginWidth * 10;
+		float margin = NXT_ArtificialPlasticityEcology.lineMarginWidth * 5;
 		int gridWidth = (int) Math.ceil(Math.pow(renderers.size(), 1 / 3.0d));
 		int gridHeight = (int) Math.floor(Math.pow(renderers.size(), 2 / 3.0d));
 
-		float width = ((screenWidth - edgeMargin * 2) / gridWidth) - margin;
-		float height = ((screenHeight - edgeMargin * 2) / gridHeight) - margin;
+		float width = ((screenWidth + margin - edgeMargin * 2) / gridWidth)
+				- margin;
+		float height = ((screenHeight + margin - edgeMargin * 2) / gridHeight)
+				- margin;
 
 		int c = 0;
 
@@ -272,7 +274,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 			println("frameRate: " + frameRate);
 		if (dummyMode) {
 			fill(255, 0, 0, (cos(debugCounter / 20.0f) + 1.0f) * 128);
-			text("NXT not found", 2, 12);
+			text("NXT not found", 5, 15);
 		}
 	}
 
