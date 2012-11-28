@@ -17,7 +17,7 @@ public class Reflex extends DataStreamBundleList {
 				.getDataProvider();
 	}
 
-	public void activate() {
+	public void react() {
 		double input = dataStreamBundles.get(0).getDataStreams()
 				.get(inputChannel).read(0);
 		double output = input * weight;

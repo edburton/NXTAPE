@@ -3,7 +3,7 @@ package org.opendrawer.dawinian.neurodynamics;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataStreamCore {
+public class NeurodynamicStreamCore {
 	private List<DataStreamBundle> dataStreamBundles = new ArrayList<DataStreamBundle>();
 	private List<DataStream> allDataStreams = new ArrayList<DataStream>();
 	private List<OutputDataProvider> outputDataProviders = new ArrayList<OutputDataProvider>();
@@ -85,7 +85,7 @@ public class DataStreamCore {
 		}
 
 		for (int i = 0; i < reflexes.size(); i++)
-			reflexes.get(i).activate();
+			reflexes.get(i).react();
 
 		for (int i = 0; i < outputDataProviders.size(); i++)
 			outputDataProviders.get(i).step();
@@ -97,5 +97,8 @@ public class DataStreamCore {
 						.getNormalizedValues()[dataStream
 						.getDataProviderChannel()]);
 		}
+
+		for (int i = 0; i < predictors.size(); i++)
+			predictors.get(i).predict();
 	}
 }
