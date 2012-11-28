@@ -69,8 +69,9 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		else
 			size(1024, 768, OPENGL);
 		frameRate(200);
-		lineMarginWidth = getHeight() / 768.0f;
+		lineMarginWidth = getHeight() / 384.0f;
 		lineWidth = lineMarginWidth * 1.70710678118655f;
+		edgeMargin = NXT_ArtificialPlasticityEcology.lineMarginWidth * 4;
 		smooth();
 		frameRate(50);
 		ellipseMode(CORNERS);
@@ -267,8 +268,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 		float screenWidth = getWidth();
 		float screenHeight = getHeight();
-		edgeMargin = NXT_ArtificialPlasticityEcology.lineMarginWidth * 10;
-		float margin = NXT_ArtificialPlasticityEcology.lineMarginWidth * 5;
+		float margin = edgeMargin / 2;
 		int gridWidth = (int) Math.ceil(Math.pow(zones, 1 / 3.0d));
 		int gridHeight = (int) Math.floor(Math.pow(zones, 2 / 3.0d));
 
@@ -304,6 +304,11 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	public void draw() {
 		neurodynamicStreamCore.step();
 		background(0);
+		if (mousePressed) {
+			translate(getWidth() / 2, getHeight() / 2);
+			scale(4, 4);
+			translate(-mouseX, -mouseY);
+		}
 		for (int i = 0; i < renderers.size(); i++) {
 			renderers.get(i).draw(g);
 		}
