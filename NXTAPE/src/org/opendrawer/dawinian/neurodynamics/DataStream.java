@@ -18,6 +18,12 @@ public class DataStream {
 		super();
 	}
 
+	public DataStream(int dataWidth) {
+		super();
+		this.dataWidth = dataWidth;
+		data = new double[dataWidth];
+	}
+
 	public void setDateProvider(DataProvider dataProvider,
 			int dataProviderChannel, int dataWidth) {
 		this.dataWidth = dataWidth;
@@ -46,6 +52,10 @@ public class DataStream {
 			return data[index];
 		} else
 			return Double.NaN;
+	}
+
+	public double[] read() {
+		return data;
 	}
 
 	public int getDataWidth() {

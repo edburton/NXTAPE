@@ -101,4 +101,8 @@ public class NeurodynamicStreamCore {
 		for (int i = 0; i < predictors.size(); i++)
 			predictors.get(i).predict();
 	}
+
+	public int getDataStreamBundleCount() {
+		return allDataStreams.size();
+	}
 }

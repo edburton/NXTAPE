@@ -23,7 +23,7 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcology extends PApplet {
-	private static final boolean presentationMode = false;
+	private static final boolean presentationMode = true;
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
@@ -49,6 +49,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private static final String accelerometer_name = "Accelerometer";
 	// private static final String compass_name = "Compass";
 	private List<Renderer> renderers = new ArrayList<Renderer>();
+	private float edgeMargin;
 
 	/**
 	 * @param args
@@ -68,7 +69,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		else
 			size(1024, 768, OPENGL);
 		frameRate(200);
-		lineMarginWidth = getHeight() / 384.0f;
+		lineMarginWidth = getHeight() / 768.0f;
 		lineWidth = lineMarginWidth * 1.70710678118655f;
 		smooth();
 		frameRate(50);
@@ -212,20 +213,28 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		reflexRenderers.add(new DataStreamBundleListRenderer(leftReflexB));
 		reflexRenderers.add(new DataStreamBundleListRenderer(rightReflexB));
 
-		for (int i = 0; i < reflexRenderers.size(); i++)
-			reflexRenderers.get(i).setKeyColor(new Color(128, 0, 0));
+		int nTypes = 3;
+		int nType = 0;
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < reflexRenderers.size(); i++)
+			reflexRenderers.get(i).setKeyColor(
+					new Color(Color
+							.HSBtoRGB(nType / (float) nTypes, 1.0f, 0.5f)));
+		nType++;
+
+		for (int i = 0; i < 50; i++) {
 			Actor actor = new Actor(null, null);
 			neurodynamicStreamCore.addActor(actor);
 			DataStreamBundleListRenderer renderer = new DataStreamBundleListRenderer(
 					null);
-			renderer.setKeyColor(new Color(0, 128, 0));
+			renderer.setKeyColor(new Color(Color.HSBtoRGB(nType
+					/ (float) nTypes, 1.0f, 0.5f)));
 			actorRenderers.add(renderer);
 		}
+		nType++;
 
 		int r = 0;
-		for (int i = 0; i < 30; i++) {
+		for (int i = 0; i < 50; i++) {
 			r = (int) Math.floor(random(0, reflexRenderers.size()));
 			DataStreamBundleListRenderer reflex = reflexRenderers.get(r);
 			Predictor predictor = new Predictor(reflex
@@ -236,7 +245,8 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 			neurodynamicStreamCore.addPredictor(predictor);
 			DataStreamBundleListRenderer renderer = new DataStreamBundleListRenderer(
 					predictor);
-			renderer.setKeyColor(new Color(0, 0, 128));
+			renderer.setKeyColor(new Color(Color.HSBtoRGB(nType
+					/ (float) nTypes, 1.0f, 0.5f)));
 			predictorRenderers.add(renderer);
 		}
 
@@ -247,12 +257,20 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		renderers.addAll(actorRenderers);
 		renderers.addAll(predictorRenderers);
 
+		int sensorimotors = homogeneousDataStreamBundleRenderers.size();
+		int reflexes = reflexRenderers.size();
+		int actors = actorRenderers.size();
+		int predictors = predictorRenderers.size();
+
+		int zones = 1 + sensorimotors + 1 + reflexes + 1 + actors + 1
+				+ predictors + 1;
+
 		float screenWidth = getWidth();
 		float screenHeight = getHeight();
-		float edgeMargin = NXT_ArtificialPlasticityEcology.lineMarginWidth * 10;
+		edgeMargin = NXT_ArtificialPlasticityEcology.lineMarginWidth * 10;
 		float margin = NXT_ArtificialPlasticityEcology.lineMarginWidth * 5;
-		int gridWidth = (int) Math.ceil(Math.pow(renderers.size(), 1 / 3.0d));
-		int gridHeight = (int) Math.floor(Math.pow(renderers.size(), 2 / 3.0d));
+		int gridWidth = (int) Math.ceil(Math.pow(zones, 1 / 3.0d));
+		int gridHeight = (int) Math.floor(Math.pow(zones, 2 / 3.0d));
 
 		float width = ((screenWidth + margin - edgeMargin * 2) / gridWidth)
 				- margin;
@@ -260,14 +278,24 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				- margin;
 
 		int c = 0;
-
+		int divider = 0;
 		for (int gx = 0; gx < gridWidth; gx++) {
 			for (int gy = 0; gy < gridHeight; gy++) {
-				if (c < renderers.size()) {
-					float x = edgeMargin + gx * (width + margin);
-					float y = edgeMargin + gy * (height + margin);
-					renderers.get(c++).setVisibleAt(x, y, width, height);
+				float x = edgeMargin + gx * (width + margin);
+				float y = edgeMargin + gy * (height + margin);
+				if (divider > 0) {
+					if (c < renderers.size()) {
+						renderers.get(c).setVisibleAt(x, y, width, height);
+					}
+					c++;
 				}
+				divider++;
+
+				if (divider > 1
+						&& ((c == 0) || (c == sensorimotors)
+								|| (c == (sensorimotors + reflexes)) || (c == (sensorimotors
+								+ reflexes + actors))))
+					divider = 0;
 			}
 		}
 	}
@@ -283,7 +311,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 			println("frameRate: " + frameRate);
 		if (dummyMode) {
 			fill(255, 0, 0, (cos(debugCounter / 20.0f) + 1.0f) * 128);
-			text("NXT not found", 5, 15);
+			text("NXT not found", edgeMargin, edgeMargin + 10);
 		}
 	}
 

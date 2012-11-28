@@ -23,6 +23,14 @@ public class DataStreamBundle {
 		return values;
 	}
 
+	public double[][] read() {
+		double[][] values = new double[dataWidth][dataStreams.size()];
+		for (int d = 0; d < dataStreams.size(); d++)
+			for (int t = 0; t < dataWidth; t++)
+				values[t] = dataStreams.get(d).read();
+		return values;
+	}
+
 	public double read(int pastPosition, int channel) {
 		return dataStreams.get(channel).read(pastPosition);
 	}
