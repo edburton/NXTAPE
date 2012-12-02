@@ -14,8 +14,8 @@ import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
 import org.opendrawer.dawinian.neurodynamics.Actor;
-import org.opendrawer.dawinian.neurodynamics.NeurodynamicStreamCore;
 import org.opendrawer.dawinian.neurodynamics.HomogeneousDataStreamBundle;
+import org.opendrawer.dawinian.neurodynamics.NeurodynamicStreamCore;
 import org.opendrawer.dawinian.neurodynamics.Predictor;
 import org.opendrawer.dawinian.neurodynamics.Reflex;
 
@@ -23,7 +23,7 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcology extends PApplet {
-	private static final boolean presentationMode = true;
+	private static final boolean presentationMode = false;
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
@@ -304,7 +304,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	public void draw() {
 		neurodynamicStreamCore.step();
 		background(0);
-		if (mousePressed) {
+		if (!dummyMode && mousePressed) {
 			translate(getWidth() / 2, getHeight() / 2);
 			scale(4, 4);
 			translate(-mouseX, -mouseY);
@@ -315,8 +315,8 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		if (++debugCounter % 100 == 0)
 			println("frameRate: " + frameRate);
 		if (dummyMode) {
-			fill(255, 0, 0, (cos(debugCounter / 20.0f) + 1.0f) * 128);
-			text("NXT not found", edgeMargin, edgeMargin + 10);
+			fill(255, 0, 0, (cos(debugCounter / 10.0f) + 1.0f) * 128);
+			text("NXT NOT FOUND", edgeMargin, edgeMargin + 10);
 		}
 	}
 

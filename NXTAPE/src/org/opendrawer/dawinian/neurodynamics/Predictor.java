@@ -40,13 +40,12 @@ public class Predictor extends DataStreamBundleList {
 	public void predict() {
 		if (predictor == null)
 			initiatePredictor();
-		double[][] inputPeriod = inputDataStreamBundle.read();
-		double[][] outputPeriod = outputDataStreamBundle.read();
+		double[][] inputPeriod = { inputDataStreamBundle.read(0) };
+		double[][] outputPeriod = { outputDataStreamBundle.read(0) };
 		MLDataSet trainingSet = new BasicMLDataSet(inputPeriod, outputPeriod);
 		MLDataPair currentPair = trainingSet.get(0);
 		MLData prediction = predictorNetwork.compute(currentPair.getInput());
 		predictionStreamBundle.write(prediction.getData());
-		predictor.setTraining(trainingSet);
 		predictor.setTraining(trainingSet);
 		predictor.iteration();
 		double error = predictor.getError();

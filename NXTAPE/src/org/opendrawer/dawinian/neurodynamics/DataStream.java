@@ -1,12 +1,14 @@
 package org.opendrawer.dawinian.neurodynamics;
 
 public class DataStream {
-	protected int dataWidth;
+	private int dataWidth;
 	private double[] data;
 	private int writeHead = 0;
-	protected int totalWriteHead = 0;
-	protected DataProvider dataProvider;
-	protected int dataProviderChannel;
+	private int totalWriteHead = 0;
+	private DataProvider dataProvider;
+	private int dataProviderChannel;
+	private double minValue = Double.NaN;
+	private double maxValue = Double.NaN;
 
 	public DataStream(DataProvider dataProvider, int dataProviderChannel,
 			int dataWidth) {
@@ -32,14 +34,32 @@ public class DataStream {
 		data = new double[dataWidth];
 	}
 
-	public void write(double values) {
+	public void write(double value) {
+		if (Double.isNaN(minValue)) {
+			minValue = value;
+			maxValue = value;
+		} else if (value < minValue)
+			minValue = value;
+		else if (value > maxValue)
+			maxValue = value;
 		if (data != null) {
-			data[writeHead] = values;
+			data[writeHead] = value;
 			writeHead++;
 			totalWriteHead++;
 			if (writeHead >= dataWidth)
 				writeHead = 0;
 		}
+	}
+
+	public double readWithMinMaxScaledToZeroOne(int pastPosition) {
+		if (Double.isNaN(minValue))
+			return Double.NaN;
+		double value = read(pastPosition);
+		if (Double.isNaN(value))
+			return Double.NaN;
+		if (maxValue - minValue == 0)
+			return 0;
+		return (value - minValue) / (maxValue - minValue);
 	}
 
 	public double read(int pastPosition) {
