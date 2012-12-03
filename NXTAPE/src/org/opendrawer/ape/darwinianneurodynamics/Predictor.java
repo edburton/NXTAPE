@@ -39,12 +39,12 @@ public class Predictor extends DataStreamBundleList {
 
 	public Predictor() {
 		super();
-		addDataStreamBundle(inputDataStreamBundle = new DataStreamBundle(256));
-		addDataStreamBundle(outputDataStreamBundle = new DataStreamBundle(256));
-		inputDataStreamBundle.addDataProvidedStreams(new TestingDataProvider(
-				1.2));
-		outputDataStreamBundle.addDataProvidedStreams(new TestingDataProvider(
-				-2.3));
+		addDataStreamBundle(inputDataStreamBundle = new DataStreamBundle(100));
+		addDataStreamBundle(outputDataStreamBundle = new DataStreamBundle(100));
+		inputDataStreamBundle
+				.addDataProvidedStreams(new TestingDataProvider(1));
+		outputDataStreamBundle
+				.addDataProvidedStreams(new TestingDataProvider(1));
 
 		predictionStreamBundle = new DataStreamBundle(
 				inputDataStreamBundle.getDataWidth());
@@ -74,7 +74,6 @@ public class Predictor extends DataStreamBundleList {
 			outputDataStreamBundle.write(outputDataStreamBundle
 					.getDataStreams().get(i).getDataProvider().getData());
 		}
-
 		double[][] inputPeriod = inputDataStreamBundle.read();
 		double[][] outputPeriod = outputDataStreamBundle.read();
 		MLDataSet trainingSet = new BasicMLDataSet(inputPeriod, outputPeriod);
@@ -84,6 +83,7 @@ public class Predictor extends DataStreamBundleList {
 		predictor.setTraining(trainingSet);
 		predictor.iteration();
 		double error = predictor.getError();
+		System.out.println(error);
 		errorStreamBundle.getDataStreams().get(0).write(error);
 	}
 

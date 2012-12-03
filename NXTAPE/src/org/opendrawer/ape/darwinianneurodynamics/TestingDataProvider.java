@@ -35,21 +35,17 @@ public class TestingDataProvider implements DataProvider {
 	@Override
 	public int getChannelCount() {
 		// TODO Auto-generated method stub
-		return 2;
+		return 1;
 	}
 
 	@Override
 	public void step() {
-		output = new double[] {
-				phase
-						* (1 + Math.random())
-						* (Math.sin(1.11 * phase * System.currentTimeMillis()
-								/ 1600.0d)),
-				phase
-						* 1.7
-						* (1 + Math.random())
-						* (-Math.sin(phase * System.currentTimeMillis()
-								/ 1600.0d)) };
+		output = new double[] { Math.random() < 0.9 ? Math.random() + phase
+				* (Math.sin(phase * System.currentTimeMillis() / 600.0d))
+				: Double.NaN /*
+							 * , Math.random() - phase (Math.sin(phase *
+							 * System.currentTimeMillis() / 600.0d))
+							 */};
 
 	}
 

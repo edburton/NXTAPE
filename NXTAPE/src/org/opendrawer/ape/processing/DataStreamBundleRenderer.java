@@ -51,21 +51,33 @@ public class DataStreamBundleRenderer extends Renderer {
 						}
 					}
 					if (!Double.isNaN(min) && !Double.isNaN(max)
-							&& (max - min != 0)) {
+							&& (max - min > 0)) {
 						g.stroke(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
-						g.beginShape();
+						boolean drawing = false;
 						for (int i = 0; i < dataWidth; i++) {
 							double v = data[i];
 							if (!Double.isNaN(v)) {
+								if (!drawing) {
+									g.beginShape();
+									drawing = true;
+								}
 								v = (v - min) / (max - min);
 								float x1 = (getStreamLeft())
 										+ ((i / (float) (dataWidth - 1)) * (width - (getStreamLeft() - x)));
 								float y1 = (float) ((y + height) - v
 										* graphHeight);
 								g.vertex(x1, y1);
+							} else {
+								if (drawing) {
+									g.endShape();
+									drawing = false;
+								}
 							}
 						}
-						g.endShape();
+						if (drawing) {
+							g.endShape();
+							drawing = false;
+						}
 					}
 				}
 			}

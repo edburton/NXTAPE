@@ -24,9 +24,9 @@ public class DataStreamBundle {
 	}
 
 	public double[][] read() {
-		double[][] values = new double[2][dataStreams.size()];
+		double[][] values = new double[dataWidth][dataStreams.size()];
 		for (int d = 0; d < dataStreams.size(); d++)
-			for (int t = 0; t < 2; t++)
+			for (int t = 0; t < dataWidth; t++)
 				values[t] = dataStreams.get(d).read();
 		return values;
 	}

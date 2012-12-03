@@ -22,6 +22,7 @@ public class DataStream {
 		super();
 		this.dataWidth = dataWidth;
 		data = new double[dataWidth];
+		setToNaN();
 	}
 
 	public void setDataProvider(DataProvider dataProvider,
@@ -30,6 +31,12 @@ public class DataStream {
 		this.dataProvider = dataProvider;
 		this.dataProviderChannel = dataProviderChannel;
 		data = new double[dataWidth];
+		setToNaN();
+	}
+
+	private void setToNaN() {
+		for (int i = 0; i < dataWidth; i++)
+			data[i] = Double.NaN;
 	}
 
 	public void write(double value) {
@@ -59,8 +66,9 @@ public class DataStream {
 		if (data == null)
 			return null;
 		double[] result = new double[dataWidth];
-		for (int i = 0; i < dataWidth; i++)
+		for (int i = 0; i < dataWidth; i++) {
 			result[i] = read(i);
+		}
 		return result;
 	}
 
