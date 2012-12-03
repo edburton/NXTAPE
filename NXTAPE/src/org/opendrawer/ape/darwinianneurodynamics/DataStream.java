@@ -9,6 +9,8 @@ public class DataStream {
 	private int dataProviderChannel;
 	private double minValue = Double.NaN;
 	private double maxValue = Double.NaN;
+	private int minValueIndex = 0;
+	private int maxValueIndex = 0;
 
 	public DataStream(DataProvider dataProvider, int dataProviderChannel,
 			int dataWidth) {
@@ -24,6 +26,7 @@ public class DataStream {
 		super();
 		this.dataWidth = dataWidth;
 		data = new double[dataWidth];
+		minValueIndex = maxValueIndex = dataWidth + 1;
 	}
 
 	public void setDateProvider(DataProvider dataProvider,
@@ -32,16 +35,42 @@ public class DataStream {
 		this.dataProvider = dataProvider;
 		this.dataProviderChannel = dataProviderChannel;
 		data = new double[dataWidth];
+		minValueIndex = maxValueIndex = dataWidth + 1;
+	}
+
+	private void resetMin() {
+		minValue = Double.NaN;
+		for (int i = 0; i < dataWidth; i++) {
+			double value = read(i);
+			if (!Double.isNaN(value)) {
+				if (Double.isNaN(minValue)) {
+					minValue = value;
+					minValueIndex = i - dataWidth;
+				} else if (value < minValue) {
+					minValue = value;
+					minValueIndex = i - dataWidth;
+				}
+			}
+		}
+	}
+
+	private void resetMax() {
+		maxValue = Double.NaN;
+		for (int i = 0; i < dataWidth; i++) {
+			double value = read(i);
+			if (!Double.isNaN(value)) {
+				if (Double.isNaN(maxValue)) {
+					maxValue = value;
+					maxValueIndex = i - dataWidth;
+				} else if (value > maxValue) {
+					maxValue = value;
+					maxValueIndex = i - dataWidth;
+				}
+			}
+		}
 	}
 
 	public void write(double value) {
-		if (Double.isNaN(minValue)) {
-			minValue = value;
-			maxValue = value;
-		} else if (value < minValue)
-			minValue = value;
-		else if (value > maxValue)
-			maxValue = value;
 		if (data != null) {
 			data[writeHead] = value;
 			writeHead++;
@@ -49,10 +78,14 @@ public class DataStream {
 			if (writeHead >= dataWidth)
 				writeHead = 0;
 		}
+		if (++minValueIndex > dataWidth)
+			resetMin();
+		if (++maxValueIndex > dataWidth)
+			resetMax();
 	}
 
 	public double readWithMinMaxScaledToZeroOne(int pastPosition) {
-		if (Double.isNaN(minValue))
+		if (Double.isNaN(minValue) || Double.isNaN(maxValue))
 			return Double.NaN;
 		double value = read(pastPosition);
 		if (Double.isNaN(value))

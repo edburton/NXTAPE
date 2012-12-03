@@ -18,7 +18,7 @@ public class NXTTouchSensor implements DataProvider {
 	}
 
 	@Override
-	public double[] getNormalizedValues() {
+	public double[] getData() {
 		return new double[] { on ? 1 : 0 };
 	}
 

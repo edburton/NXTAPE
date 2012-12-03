@@ -126,7 +126,7 @@ public class NXTMotor implements OutputDataProvider {
 	}
 
 	@Override
-	public double[] getNormalizedValues() {
+	public double[] getData() {
 		return new double[] { inputRate,
 				((double) actualAngle - restAngle) / (maxAngle - minAngle) };
 	}

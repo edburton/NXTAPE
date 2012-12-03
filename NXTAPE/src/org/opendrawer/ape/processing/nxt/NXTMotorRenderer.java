@@ -28,7 +28,7 @@ public class NXTMotorRenderer extends DataProviderRenderer {
 		g.fill(16);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 		g.stroke(255, 255, 0);
-		float a = (float) ((nxtMotor.getNormalizedValues()[1]) * (Math.PI));
+		float a = (float) ((nxtMotor.getData()[1]) * (Math.PI));
 		g.line(xc, yc, (float) (xc + Math.sin(a) * radius),
 				(float) (yc + Math.cos(a) * radius));
 	}

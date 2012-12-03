@@ -28,7 +28,7 @@ public class NXTCompassRenderer extends DataProviderRenderer {
 		g.fill(16);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 		g.stroke(255, 255, 0);
-		float a = (float) ((nxtCompass.getNormalizedValues()[0]) * (Math.PI * 2));
+		float a = (float) ((nxtCompass.getData()[0]) * (Math.PI * 2));
 		g.line(xc, yc, (float) (xc + Math.sin(a) * radius),
 				(float) (yc + Math.cos(a) * radius));
 	}

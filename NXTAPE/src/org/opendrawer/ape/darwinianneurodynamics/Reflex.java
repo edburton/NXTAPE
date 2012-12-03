@@ -21,7 +21,7 @@ public class Reflex extends DataStreamBundleList {
 		double input = dataStreamBundles.get(0).getDataStreams()
 				.get(inputChannel).read(0);
 		double output = input * weight;
-		double[] outputs = outputDataProvider.getNormalizedValues();
+		double[] outputs = outputDataProvider.getData();
 		output = outputs[outputChannel] + output;
 		outputDataProvider.setOutputChannel(output, outputChannel);
 	}

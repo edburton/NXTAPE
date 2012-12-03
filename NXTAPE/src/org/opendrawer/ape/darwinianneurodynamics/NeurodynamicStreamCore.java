@@ -71,9 +71,9 @@ public class NeurodynamicStreamCore {
 		for (int i = 0; i < allDataStreams.size(); i++) {
 			DataStream dataStream = allDataStreams.get(i);
 			if (inputOnlyDataProviders.contains(dataStream.getDataProvider()))
-				dataStream.write(dataStream.getDataProvider()
-						.getNormalizedValues()[dataStream
-						.getDataProviderChannel()]);
+				dataStream
+						.write(dataStream.getDataProvider().getData()[dataStream
+								.getDataProviderChannel()]);
 		}
 	}
 
@@ -93,9 +93,9 @@ public class NeurodynamicStreamCore {
 		for (int i = 0; i < allDataStreams.size(); i++) {
 			DataStream dataStream = allDataStreams.get(i);
 			if (outputDataProviders.contains(dataStream.getDataProvider()))
-				dataStream.write(dataStream.getDataProvider()
-						.getNormalizedValues()[dataStream
-						.getDataProviderChannel()]);
+				dataStream
+						.write(dataStream.getDataProvider().getData()[dataStream
+								.getDataProviderChannel()]);
 		}
 
 		for (int i = 0; i < predictors.size(); i++)

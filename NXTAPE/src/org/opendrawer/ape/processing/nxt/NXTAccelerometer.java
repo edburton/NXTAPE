@@ -21,7 +21,7 @@ public class NXTAccelerometer implements DataProvider {
 	}
 
 	@Override
-	public double[] getNormalizedValues() {
+	public double[] getData() {
 		return values;
 	}
 

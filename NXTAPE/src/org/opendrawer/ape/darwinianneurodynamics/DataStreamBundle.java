@@ -12,7 +12,7 @@ public class DataStreamBundle {
 	}
 
 	public void write(double[] values) {
-		for (int i = 0; i < dataStreams.size(); i++)
+		for (int i = 0; i < dataStreams.size() && i < values.length; i++)
 			dataStreams.get(i).write(values[i]);
 	}
 
@@ -24,9 +24,9 @@ public class DataStreamBundle {
 	}
 
 	public double[][] read() {
-		double[][] values = new double[dataWidth][dataStreams.size()];
+		double[][] values = new double[2][dataStreams.size()];
 		for (int d = 0; d < dataStreams.size(); d++)
-			for (int t = 0; t < dataWidth; t++)
+			for (int t = 0; t < 2; t++)
 				values[t] = dataStreams.get(d).read();
 		return values;
 	}
@@ -43,11 +43,21 @@ public class DataStreamBundle {
 		return dataStreams;
 	}
 
-	public void AddDataStream(DataStream dataStream) {
+	public void addDataStream(DataStream dataStream) {
 		dataStreams.add(dataStream);
 	}
 
-	public void RemoveDataStream(DataStream dataStream) {
+	public void addDataProvidedStreams(DataProvider dataProvider) {
+		for (int i = 0; i < dataProvider.getChannelCount(); i++)
+			addDataStream(new DataStream(dataProvider, i, dataWidth));
+	}
+
+	public void addEmptyDataStreams(int n) {
+		for (int i = 0; i < n; i++)
+			addDataStream(new DataStream(dataWidth));
+	}
+
+	public void removeDataStream(DataStream dataStream) {
 		dataStreams.remove(dataStream);
 	}
 }

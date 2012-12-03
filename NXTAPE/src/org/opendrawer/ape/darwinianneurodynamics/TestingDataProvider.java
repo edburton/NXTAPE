@@ -2,8 +2,11 @@ package org.opendrawer.ape.darwinianneurodynamics;
 
 public class TestingDataProvider implements DataProvider {
 
-	public TestingDataProvider() {
-		// TODO Auto-generated constructor stub
+	private double phase;
+	private double[] output;
+
+	public TestingDataProvider(double phase) {
+		this.phase = phase;
 	}
 
 	@Override
@@ -13,12 +16,8 @@ public class TestingDataProvider implements DataProvider {
 	}
 
 	@Override
-	public double[] getNormalizedValues() {
-		return new double[] {
-				Math.random()
-						* (Math.sin(System.currentTimeMillis() / 2000.0d)),
-				Math.random()
-						* (Math.cos(System.currentTimeMillis() / 2000.0d)) };
+	public double[] getData() {
+		return output;
 	}
 
 	@Override
@@ -41,7 +40,16 @@ public class TestingDataProvider implements DataProvider {
 
 	@Override
 	public void step() {
-		// TODO Auto-generated method stub
+		output = new double[] {
+				phase
+						* Math.random()
+						* (Math.sin(1.11 * phase * System.currentTimeMillis()
+								/ 1600.0d)),
+				phase
+						* 1.7
+						* Math.random()
+						* (-Math.sin(phase * System.currentTimeMillis()
+								/ 1600.0d)) };
 
 	}
 

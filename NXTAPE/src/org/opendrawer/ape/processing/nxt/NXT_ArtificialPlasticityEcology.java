@@ -40,7 +40,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private NXTMotor armMiddleMotor;
 	private NXTMotor armBodyMotor;
 	private int debugCounter = 0;
-	private int dataStreamWidth = 64;
+	private int dataStreamWidth = 256;
 	private final NeurodynamicStreamCore neurodynamicStreamCore = new NeurodynamicStreamCore();
 	private boolean dummyMode = false;
 	private Renderer mouseFocusedRenderer;

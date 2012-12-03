@@ -18,7 +18,7 @@ public class NXTCompass implements DataProvider {
 	}
 
 	@Override
-	public double[] getNormalizedValues() {
+	public double[] getData() {
 		return new double[] { direction };
 	}
 

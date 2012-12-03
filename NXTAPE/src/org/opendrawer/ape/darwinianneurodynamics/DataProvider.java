@@ -7,7 +7,7 @@ public interface DataProvider {
 
 	public abstract String getName();
 
-	public abstract double[] getNormalizedValues();
+	public abstract double[] getData();
 
 	public abstract String[] getChannelNames();
 

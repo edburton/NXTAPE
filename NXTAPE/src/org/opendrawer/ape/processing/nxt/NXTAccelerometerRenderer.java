@@ -28,7 +28,7 @@ public class NXTAccelerometerRenderer extends DataProviderRenderer {
 		radius -= Renderer.lineMarginWidth;
 		g.fill(16);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
-		double[] values = nxtAccelerometer.getNormalizedValues();
+		double[] values = nxtAccelerometer.getData();
 		g.strokeWeight(Renderer.lineWidth);
 		float r = Renderer.lineMarginWidth * 2;
 		for (int i = 0; i < 3; i++) {

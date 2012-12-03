@@ -27,36 +27,33 @@ public class Predictor extends DataStreamBundleList {
 		this.outputDataStreamBundle = outputDataStreamBundle;
 		predictionStreamBundle = new DataStreamBundle(
 				inputDataStreamBundle.getDataWidth());
-		predictionStreamBundle.AddDataStream(new DataStream(
+		predictionStreamBundle.addDataStream(new DataStream(
 				inputDataStreamBundle.getDataWidth()));
 		addDataStreamBundle(predictionStreamBundle);
 		errorStreamBundle = new DataStreamBundle(
 				inputDataStreamBundle.getDataWidth());
-		errorStreamBundle.AddDataStream(new DataStream(inputDataStreamBundle
+		errorStreamBundle.addDataStream(new DataStream(inputDataStreamBundle
 				.getDataWidth()));
 		addDataStreamBundle(errorStreamBundle);
 	}
 
 	public Predictor() {
 		super();
-		addDataStreamBundle(inputDataStreamBundle = new DataStreamBundle(512));
-		addDataStreamBundle(outputDataStreamBundle = new DataStreamBundle(512));
-		inputDataStreamBundle.AddDataStream(new DataStream(
-				new TestingDataProvider(), 0, 512));
-		inputDataStreamBundle.AddDataStream(new DataStream(
-				new TestingDataProvider(), 1, 512));
-		outputDataStreamBundle.AddDataStream(new DataStream(
-				new TestingDataProvider(), 0, 512));
-		outputDataStreamBundle.AddDataStream(new DataStream(
-				new TestingDataProvider(), 1, 512));
+		addDataStreamBundle(inputDataStreamBundle = new DataStreamBundle(128));
+		addDataStreamBundle(outputDataStreamBundle = new DataStreamBundle(128));
+		inputDataStreamBundle.addDataProvidedStreams(new TestingDataProvider(
+				1.2));
+		outputDataStreamBundle.addDataProvidedStreams(new TestingDataProvider(
+				-2.3));
+
 		predictionStreamBundle = new DataStreamBundle(
 				inputDataStreamBundle.getDataWidth());
-		predictionStreamBundle.AddDataStream(new DataStream(
-				inputDataStreamBundle.getDataWidth()));
+		predictionStreamBundle.addEmptyDataStreams(outputDataStreamBundle
+				.getDataStreams().size());
 		addDataStreamBundle(predictionStreamBundle);
 		errorStreamBundle = new DataStreamBundle(
 				inputDataStreamBundle.getDataWidth());
-		errorStreamBundle.AddDataStream(new DataStream(inputDataStreamBundle
+		errorStreamBundle.addDataStream(new DataStream(inputDataStreamBundle
 				.getDataWidth()));
 		addDataStreamBundle(errorStreamBundle);
 	}
@@ -64,14 +61,21 @@ public class Predictor extends DataStreamBundleList {
 	public void predict() {
 		if (predictor == null)
 			initiatePredictor();
+		/*
+		 * for (int i = 0; i < inputDataStreamBundle.getDataStreams().size();
+		 * i++) {
+		 * inputDataStreamBundle.getDataStreams().get(i).getDataProvider()
+		 * .step();
+		 * inputDataStreamBundle.write(inputDataStreamBundle.getDataStreams()
+		 * .get(i).getDataProvider().getData()); } for (int i = 0; i <
+		 * outputDataStreamBundle.getDataStreams().size(); i++) {
+		 * outputDataStreamBundle.getDataStreams().get(i).getDataProvider()
+		 * .step(); outputDataStreamBundle.write(outputDataStreamBundle
+		 * .getDataStreams().get(i).getDataProvider().getData()); }
+		 */
 
-		inputDataStreamBundle.write(inputDataStreamBundle.getDataStreams()
-				.get(0).getDataProvider().getNormalizedValues());
-		outputDataStreamBundle.write(outputDataStreamBundle.getDataStreams()
-				.get(0).getDataProvider().getNormalizedValues());
-
-		double[][] inputPeriod = { inputDataStreamBundle.read(0) };
-		double[][] outputPeriod = { outputDataStreamBundle.read(0) };
+		double[][] inputPeriod = inputDataStreamBundle.read();
+		double[][] outputPeriod = outputDataStreamBundle.read();
 		MLDataSet trainingSet = new BasicMLDataSet(inputPeriod, outputPeriod);
 		MLDataPair currentPair = trainingSet.get(0);
 		MLData prediction = predictorNetwork.compute(currentPair.getInput());
@@ -83,16 +87,16 @@ public class Predictor extends DataStreamBundleList {
 	}
 
 	private void initiatePredictor() {
-		double[][] inputPrototype = { inputDataStreamBundle.read(0) };
-		double[][] outputPrototype = { outputDataStreamBundle.read(0) };
+		double[][] inputPrototype = inputDataStreamBundle.read();
+		double[][] outputPrototype = outputDataStreamBundle.read();
 
 		predictorNetwork = new BasicNetwork();
 		predictorNetwork.addLayer(new BasicLayer(null, true,
-				inputPrototype.length));
+				inputPrototype[0].length));
 		predictorNetwork.addLayer(new BasicLayer(new ActivationSigmoid(), true,
 				inputPrototype.length + outputPrototype.length));
 		predictorNetwork.addLayer(new BasicLayer(new ActivationSigmoid(),
-				false, outputPrototype.length));
+				false, inputPrototype[0].length));
 		predictorNetwork.getStructure().finalizeStructure();
 		predictorNetwork.reset();
 
