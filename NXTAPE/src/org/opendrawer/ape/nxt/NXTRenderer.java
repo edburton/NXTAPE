@@ -1,5 +1,6 @@
-package org.opendrawer.nxtape;
+package org.opendrawer.ape.nxt;
 
+import org.opendrawer.ape.Renderer;
 import org.opendrawer.dawinian.neurodynamics.DataProvider;
 
 public abstract class NXTRenderer extends Renderer {

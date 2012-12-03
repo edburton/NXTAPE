@@ -1,4 +1,4 @@
-package org.opendrawer.nxtape;
+package org.opendrawer.ape.nxt;
 
 import lejos.nxt.remote.RemoteMotor;
 

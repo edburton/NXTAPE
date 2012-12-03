@@ -1,4 +1,4 @@
-package org.opendrawer.nxtape;
+package org.opendrawer.ape.nxt;
 
 import java.awt.Color;
 

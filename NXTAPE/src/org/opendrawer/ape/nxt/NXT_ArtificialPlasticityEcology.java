@@ -1,4 +1,4 @@
-package org.opendrawer.nxtape;
+package org.opendrawer.ape.nxt;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -13,6 +13,9 @@ import lejos.pc.comm.NXTCommException;
 import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
+import org.opendrawer.ape.DataStreamBundleListRenderer;
+import org.opendrawer.ape.HomogeneousDataStreamBundleRenderer;
+import org.opendrawer.ape.Renderer;
 import org.opendrawer.dawinian.neurodynamics.Actor;
 import org.opendrawer.dawinian.neurodynamics.HomogeneousDataStreamBundle;
 import org.opendrawer.dawinian.neurodynamics.NeurodynamicStreamCore;
@@ -57,9 +60,9 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	public static void main(String[] args) {
 		if (presentationMode)
 			PApplet.main(new String[] { "--present",
-					"org.opendrawer.nxtape.NXT_ArtificialPlasticityEcology" });
+					"org.opendrawer.ape.nxt.NXT_ArtificialPlasticityEcology" });
 		else
-			PApplet.main("org.opendrawer.nxtape.NXT_ArtificialPlasticityEcology");
+			PApplet.main("org.opendrawer.ape.nxt.NXT_ArtificialPlasticityEcology");
 	}
 
 	@Override

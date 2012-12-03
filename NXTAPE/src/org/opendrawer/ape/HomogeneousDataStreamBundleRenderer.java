@@ -1,5 +1,6 @@
-package org.opendrawer.nxtape;
+package org.opendrawer.ape;
 
+import org.opendrawer.ape.nxt.NXTRenderer;
 import org.opendrawer.dawinian.neurodynamics.HomogeneousDataStreamBundle;
 
 import processing.core.PGraphics;

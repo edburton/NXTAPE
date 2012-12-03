@@ -1,15 +1,15 @@
-package org.opendrawer.nxtape;
+package org.opendrawer.ape.nxt;
 
 import org.opendrawer.dawinian.neurodynamics.DataProvider;
 
 import processing.core.PGraphics;
 
-public class NXTCompassRenderer extends NXTRenderer {
-	NXTCompass nxtCompass;
+public class NXTMotorRenderer extends NXTRenderer {
+	NXTMotor nxtMotor;
 
-	public NXTCompassRenderer(NXTCompass nxtCompass) {
+	public NXTMotorRenderer(NXTMotor nxtMotor) {
 		super();
-		this.nxtCompass = nxtCompass;
+		this.nxtMotor = nxtMotor;
 	}
 
 	@Override
@@ -20,13 +20,13 @@ public class NXTCompassRenderer extends NXTRenderer {
 		float xc = x + width / 2;
 		float yc = y + height / 2;
 		g.noStroke();
-		g.fill(64, 64, 64);
+		g.fill(0, 128, 0);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 		radius -= NXT_ArtificialPlasticityEcology.lineMarginWidth;
 		g.fill(16);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 		g.stroke(255, 255, 0);
-		float a = (float) ((nxtCompass.getNormalizedValues()[0]) * (Math.PI * 2));
+		float a = (float) ((nxtMotor.getNormalizedValues()[1]) * (Math.PI));
 		g.line(xc, yc, (float) (xc + Math.sin(a) * radius),
 				(float) (yc + Math.cos(a) * radius));
 	}
@@ -44,26 +44,31 @@ public class NXTCompassRenderer extends NXTRenderer {
 
 	@Override
 	public void mouseClicked(int mouseX, int mouseY) {
-
-	}
-
-	@Override
-	public DataProvider getDataProvider() {
-		return nxtCompass;
+		float xc = x + width / 2;
+		float yc = y + height / 2;
+		float dx = mouseX - xc;
+		float dy = mouseY - yc;
+		float a = (float) (Math.atan2(dx, dy) * (360 / (Math.PI)));
+		nxtMotor.setGUIAngle(Math.round(a));
 	}
 
 	@Override
 	public void mousePressed(int mouseX, int mouseY) {
-
+		mouseClicked(mouseX, mouseY);
 	}
 
 	@Override
 	public void mouseDragged(int mouseX, int mouseY) {
-
+		mouseClicked(mouseX, mouseY);
 	}
 
 	@Override
 	public void mouseReleased(int mouseX, int mouseY) {
+		mouseClicked(mouseX, mouseY);
+	}
 
+	@Override
+	public DataProvider getDataProvider() {
+		return nxtMotor;
 	}
 }
