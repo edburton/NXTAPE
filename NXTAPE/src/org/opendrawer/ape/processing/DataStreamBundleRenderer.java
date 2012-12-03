@@ -30,24 +30,44 @@ public class DataStreamBundleRenderer extends Renderer {
 		super.draw(g);
 		if (dataStreamBundle != null) {
 			g.noFill();
-
 			int nc = dataStreamBundle.getDataStreams().size();
 			float graphHeight = height - Renderer.lineWidth / 2.0f;
 			for (int c = nc - 1; c >= 0; c--) {
-				int dataWidth = dataStreamBundle.getDataWidth();
-				g.stroke(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
-				g.beginShape();
-				for (int i = 0; i < dataWidth; i++) {
-					double v = dataStreamBundle.getDataStreams().get(c)
-							.readWithMinMaxScaledToZeroOne(i);
-					if (!Double.isNaN(v)) {
-						float x1 = (getStreamLeft())
-								+ ((i / (float) (dataWidth - 1)) * (width - (getStreamLeft() - x)));
-						float y1 = (float) ((y + height) - v * graphHeight);
-						g.vertex(x1, y1);
+				double[] data = dataStreamBundle.getDataStreams().get(c).read();
+				if (data != null) {
+					int dataWidth = data.length;
+					double min = Double.NaN;
+					double max = Double.NaN;
+					for (int i = 0; i < dataWidth; i++) {
+						if (!Double.isNaN(data[i])) {
+							if (Double.isNaN(min))
+								min = data[i];
+							else if (data[i] < min)
+								min = data[i];
+							if (Double.isNaN(max))
+								max = data[i];
+							else if (data[i] > max)
+								max = data[i];
+						}
+					}
+					if (!Double.isNaN(min) && !Double.isNaN(max)
+							&& (max - min != 0)) {
+						g.stroke(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
+						g.beginShape();
+						for (int i = 0; i < dataWidth; i++) {
+							double v = data[i];
+							if (!Double.isNaN(v)) {
+								v = (v - min) / (max - min);
+								float x1 = (getStreamLeft())
+										+ ((i / (float) (dataWidth - 1)) * (width - (getStreamLeft() - x)));
+								float y1 = (float) ((y + height) - v
+										* graphHeight);
+								g.vertex(x1, y1);
+							}
+						}
+						g.endShape();
 					}
 				}
-				g.endShape();
 			}
 		}
 	}

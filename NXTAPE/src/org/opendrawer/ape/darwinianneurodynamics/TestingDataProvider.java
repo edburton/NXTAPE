@@ -42,12 +42,12 @@ public class TestingDataProvider implements DataProvider {
 	public void step() {
 		output = new double[] {
 				phase
-						* Math.random()
+						* (1 + Math.random())
 						* (Math.sin(1.11 * phase * System.currentTimeMillis()
 								/ 1600.0d)),
 				phase
 						* 1.7
-						* Math.random()
+						* (1 + Math.random())
 						* (-Math.sin(phase * System.currentTimeMillis()
 								/ 1600.0d)) };
 

@@ -39,8 +39,8 @@ public class Predictor extends DataStreamBundleList {
 
 	public Predictor() {
 		super();
-		addDataStreamBundle(inputDataStreamBundle = new DataStreamBundle(128));
-		addDataStreamBundle(outputDataStreamBundle = new DataStreamBundle(128));
+		addDataStreamBundle(inputDataStreamBundle = new DataStreamBundle(256));
+		addDataStreamBundle(outputDataStreamBundle = new DataStreamBundle(256));
 		inputDataStreamBundle.addDataProvidedStreams(new TestingDataProvider(
 				1.2));
 		outputDataStreamBundle.addDataProvidedStreams(new TestingDataProvider(
@@ -61,18 +61,19 @@ public class Predictor extends DataStreamBundleList {
 	public void predict() {
 		if (predictor == null)
 			initiatePredictor();
-		/*
-		 * for (int i = 0; i < inputDataStreamBundle.getDataStreams().size();
-		 * i++) {
-		 * inputDataStreamBundle.getDataStreams().get(i).getDataProvider()
-		 * .step();
-		 * inputDataStreamBundle.write(inputDataStreamBundle.getDataStreams()
-		 * .get(i).getDataProvider().getData()); } for (int i = 0; i <
-		 * outputDataStreamBundle.getDataStreams().size(); i++) {
-		 * outputDataStreamBundle.getDataStreams().get(i).getDataProvider()
-		 * .step(); outputDataStreamBundle.write(outputDataStreamBundle
-		 * .getDataStreams().get(i).getDataProvider().getData()); }
-		 */
+
+		for (int i = 0; i < inputDataStreamBundle.getDataStreams().size(); i++) {
+			inputDataStreamBundle.getDataStreams().get(i).getDataProvider()
+					.step();
+			inputDataStreamBundle.write(inputDataStreamBundle.getDataStreams()
+					.get(i).getDataProvider().getData());
+		}
+		for (int i = 0; i < outputDataStreamBundle.getDataStreams().size(); i++) {
+			outputDataStreamBundle.getDataStreams().get(i).getDataProvider()
+					.step();
+			outputDataStreamBundle.write(outputDataStreamBundle
+					.getDataStreams().get(i).getDataProvider().getData());
+		}
 
 		double[][] inputPeriod = inputDataStreamBundle.read();
 		double[][] outputPeriod = outputDataStreamBundle.read();
