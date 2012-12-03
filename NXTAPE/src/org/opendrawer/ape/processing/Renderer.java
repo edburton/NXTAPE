@@ -1,8 +1,6 @@
-package org.opendrawer.ape;
+package org.opendrawer.ape.processing;
 
 import java.awt.Color;
-
-import org.opendrawer.ape.nxt.NXT_ArtificialPlasticityEcology;
 
 import processing.core.PGraphics;
 
@@ -10,6 +8,8 @@ public class Renderer {
 	protected float x, y, width, height;
 	protected boolean visible = false;
 	protected Color keyColor = null;
+	public static float lineMarginWidth;
+	public static float lineWidth;
 
 	public Renderer() {
 
@@ -38,12 +38,9 @@ public class Renderer {
 			g.rect(x, y, x + width, y + height);
 			g.fill(keyColor.getRed() / 4, keyColor.getGreen() / 4,
 					keyColor.getBlue() / 4);
-			g.rect(x + NXT_ArtificialPlasticityEcology.lineMarginWidth, y
-					+ NXT_ArtificialPlasticityEcology.lineMarginWidth,
-					(x + width)
-							- NXT_ArtificialPlasticityEcology.lineMarginWidth,
-					(y + height)
-							- NXT_ArtificialPlasticityEcology.lineMarginWidth);
+			g.rect(x + Renderer.lineMarginWidth, y + Renderer.lineMarginWidth,
+					(x + width) - Renderer.lineMarginWidth, (y + height)
+							- Renderer.lineMarginWidth);
 		}
 	}
 

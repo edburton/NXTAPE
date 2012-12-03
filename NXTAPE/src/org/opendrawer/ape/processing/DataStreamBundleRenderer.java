@@ -1,9 +1,8 @@
-package org.opendrawer.ape;
+package org.opendrawer.ape.processing;
 
 import java.awt.Color;
 
-import org.opendrawer.ape.nxt.NXT_ArtificialPlasticityEcology;
-import org.opendrawer.dawinian.neurodynamics.DataStreamBundle;
+import org.opendrawer.ape.darwinianneurodynamics.DataStreamBundle;
 
 import processing.core.PGraphics;
 
@@ -33,8 +32,7 @@ public class DataStreamBundleRenderer extends Renderer {
 			g.noFill();
 
 			int nc = dataStreamBundle.getDataStreams().size();
-			float graphHeight = height
-					- NXT_ArtificialPlasticityEcology.lineWidth / 2.0f;
+			float graphHeight = height - Renderer.lineWidth / 2.0f;
 			for (int c = nc - 1; c >= 0; c--) {
 				int dataWidth = dataStreamBundle.getDataWidth();
 				g.stroke(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));

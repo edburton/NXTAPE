@@ -1,4 +1,4 @@
-package org.opendrawer.dawinian.neurodynamics;
+package org.opendrawer.ape.darwinianneurodynamics;
 
 import java.util.ArrayList;
 import java.util.List;

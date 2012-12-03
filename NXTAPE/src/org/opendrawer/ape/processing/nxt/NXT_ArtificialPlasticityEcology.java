@@ -1,4 +1,4 @@
-package org.opendrawer.ape.nxt;
+package org.opendrawer.ape.processing.nxt;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -13,14 +13,14 @@ import lejos.pc.comm.NXTCommException;
 import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
-import org.opendrawer.ape.DataStreamBundleListRenderer;
-import org.opendrawer.ape.HomogeneousDataStreamBundleRenderer;
-import org.opendrawer.ape.Renderer;
-import org.opendrawer.dawinian.neurodynamics.Actor;
-import org.opendrawer.dawinian.neurodynamics.HomogeneousDataStreamBundle;
-import org.opendrawer.dawinian.neurodynamics.NeurodynamicStreamCore;
-import org.opendrawer.dawinian.neurodynamics.Predictor;
-import org.opendrawer.dawinian.neurodynamics.Reflex;
+import org.opendrawer.ape.darwinianneurodynamics.Actor;
+import org.opendrawer.ape.darwinianneurodynamics.HomogeneousDataStreamBundle;
+import org.opendrawer.ape.darwinianneurodynamics.NeurodynamicStreamCore;
+import org.opendrawer.ape.darwinianneurodynamics.Predictor;
+import org.opendrawer.ape.darwinianneurodynamics.Reflex;
+import org.opendrawer.ape.processing.DataStreamBundleListRenderer;
+import org.opendrawer.ape.processing.HomogeneousDataStreamBundleRenderer;
+import org.opendrawer.ape.processing.Renderer;
 
 import processing.core.PApplet;
 
@@ -43,8 +43,6 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private int dataStreamWidth = 64;
 	private final NeurodynamicStreamCore neurodynamicStreamCore = new NeurodynamicStreamCore();
 	private boolean dummyMode = false;
-	public static float lineWidth;
-	public static float lineMarginWidth;
 	private Renderer mouseFocusedRenderer;
 	private static final String touch_left_name = "Touch Left";
 	private static final String touch_bottom_name = "Touch Bottom";
@@ -60,9 +58,9 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	public static void main(String[] args) {
 		if (presentationMode)
 			PApplet.main(new String[] { "--present",
-					"org.opendrawer.ape.nxt.NXT_ArtificialPlasticityEcology" });
+					"org.opendrawer.ape.processing.nxt.NXT_ArtificialPlasticityEcology" });
 		else
-			PApplet.main("org.opendrawer.ape.nxt.NXT_ArtificialPlasticityEcology");
+			PApplet.main("org.opendrawer.ape.processing.nxt.NXT_ArtificialPlasticityEcology");
 	}
 
 	@Override
@@ -72,9 +70,9 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		else
 			size(1024, 768, OPENGL);
 		frameRate(200);
-		lineMarginWidth = getHeight() / 384.0f;
-		lineWidth = lineMarginWidth * 1.70710678118655f;
-		edgeMargin = NXT_ArtificialPlasticityEcology.lineMarginWidth * 4;
+		Renderer.lineMarginWidth = getHeight() / 384.0f;
+		Renderer.lineWidth = Renderer.lineMarginWidth * 1.70710678118655f;
+		edgeMargin = Renderer.lineMarginWidth * 4;
 		smooth();
 		frameRate(50);
 		ellipseMode(CORNERS);

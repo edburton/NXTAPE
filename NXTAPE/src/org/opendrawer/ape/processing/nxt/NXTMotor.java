@@ -1,9 +1,9 @@
-package org.opendrawer.ape.nxt;
+package org.opendrawer.ape.processing.nxt;
 
 import lejos.nxt.remote.RemoteMotor;
 
-import org.opendrawer.dawinian.neurodynamics.DataProvider;
-import org.opendrawer.dawinian.neurodynamics.OutputDataProvider;
+import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
+import org.opendrawer.ape.darwinianneurodynamics.OutputDataProvider;
 
 public class NXTMotor implements OutputDataProvider {
 	private RemoteMotor remoteMotor;

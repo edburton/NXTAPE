@@ -1,27 +1,26 @@
-package org.opendrawer.ape;
+package org.opendrawer.ape.processing;
 
-import org.opendrawer.ape.nxt.NXTRenderer;
-import org.opendrawer.dawinian.neurodynamics.HomogeneousDataStreamBundle;
+import org.opendrawer.ape.darwinianneurodynamics.HomogeneousDataStreamBundle;
 
 import processing.core.PGraphics;
 
 public class HomogeneousDataStreamBundleRenderer extends
 		DataStreamBundleRenderer {
 
-	NXTRenderer dataProviderRenderer;
-	NXTRenderer mouseFocusedRenderer;
+	DataProviderRenderer dataProviderRenderer;
+	DataProviderRenderer mouseFocusedRenderer;
 
 	public HomogeneousDataStreamBundleRenderer(
 			HomogeneousDataStreamBundle dataStreamBundle,
-			NXTRenderer dataProviderRenderer) {
+			DataProviderRenderer dataProviderRenderer) {
 		super(dataStreamBundle);
 		this.dataProviderRenderer = dataProviderRenderer;
 	}
 
 	public HomogeneousDataStreamBundleRenderer(
 			HomogeneousDataStreamBundle dataStreamBundle,
-			NXTRenderer dataProviderRenderer, float x, float y, float width,
-			float height) {
+			DataProviderRenderer dataProviderRenderer, float x, float y,
+			float width, float height) {
 		super(dataStreamBundle, x, y, width, height);
 		this.dataProviderRenderer = dataProviderRenderer;
 		setVisibleAt(x, y, width, height);

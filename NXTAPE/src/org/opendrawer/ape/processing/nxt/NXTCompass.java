@@ -1,8 +1,8 @@
-package org.opendrawer.ape.nxt;
+package org.opendrawer.ape.processing.nxt;
 
 import lejos.nxt.addon.CompassHTSensor;
 
-import org.opendrawer.dawinian.neurodynamics.DataProvider;
+import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
 
 public class NXTCompass implements DataProvider {
 	private final CompassHTSensor compass;

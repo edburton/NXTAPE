@@ -1,12 +1,14 @@
-package org.opendrawer.ape.nxt;
+package org.opendrawer.ape.processing.nxt;
 
 import java.awt.Color;
 
-import org.opendrawer.dawinian.neurodynamics.DataProvider;
+import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
+import org.opendrawer.ape.processing.DataProviderRenderer;
+import org.opendrawer.ape.processing.Renderer;
 
 import processing.core.PGraphics;
 
-public class NXTAccelerometerRenderer extends NXTRenderer {
+public class NXTAccelerometerRenderer extends DataProviderRenderer {
 	NXTAccelerometer nxtAccelerometer;
 
 	public NXTAccelerometerRenderer(NXTAccelerometer nxtAccelerometer) {
@@ -23,12 +25,12 @@ public class NXTAccelerometerRenderer extends NXTRenderer {
 		g.noStroke();
 		g.fill(64, 64, 64);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
-		radius -= NXT_ArtificialPlasticityEcology.lineMarginWidth;
+		radius -= Renderer.lineMarginWidth;
 		g.fill(16);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 		double[] values = nxtAccelerometer.getNormalizedValues();
-		g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
-		float r = NXT_ArtificialPlasticityEcology.lineMarginWidth * 2;
+		g.strokeWeight(Renderer.lineWidth);
+		float r = Renderer.lineMarginWidth * 2;
 		for (int i = 0; i < 3; i++) {
 			int c = Color.HSBtoRGB(i / 3.0f, 1.0f, 1.0f);
 			g.stroke(c);
@@ -45,8 +47,8 @@ public class NXTAccelerometerRenderer extends NXTRenderer {
 
 	@Override
 	public boolean contains(float x1, float y1) {
-		float radius = (Math.min(width, height) / 2)
-				- NXT_ArtificialPlasticityEcology.lineMarginWidth / 2;
+		float radius = (Math.min(width, height) / 2) - Renderer.lineMarginWidth
+				/ 2;
 		float xc = x + width / 2;
 		float yc = y + height / 2;
 		float dx = x1 - xc;

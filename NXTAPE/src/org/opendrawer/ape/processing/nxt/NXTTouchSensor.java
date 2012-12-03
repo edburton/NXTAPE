@@ -1,8 +1,8 @@
-package org.opendrawer.ape.nxt;
+package org.opendrawer.ape.processing.nxt;
 
 import lejos.nxt.TouchSensor;
 
-import org.opendrawer.dawinian.neurodynamics.DataProvider;
+import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
 
 public class NXTTouchSensor implements DataProvider {
 	private final TouchSensor touchSensor;

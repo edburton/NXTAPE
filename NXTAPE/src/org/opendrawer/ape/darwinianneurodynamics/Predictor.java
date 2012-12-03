@@ -1,4 +1,4 @@
-package org.opendrawer.dawinian.neurodynamics;
+package org.opendrawer.ape.darwinianneurodynamics;
 
 import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.ml.data.MLData;

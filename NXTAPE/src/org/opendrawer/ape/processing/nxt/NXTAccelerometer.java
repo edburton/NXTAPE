@@ -1,8 +1,8 @@
-package org.opendrawer.ape.nxt;
+package org.opendrawer.ape.processing.nxt;
 
 import lejos.nxt.addon.AccelHTSensor;
 
-import org.opendrawer.dawinian.neurodynamics.DataProvider;
+import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
 
 public class NXTAccelerometer implements DataProvider {
 	private final AccelHTSensor accelerometer;

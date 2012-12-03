@@ -1,4 +1,4 @@
-package org.opendrawer.dawinian.neurodynamics;
+package org.opendrawer.ape.darwinianneurodynamics;
 
 public interface DataProvider {
 	public static final int NULL = 0;

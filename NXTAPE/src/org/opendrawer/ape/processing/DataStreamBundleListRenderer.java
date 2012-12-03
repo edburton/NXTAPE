@@ -1,10 +1,10 @@
-package org.opendrawer.ape;
+package org.opendrawer.ape.processing;
 
 import java.awt.Color;
 import java.util.ArrayList;
 
-import org.opendrawer.dawinian.neurodynamics.DataStreamBundle;
-import org.opendrawer.dawinian.neurodynamics.DataStreamBundleList;
+import org.opendrawer.ape.darwinianneurodynamics.DataStreamBundle;
+import org.opendrawer.ape.darwinianneurodynamics.DataStreamBundleList;
 
 import processing.core.PGraphics;
 

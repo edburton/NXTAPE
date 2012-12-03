@@ -1,40 +1,42 @@
-package org.opendrawer.ape.nxt;
+package org.opendrawer.ape.processing.nxt;
 
-import org.opendrawer.dawinian.neurodynamics.DataProvider;
+import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
+import org.opendrawer.ape.processing.DataProviderRenderer;
+import org.opendrawer.ape.processing.Renderer;
 
 import processing.core.PGraphics;
 
-public class NXTCompassRenderer extends NXTRenderer {
-	NXTCompass nxtCompass;
+public class NXTTouchSensorRenderer extends DataProviderRenderer {
+	NXTTouchSensor nxtTouchSensor;
 
-	public NXTCompassRenderer(NXTCompass nxtCompass) {
+	public NXTTouchSensorRenderer(NXTTouchSensor nxtTouchSensor) {
 		super();
-		this.nxtCompass = nxtCompass;
+		this.nxtTouchSensor = nxtTouchSensor;
 	}
 
 	@Override
 	public void draw(PGraphics g) {
 		super.draw(g);
-		g.strokeWeight(NXT_ArtificialPlasticityEcology.lineWidth);
 		float radius = (Math.min(width, height) / 2);
 		float xc = x + width / 2;
 		float yc = y + height / 2;
 		g.noStroke();
 		g.fill(64, 64, 64);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
-		radius -= NXT_ArtificialPlasticityEcology.lineMarginWidth;
-		g.fill(16);
+		radius -= Renderer.lineMarginWidth;
+
+		if (nxtTouchSensor.isOn())
+			g.fill(255, 255, 0);
+		else
+			g.fill(16);
+
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
-		g.stroke(255, 255, 0);
-		float a = (float) ((nxtCompass.getNormalizedValues()[0]) * (Math.PI * 2));
-		g.line(xc, yc, (float) (xc + Math.sin(a) * radius),
-				(float) (yc + Math.cos(a) * radius));
 	}
 
 	@Override
 	public boolean contains(float x1, float y1) {
-		float radius = (Math.min(width, height) / 2)
-				- NXT_ArtificialPlasticityEcology.lineMarginWidth / 2;
+		float radius = (Math.min(width, height) / 2) - Renderer.lineMarginWidth
+				/ 2;
 		float xc = x + width / 2;
 		float yc = y + height / 2;
 		float dx = x1 - xc;
@@ -44,12 +46,12 @@ public class NXTCompassRenderer extends NXTRenderer {
 
 	@Override
 	public void mouseClicked(int mouseX, int mouseY) {
-
+		nxtTouchSensor.setOn(!nxtTouchSensor.isOn());
 	}
 
 	@Override
 	public DataProvider getDataProvider() {
-		return nxtCompass;
+		return nxtTouchSensor;
 	}
 
 	@Override
