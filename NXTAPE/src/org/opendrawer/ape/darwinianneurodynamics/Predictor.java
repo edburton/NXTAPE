@@ -37,9 +37,39 @@ public class Predictor extends DataStreamBundleList {
 		addDataStreamBundle(errorStreamBundle);
 	}
 
+	public Predictor() {
+		super();
+		addDataStreamBundle(inputDataStreamBundle = new DataStreamBundle(512));
+		addDataStreamBundle(outputDataStreamBundle = new DataStreamBundle(512));
+		inputDataStreamBundle.AddDataStream(new DataStream(
+				new TestingDataProvider(), 0, 512));
+		inputDataStreamBundle.AddDataStream(new DataStream(
+				new TestingDataProvider(), 1, 512));
+		outputDataStreamBundle.AddDataStream(new DataStream(
+				new TestingDataProvider(), 0, 512));
+		outputDataStreamBundle.AddDataStream(new DataStream(
+				new TestingDataProvider(), 1, 512));
+		predictionStreamBundle = new DataStreamBundle(
+				inputDataStreamBundle.getDataWidth());
+		predictionStreamBundle.AddDataStream(new DataStream(
+				inputDataStreamBundle.getDataWidth()));
+		addDataStreamBundle(predictionStreamBundle);
+		errorStreamBundle = new DataStreamBundle(
+				inputDataStreamBundle.getDataWidth());
+		errorStreamBundle.AddDataStream(new DataStream(inputDataStreamBundle
+				.getDataWidth()));
+		addDataStreamBundle(errorStreamBundle);
+	}
+
 	public void predict() {
 		if (predictor == null)
 			initiatePredictor();
+
+		inputDataStreamBundle.write(inputDataStreamBundle.getDataStreams()
+				.get(0).getDataProvider().getNormalizedValues());
+		outputDataStreamBundle.write(outputDataStreamBundle.getDataStreams()
+				.get(0).getDataProvider().getNormalizedValues());
+
 		double[][] inputPeriod = { inputDataStreamBundle.read(0) };
 		double[][] outputPeriod = { outputDataStreamBundle.read(0) };
 		MLDataSet trainingSet = new BasicMLDataSet(inputPeriod, outputPeriod);

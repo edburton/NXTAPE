@@ -79,7 +79,10 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		rectMode(CORNERS);
 		background(0);
 		frame.setBackground(new java.awt.Color(0, 0, 0));
-		setupNXT();
+		if (false)
+			setupNXT();
+		else
+			setupTestingPlayground();
 	}
 
 	private void setupNXT() {
@@ -301,11 +304,87 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		}
 	}
 
+	private void setupTestingPlayground() {
+		dummyMode = true;
+
+		List<HomogeneousDataStreamBundleRenderer> homogeneousDataStreamBundleRenderers = new ArrayList<HomogeneousDataStreamBundleRenderer>();
+		List<DataStreamBundleListRenderer> reflexRenderers = new ArrayList<DataStreamBundleListRenderer>();
+		List<DataStreamBundleListRenderer> predictorRenderers = new ArrayList<DataStreamBundleListRenderer>();
+		List<DataStreamBundleListRenderer> actorRenderers = new ArrayList<DataStreamBundleListRenderer>();
+
+		int nTypes = 3;
+		int nType = 0;
+
+		for (int i = 0; i < reflexRenderers.size(); i++)
+			reflexRenderers.get(i).setKeyColor(
+					new Color(Color
+							.HSBtoRGB(nType / (float) nTypes, 1.0f, 0.5f)));
+		nType++;
+
+		nType++;
+
+		Predictor predictor = new Predictor();
+		neurodynamicStreamCore.addPredictor(predictor);
+		DataStreamBundleListRenderer renderer = new DataStreamBundleListRenderer(
+				predictor);
+		renderer.setKeyColor(new Color(Color.HSBtoRGB(nType / (float) nTypes,
+				1.0f, 0.5f)));
+		predictorRenderers.add(renderer);
+
+		neurodynamicStreamCore.prepareDataStreams();
+
+		renderers.addAll(homogeneousDataStreamBundleRenderers);
+		renderers.addAll(reflexRenderers);
+		renderers.addAll(actorRenderers);
+		renderers.addAll(predictorRenderers);
+
+		int sensorimotors = homogeneousDataStreamBundleRenderers.size();
+		int reflexes = reflexRenderers.size();
+		int actors = actorRenderers.size();
+		int predictors = predictorRenderers.size();
+
+		int zones = 1 + sensorimotors + 1 + reflexes + 1 + actors + 1
+				+ predictors + 1;
+
+		float screenWidth = getWidth();
+		float screenHeight = getHeight();
+		float margin = edgeMargin / 2;
+		int gridWidth = 1;// (int) Math.ceil(Math.pow(zones, 1 / 3.0d));
+		int gridHeight = 6;// (int) Math.floor(Math.pow(zones, 2 / 3.0d));
+
+		float width = ((screenWidth + margin - edgeMargin * 2) / gridWidth)
+				- margin;
+		float height = ((screenHeight + margin - edgeMargin * 2) / gridHeight)
+				- margin;
+
+		int c = 0;
+		int divider = 0;
+		for (int gx = 0; gx < gridWidth; gx++) {
+			for (int gy = 0; gy < gridHeight; gy++) {
+				float x = edgeMargin + gx * (width + margin);
+				float y = edgeMargin + gy * (height + margin);
+				if (divider > 0) {
+					if (c < renderers.size()) {
+						renderers.get(c).setVisibleAt(x, y, width, height);
+					}
+					c++;
+				}
+				divider++;
+
+				if (divider > 1
+						&& ((c == 0) || (c == sensorimotors)
+								|| (c == (sensorimotors + reflexes)) || (c == (sensorimotors
+								+ reflexes + actors))))
+					divider = 0;
+			}
+		}
+	}
+
 	@Override
 	public void draw() {
 		neurodynamicStreamCore.step();
 		background(0);
-		if (!dummyMode && mousePressed) {
+		if (mousePressed) {
 			translate(getWidth() / 2, getHeight() / 2);
 			scale(4, 4);
 			translate(-mouseX, -mouseY);
