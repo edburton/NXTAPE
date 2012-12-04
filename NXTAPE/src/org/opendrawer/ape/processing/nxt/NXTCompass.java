@@ -8,7 +8,7 @@ public class NXTCompass implements DataProvider {
 	private final CompassHTSensor compass;
 	private final String name;
 	private static final String[] channelNames = new String[] { "Heading South" };
-	private static final int[] channelTypes = new int[] { DataProvider.INPUT };
+	private static final int[] channelTypes = new int[] { INPUT };
 	private boolean inhibited = false;
 	private double direction;
 

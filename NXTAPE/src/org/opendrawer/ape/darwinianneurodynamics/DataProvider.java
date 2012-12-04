@@ -4,6 +4,7 @@ public interface DataProvider {
 	public static final int NULL = 0;
 	public static final int INPUT = 1;
 	public static final int OUTPUT = 2;
+	public static final int INTERNAL = 3;
 
 	public abstract String getName();
 

@@ -8,7 +8,7 @@ public class NXTTouchSensor implements DataProvider {
 	private final TouchSensor touchSensor;
 	private final String name;
 	private static String[] channelNames = new String[] { "On/Off" };
-	private static int[] channelTypes = new int[] { DataProvider.INPUT };
+	private static int[] channelTypes = new int[] { INPUT };
 	private boolean on = false;
 	private boolean inhibited = false;
 

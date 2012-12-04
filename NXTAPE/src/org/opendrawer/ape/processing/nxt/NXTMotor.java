@@ -2,7 +2,6 @@ package org.opendrawer.ape.processing.nxt;
 
 import lejos.nxt.remote.RemoteMotor;
 
-import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
 import org.opendrawer.ape.darwinianneurodynamics.OutputDataProvider;
 
 public class NXTMotor implements OutputDataProvider {
@@ -20,8 +19,7 @@ public class NXTMotor implements OutputDataProvider {
 	private double maxInputRate = 1f;
 	private double maxRate = 40.0f;
 	private static String[] channelNames = new String[] { "Impulse", "Angle" };
-	private static final int[] channelTypes = new int[] { DataProvider.OUTPUT,
-			DataProvider.INPUT };
+	private static final int[] channelTypes = new int[] { OUTPUT, INPUT };
 	private boolean inhibited = false;
 	private double topSpeed;
 	private int currentSpeed;

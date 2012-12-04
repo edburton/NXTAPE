@@ -54,6 +54,7 @@ public class DataStreamBundleRenderer extends Renderer {
 							|| (max - min == 0))
 						return;
 					g.stroke(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
+					g.strokeWeight(Renderer.lineWidth);
 					boolean drawing = false;
 					int vertexCount = 0;
 					float x1 = 0;
@@ -77,7 +78,7 @@ public class DataStreamBundleRenderer extends Renderer {
 								if (vertexCount++ % 2 == 1)
 									g.vertex(x1, y1);
 								g.endShape();
-								vertexCount=0;
+								vertexCount = 0;
 								drawing = false;
 							}
 						}

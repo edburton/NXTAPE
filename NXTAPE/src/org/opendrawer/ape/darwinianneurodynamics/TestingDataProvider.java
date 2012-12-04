@@ -4,8 +4,7 @@ public class TestingDataProvider implements DataProvider {
 
 	private double phase;
 	private double[] output;
-	private static final int[] channelTypes = new int[] { DataProvider.INPUT,
-			DataProvider.INPUT };
+	private static final int[] channelTypes = new int[] { INTERNAL, INTERNAL };
 	private int c = 0;
 
 	public TestingDataProvider(double phase) {

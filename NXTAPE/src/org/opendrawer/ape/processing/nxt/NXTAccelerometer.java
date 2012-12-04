@@ -8,8 +8,7 @@ public class NXTAccelerometer implements DataProvider {
 	private final AccelHTSensor accelerometer;
 	private final String name;
 	private static final String[] channelNames = new String[] { "X", "Y", "Z" };
-	private static final int[] channelTypes = new int[] { DataProvider.INPUT,
-			DataProvider.INPUT, DataProvider.INPUT };
+	private static final int[] channelTypes = new int[] { INPUT, INPUT, INPUT };
 	private boolean inhibited = false;
 	private double values[];
 	private float maxExpectedValue = 256; // Arbitrary

@@ -2,10 +2,14 @@ package org.opendrawer.ape.darwinianneurodynamics;
 
 public class Prediction implements DataProvider {
 	int channels;
+	private int[] channelTypes;
 	double[] data;
 
 	public Prediction(int channels) {
 		this.channels = channels;
+		channelTypes = new int[channels];
+		for (int i = 0; i < channels; i++)
+			channelTypes[i] = INTERNAL;
 	}
 
 	@Override
@@ -27,8 +31,7 @@ public class Prediction implements DataProvider {
 
 	@Override
 	public int[] getChannelTypes() {
-		// TODO Auto-generated method stub
-		return null;
+		return channelTypes;
 	}
 
 	@Override
