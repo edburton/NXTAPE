@@ -1,15 +1,11 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
-public class TestingDataProvider implements DataProvider {
+public class Prediction implements DataProvider {
+	int channels;
+	double[] data;
 
-	private double phase;
-	private double[] output;
-	private static final int[] channelTypes = new int[] { DataProvider.INPUT,
-			DataProvider.INPUT };
-	private int c = 0;
-
-	public TestingDataProvider(double phase) {
-		this.phase = phase;
+	public Prediction(int channels) {
+		this.channels = channels;
 	}
 
 	@Override
@@ -20,7 +16,7 @@ public class TestingDataProvider implements DataProvider {
 
 	@Override
 	public double[] getData() {
-		return output;
+		return data;
 	}
 
 	@Override
@@ -32,21 +28,23 @@ public class TestingDataProvider implements DataProvider {
 	@Override
 	public int[] getChannelTypes() {
 		// TODO Auto-generated method stub
-		return channelTypes;
+		return null;
 	}
 
 	@Override
 	public int getChannelCount() {
 		// TODO Auto-generated method stub
-		return 2;
+		return channels;
 	}
 
 	@Override
 	public void step() {
-		output = new double[] {
-				Math.random() / 10 + phase * (Math.cos(c / 20.0d)),
-				Math.random() / 10 + phase * (Math.sin(c / 20.0d)) };
-		c++;
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setData(double[] data) {
+		this.data = data;
 	}
 
 	@Override

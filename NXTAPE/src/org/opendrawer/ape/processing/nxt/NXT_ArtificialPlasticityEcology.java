@@ -79,7 +79,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		rectMode(CORNERS);
 		background(0);
 		frame.setBackground(new java.awt.Color(0, 0, 0));
-		if (true)
+		if (false)
 			setupNXT();
 		else
 			setupTestingPlayground();
@@ -322,14 +322,15 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		nType++;
 
 		nType++;
-
-		Predictor predictor = new Predictor();
-		neurodynamicStreamCore.addPredictor(predictor);
-		DataStreamBundleListRenderer renderer = new DataStreamBundleListRenderer(
-				predictor);
-		renderer.setKeyColor(new Color(Color.HSBtoRGB(nType / (float) nTypes,
-				1.0f, 0.5f)));
-		predictorRenderers.add(renderer);
+		for (int i = 0; i < 6; i++) {
+			Predictor predictor = new Predictor();
+			neurodynamicStreamCore.addPredictor(predictor);
+			DataStreamBundleListRenderer renderer = new DataStreamBundleListRenderer(
+					predictor);
+			renderer.setKeyColor(new Color(Color.HSBtoRGB(nType
+					/ (float) nTypes, 1.0f, 0.5f)));
+			predictorRenderers.add(renderer);
+		}
 
 		neurodynamicStreamCore.prepareDataStreams();
 

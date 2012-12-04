@@ -17,8 +17,10 @@ public class Predictor extends DataStreamBundleList {
 	DataStreamBundle inputDataStreamBundle;
 	DataStreamBundle outputDataStreamBundle;
 
-	DataStreamBundle predictionStreamBundle;
+	HomogeneousDataStreamBundle predictionStreamBundle;
 	DataStreamBundle errorStreamBundle;
+
+	Prediction prediction;
 
 	private static final int dataWidth = 20;
 
@@ -27,9 +29,10 @@ public class Predictor extends DataStreamBundleList {
 		super(inputDataStreamBundle, outputDataStreamBundle);
 		this.inputDataStreamBundle = inputDataStreamBundle;
 		this.outputDataStreamBundle = outputDataStreamBundle;
-		predictionStreamBundle = new DataStreamBundle(dataWidth);
-		predictionStreamBundle.addEmptyDataStreams(outputDataStreamBundle
-				.getDataStreams().size());
+		prediction = new Prediction(outputDataStreamBundle.getDataStreams()
+				.size());
+		predictionStreamBundle = new HomogeneousDataStreamBundle(prediction,
+				dataWidth);
 		addDataStreamBundle(predictionStreamBundle);
 		errorStreamBundle = new DataStreamBundle(
 				inputDataStreamBundle.getDataWidth());
@@ -40,13 +43,13 @@ public class Predictor extends DataStreamBundleList {
 	public Predictor() { // Constructor used for testing only
 		super();
 		addDataStreamBundle(inputDataStreamBundle = new HomogeneousDataStreamBundle(
-				new TestingDataProvider(1), 100));
+				new TestingDataProvider(1), 200));
 		addDataStreamBundle(outputDataStreamBundle = new HomogeneousDataStreamBundle(
-				new TestingDataProvider(-1), 100));
-		predictionStreamBundle = new DataStreamBundle(
-				inputDataStreamBundle.getDataWidth());
-		predictionStreamBundle.addEmptyDataStreams(outputDataStreamBundle
-				.getDataStreams().size());
+				new TestingDataProvider(-1), 200));
+		prediction = new Prediction(outputDataStreamBundle.getDataStreams()
+				.size());
+		predictionStreamBundle = new HomogeneousDataStreamBundle(prediction,
+				dataWidth);
 		addDataStreamBundle(predictionStreamBundle);
 		errorStreamBundle = new DataStreamBundle(
 				inputDataStreamBundle.getDataWidth());
