@@ -20,13 +20,14 @@ public class Predictor extends DataStreamBundleList {
 	DataStreamBundle predictionStreamBundle;
 	DataStreamBundle errorStreamBundle;
 
+	private static final int dataWidth = 20;
+
 	public Predictor(DataStreamBundle inputDataStreamBundle,
 			DataStreamBundle outputDataStreamBundle) {
 		super(inputDataStreamBundle, outputDataStreamBundle);
 		this.inputDataStreamBundle = inputDataStreamBundle;
 		this.outputDataStreamBundle = outputDataStreamBundle;
-		predictionStreamBundle = new DataStreamBundle(
-				inputDataStreamBundle.getDataWidth());
+		predictionStreamBundle = new DataStreamBundle(dataWidth);
 		predictionStreamBundle.addEmptyDataStreams(outputDataStreamBundle
 				.getDataStreams().size());
 		addDataStreamBundle(predictionStreamBundle);
@@ -42,7 +43,6 @@ public class Predictor extends DataStreamBundleList {
 				new TestingDataProvider(1), 100));
 		addDataStreamBundle(outputDataStreamBundle = new HomogeneousDataStreamBundle(
 				new TestingDataProvider(-1), 100));
-
 		predictionStreamBundle = new DataStreamBundle(
 				inputDataStreamBundle.getDataWidth());
 		predictionStreamBundle.addEmptyDataStreams(outputDataStreamBundle
@@ -58,14 +58,17 @@ public class Predictor extends DataStreamBundleList {
 		// double[] input = inputDataStreamBundle.read(0);
 		double[] output = outputDataStreamBundle.read(0);
 		predictionStreamBundle.write(output);
-		errorStreamBundle.write(new double[] { Math.random() });
+		errorStreamBundle.write(new double[] { Math.cos(System
+				.currentTimeMillis() / 600.0d) });
 	}
 
-	public void predict_Backup() {
+	public void predict_backup() {
 		if (predictor == null)
 			initiatePredictor();
-		double[][] inputPeriod = inputDataStreamBundle.read();
-		double[][] outputPeriod = outputDataStreamBundle.read();
+		double[][] inputPeriod = inputDataStreamBundle
+				.readPortion(0, dataWidth);
+		double[][] outputPeriod = outputDataStreamBundle.readPortion(0,
+				dataWidth);
 		MLDataSet trainingSet = new BasicMLDataSet(inputPeriod, outputPeriod);
 		MLDataPair currentPair = trainingSet.get(0);
 		MLData prediction = predictorNetwork.compute(currentPair.getInput());
@@ -78,16 +81,18 @@ public class Predictor extends DataStreamBundleList {
 	}
 
 	private void initiatePredictor() {
-		double[][] inputPrototype = inputDataStreamBundle.read();
-		double[][] outputPrototype = outputDataStreamBundle.read();
-
+		double[][] inputPrototype = new double[][] { inputDataStreamBundle
+				.read(0) };
+		double[][] outputPrototype = new double[][] { outputDataStreamBundle
+				.read(0) };
 		predictorNetwork = new BasicNetwork();
 		predictorNetwork.addLayer(new BasicLayer(null, true,
-				inputPrototype[0].length));
+				inputDataStreamBundle.getDataStreams().size()));
 		predictorNetwork.addLayer(new BasicLayer(new ActivationSigmoid(), true,
-				inputPrototype.length + outputPrototype.length));
+				inputDataStreamBundle.getDataStreams().size()
+						+ outputDataStreamBundle.getDataStreams().size()));
 		predictorNetwork.addLayer(new BasicLayer(new ActivationSigmoid(),
-				false, inputPrototype[0].length));
+				false, outputDataStreamBundle.getDataStreams().size()));
 		predictorNetwork.getStructure().finalizeStructure();
 		predictorNetwork.reset();
 

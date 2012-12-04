@@ -5,7 +5,7 @@ public class TestingDataProvider implements DataProvider {
 	private double phase;
 	private double[] output;
 	private static final int[] channelTypes = new int[] { DataProvider.INPUT,
-		DataProvider.INPUT };
+			DataProvider.INPUT };
 
 	public TestingDataProvider(double phase) {
 		this.phase = phase;
@@ -43,13 +43,9 @@ public class TestingDataProvider implements DataProvider {
 	@Override
 	public void step() {
 		output = new double[] {
-				Math.random()
-						/ 10
-						+ phase
+				Math.random() / 10 + phase
 						* (Math.cos(System.currentTimeMillis() / 600.0d)),
-				Math.random()
-						/ 10
-						+ phase
+				Math.random() / 10 + phase
 						* (Math.sin(System.currentTimeMillis() / 600.0d)) };
 
 	}

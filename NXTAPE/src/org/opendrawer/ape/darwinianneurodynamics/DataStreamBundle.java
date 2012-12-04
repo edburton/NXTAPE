@@ -24,10 +24,14 @@ public class DataStreamBundle {
 	}
 
 	public double[][] read() {
-		double[][] values = new double[dataWidth][dataStreams.size()];
+		return readPortion(0, dataWidth);
+	}
+
+	public double[][] readPortion(int from, int to) {
+		double[][] values = new double[to - from][dataStreams.size()];
 		for (int d = 0; d < dataStreams.size(); d++)
-			for (int t = 0; t < dataWidth; t++)
-				values[t] = dataStreams.get(d).read();
+			for (int t = 0; t < to - from; t++)
+				values[t][d] = read(from + t, d);
 		return values;
 	}
 
