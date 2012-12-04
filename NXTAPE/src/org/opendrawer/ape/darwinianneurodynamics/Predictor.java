@@ -27,24 +27,21 @@ public class Predictor extends DataStreamBundleList {
 		this.outputDataStreamBundle = outputDataStreamBundle;
 		predictionStreamBundle = new DataStreamBundle(
 				inputDataStreamBundle.getDataWidth());
-		predictionStreamBundle.addDataStream(new DataStream(
-				inputDataStreamBundle.getDataWidth()));
+		predictionStreamBundle.addEmptyDataStreams(outputDataStreamBundle
+				.getDataStreams().size());
 		addDataStreamBundle(predictionStreamBundle);
 		errorStreamBundle = new DataStreamBundle(
 				inputDataStreamBundle.getDataWidth());
-		errorStreamBundle.addDataStream(new DataStream(inputDataStreamBundle
-				.getDataWidth()));
+		errorStreamBundle.addEmptyDataStreams(1);
 		addDataStreamBundle(errorStreamBundle);
 	}
 
-	public Predictor() {
+	public Predictor() { // Constructor used for testing only
 		super();
-		addDataStreamBundle(inputDataStreamBundle = new DataStreamBundle(100));
-		addDataStreamBundle(outputDataStreamBundle = new DataStreamBundle(100));
-		inputDataStreamBundle
-				.addDataProvidedStreams(new TestingDataProvider(1));
-		outputDataStreamBundle
-				.addDataProvidedStreams(new TestingDataProvider(1));
+		addDataStreamBundle(inputDataStreamBundle = new HomogeneousDataStreamBundle(
+				new TestingDataProvider(1), 100));
+		addDataStreamBundle(outputDataStreamBundle = new HomogeneousDataStreamBundle(
+				new TestingDataProvider(-1), 100));
 
 		predictionStreamBundle = new DataStreamBundle(
 				inputDataStreamBundle.getDataWidth());
@@ -53,27 +50,20 @@ public class Predictor extends DataStreamBundleList {
 		addDataStreamBundle(predictionStreamBundle);
 		errorStreamBundle = new DataStreamBundle(
 				inputDataStreamBundle.getDataWidth());
-		errorStreamBundle.addDataStream(new DataStream(inputDataStreamBundle
-				.getDataWidth()));
+		errorStreamBundle.addEmptyDataStreams(1);
 		addDataStreamBundle(errorStreamBundle);
 	}
 
 	public void predict() {
+		// double[] input = inputDataStreamBundle.read(0);
+		double[] output = outputDataStreamBundle.read(0);
+		predictionStreamBundle.write(output);
+		errorStreamBundle.write(new double[] { Math.random() });
+	}
+
+	public void predict_Backup() {
 		if (predictor == null)
 			initiatePredictor();
-
-		for (int i = 0; i < inputDataStreamBundle.getDataStreams().size(); i++) {
-			inputDataStreamBundle.getDataStreams().get(i).getDataProvider()
-					.step();
-			inputDataStreamBundle.write(inputDataStreamBundle.getDataStreams()
-					.get(i).getDataProvider().getData());
-		}
-		for (int i = 0; i < outputDataStreamBundle.getDataStreams().size(); i++) {
-			outputDataStreamBundle.getDataStreams().get(i).getDataProvider()
-					.step();
-			outputDataStreamBundle.write(outputDataStreamBundle
-					.getDataStreams().get(i).getDataProvider().getData());
-		}
 		double[][] inputPeriod = inputDataStreamBundle.read();
 		double[][] outputPeriod = outputDataStreamBundle.read();
 		MLDataSet trainingSet = new BasicMLDataSet(inputPeriod, outputPeriod);
@@ -83,7 +73,7 @@ public class Predictor extends DataStreamBundleList {
 		predictor.setTraining(trainingSet);
 		predictor.iteration();
 		double error = predictor.getError();
-		System.out.println(error);
+		// System.out.println(error);
 		errorStreamBundle.getDataStreams().get(0).write(error);
 	}
 

@@ -4,6 +4,8 @@ public class TestingDataProvider implements DataProvider {
 
 	private double phase;
 	private double[] output;
+	private static final int[] channelTypes = new int[] { DataProvider.INPUT,
+		DataProvider.INPUT };
 
 	public TestingDataProvider(double phase) {
 		this.phase = phase;
@@ -29,23 +31,26 @@ public class TestingDataProvider implements DataProvider {
 	@Override
 	public int[] getChannelTypes() {
 		// TODO Auto-generated method stub
-		return null;
+		return channelTypes;
 	}
 
 	@Override
 	public int getChannelCount() {
 		// TODO Auto-generated method stub
-		return 1;
+		return 2;
 	}
 
 	@Override
 	public void step() {
-		output = new double[] { Math.random() < 0.9 ? Math.random() + phase
-				* (Math.sin(phase * System.currentTimeMillis() / 600.0d))
-				: Double.NaN /*
-							 * , Math.random() - phase (Math.sin(phase *
-							 * System.currentTimeMillis() / 600.0d))
-							 */};
+		output = new double[] {
+				Math.random()
+						/ 10
+						+ phase
+						* (Math.cos(System.currentTimeMillis() / 600.0d)),
+				Math.random()
+						/ 10
+						+ phase
+						* (Math.sin(System.currentTimeMillis() / 600.0d)) };
 
 	}
 

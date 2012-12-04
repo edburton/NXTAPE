@@ -40,7 +40,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private NXTMotor armMiddleMotor;
 	private NXTMotor armBodyMotor;
 	private int debugCounter = 0;
-	private int dataStreamWidth = 256;
+	private int dataStreamWidth = 100;
 	private final NeurodynamicStreamCore neurodynamicStreamCore = new NeurodynamicStreamCore();
 	private boolean dummyMode = false;
 	private Renderer mouseFocusedRenderer;
@@ -79,7 +79,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		rectMode(CORNERS);
 		background(0);
 		frame.setBackground(new java.awt.Color(0, 0, 0));
-		if (false)
+		if (true)
 			setupNXT();
 		else
 			setupTestingPlayground();
