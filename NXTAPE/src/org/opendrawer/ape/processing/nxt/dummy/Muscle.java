@@ -31,7 +31,7 @@ public class Muscle implements OutputDataProvider {
 
 	@Override
 	public double[] getData() {
-		return new double[] { restLength, 1 };
+		return new double[] { restLength, 0 };
 	}
 
 	@Override

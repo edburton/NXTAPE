@@ -50,44 +50,43 @@ public class DataStreamBundleRenderer extends Renderer {
 								max = data[i];
 						}
 					}
-					if (Double.isNaN(min) || Double.isNaN(max)
-							|| (max - min == 0))
-						return;
-					g.stroke(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
-					g.strokeWeight(Renderer.lineWidth);
-					boolean drawing = false;
-					int vertexCount = 0;
-					float x1 = 0;
-					float y1 = 0;
-					for (int i = 0; i < dataWidth; i++) {
-						double v = data[i];
-						if (!Double.isNaN(v)) {
-							if (!drawing) {
-								g.beginShape();
-								drawing = true;
-								vertexCount = 0;
-							}
-							v = (v - min) / (max - min);
-							x1 = (getStreamLeft())
-									+ ((i / (float) (dataWidth - 1)) * (width - (getStreamLeft() - x)));
-							y1 = (float) ((y + height) - v * graphHeight);
-							g.vertex(x1, y1);
-							vertexCount++;
-						} else {
-							if (drawing) {
-								if (vertexCount++ % 2 == 1)
-									g.vertex(x1, y1);
-								g.endShape();
-								vertexCount = 0;
-								drawing = false;
+					if (!(Double.isNaN(min) || Double.isNaN(max) || max == min)) {
+						g.stroke(Color.HSBtoRGB(c / (float) nc, 1.0f, 1.0f));
+						g.strokeWeight(Renderer.lineWidth);
+						boolean drawing = false;
+						int vertexCount = 0;
+						float x1 = 0;
+						float y1 = 0;
+						for (int i = 0; i < dataWidth; i++) {
+							double v = data[i];
+							if (!Double.isNaN(v)) {
+								if (!drawing) {
+									g.beginShape();
+									drawing = true;
+									vertexCount = 0;
+								}
+								v = (v - min) / (max - min);
+								x1 = (getStreamLeft())
+										+ ((i / (float) (dataWidth - 1)) * (width - (getStreamLeft() - x)));
+								y1 = (float) ((y + height) - v * graphHeight);
+								g.vertex(x1, y1);
+								vertexCount++;
+							} else {
+								if (drawing) {
+									if (vertexCount++ % 2 == 1)
+										g.vertex(x1, y1);
+									g.endShape();
+									vertexCount = 0;
+									drawing = false;
+								}
 							}
 						}
-					}
-					if (drawing) {
-						if (vertexCount++ % 2 == 1)
-							g.vertex(x1, y1);
-						g.endShape();
-						drawing = false;
+						if (drawing) {
+							if (vertexCount++ % 2 == 1)
+								g.vertex(x1, y1);
+							g.endShape();
+							drawing = false;
+						}
 					}
 				}
 			}

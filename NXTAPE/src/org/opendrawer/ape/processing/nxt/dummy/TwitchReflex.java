@@ -20,10 +20,10 @@ public class TwitchReflex extends Reflex {
 	public void react() {
 		if (outputDataProvider == null)
 			return;
-		if (counter > twitchTime && Math.random() > 0.995) {
+		if (counter > twitchTime && Math.random() > 0.99) {
 			counter = 0;
 			twitchTime = (int) ((1 + Math.random()) * 10);
-			twitchLength = Math.pow(Math.random(), 2);
+			twitchLength = Math.random();
 		}
 		double output = counter++ > twitchTime ? 1 : twitchLength;
 		outputDataProvider.setOutputChannel(output, outputChannel);
