@@ -5,9 +5,6 @@ import org.opendrawer.ape.darwinianneurodynamics.HomogeneousDataStreamBundle;
 import org.opendrawer.ape.darwinianneurodynamics.Reflex;
 
 public class TwitchReflex extends Reflex {
-
-	private int count = (int) (50 * Math.random());
-
 	public TwitchReflex(DataStreamBundle inputDataStreamBundle,
 			HomogeneousDataStreamBundle outputDataStreamBundle,
 			int inputChannel, int outputChannel) {

@@ -52,18 +52,6 @@ public class Renderer {
 		this.visible = visible;
 	}
 
-	public void mouseClicked(int mouseX, int mouseY) {
-	}
-
-	public void mousePressed(int mouseX, int mouseY) {
-	}
-
-	public void mouseDragged(int mouseX, int mouseY) {
-	}
-
-	public void mouseReleased(int mouseX, int mouseY) {
-	}
-
 	public void setKeyColor(Color keyColor) {
 		this.keyColor = keyColor;
 	}

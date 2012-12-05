@@ -45,31 +45,6 @@ public class MuscleRenderer extends DataProviderRenderer {
 	}
 
 	@Override
-	public void mouseClicked(int mouseX, int mouseY) {
-		float xc = x + width / 2;
-		float yc = y + height / 2;
-		float dx = mouseX - xc;
-		float dy = mouseY - yc;
-		float a = (float) (Math.atan2(dx, dy) * (360 / (Math.PI)));
-		muscle.setOutputChannel(a, 0);
-	}
-
-	@Override
-	public void mousePressed(int mouseX, int mouseY) {
-		mouseClicked(mouseX, mouseY);
-	}
-
-	@Override
-	public void mouseDragged(int mouseX, int mouseY) {
-		mouseClicked(mouseX, mouseY);
-	}
-
-	@Override
-	public void mouseReleased(int mouseX, int mouseY) {
-		mouseClicked(mouseX, mouseY);
-	}
-
-	@Override
 	public DataProvider getDataProvider() {
 		return muscle;
 	}

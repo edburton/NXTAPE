@@ -60,24 +60,4 @@ public class NXTAccelerometerRenderer extends DataProviderRenderer {
 	public DataProvider getDataProvider() {
 		return nxtAccelerometer;
 	}
-
-	@Override
-	public void mouseClicked(int mouseX, int mouseY) {
-
-	}
-
-	@Override
-	public void mousePressed(int mouseX, int mouseY) {
-
-	}
-
-	@Override
-	public void mouseDragged(int mouseX, int mouseY) {
-
-	}
-
-	@Override
-	public void mouseReleased(int mouseX, int mouseY) {
-
-	}
 }

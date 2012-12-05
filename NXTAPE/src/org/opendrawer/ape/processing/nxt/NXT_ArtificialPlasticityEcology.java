@@ -48,7 +48,6 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private int dataStreamWidth = 100;
 	private final NeurodynamicStreamCore neurodynamicStreamCore = new NeurodynamicStreamCore();
 	private boolean dummyMode = false;
-	private Renderer mouseFocusedRenderer;
 	private static final String touch_left_name = "Touch Left";
 	private static final String touch_bottom_name = "Touch Bottom";
 	private static final String touch_right_name = "Touch Right";
@@ -444,36 +443,6 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		if (dummyMode) {
 			fill(255, 0, 0, (cos(debugCounter / 10.0f) + 1.0f) * 128);
 			text("NXT NOT FOUND", edgeMargin, edgeMargin + 10);
-		}
-	}
-
-	@Override
-	public void mouseClicked() {
-		for (int i = 0; i < renderers.size(); i++)
-			if (renderers.get(i).contains(mouseX, mouseY))
-				renderers.get(i).mouseClicked(mouseX, mouseY);
-	}
-
-	@Override
-	public void mousePressed() {
-		for (int i = 0; i < renderers.size(); i++)
-			if (renderers.get(i).contains(mouseX, mouseY)) {
-				mouseFocusedRenderer = renderers.get(i);
-				mouseFocusedRenderer.mousePressed(mouseX, mouseY);
-			}
-	}
-
-	@Override
-	public void mouseDragged() {
-		if (mouseFocusedRenderer != null)
-			mouseFocusedRenderer.mouseDragged(mouseX, mouseY);
-	}
-
-	@Override
-	public void mouseReleased() {
-		if (mouseFocusedRenderer != null) {
-			mouseFocusedRenderer.mouseReleased(mouseX, mouseY);
-			mouseFocusedRenderer = null;
 		}
 	}
 }
