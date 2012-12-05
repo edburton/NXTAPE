@@ -27,10 +27,6 @@ public class Renderer {
 		visible = true;
 	}
 
-	public boolean contains(float x1, float y1) {
-		return x1 >= x && y1 >= y && x1 <= x + width && y1 <= y + height;
-	}
-
 	public void draw(PGraphics g) {
 		if (keyColor != null) {
 			g.noStroke();

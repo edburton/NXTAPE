@@ -5,11 +5,10 @@ import org.opendrawer.ape.darwinianneurodynamics.OutputDataProvider;
 public class Muscle implements OutputDataProvider {
 	private final String name;
 	private final double friction = 0.9;
-	private double restLength = 0.5;
+	private double restLength = 1;
 	private static String[] channelNames = new String[] { "Rest Length",
 			"Actual Length" };
 	private static final int[] channelTypes = new int[] { INPUT, OUTPUT };
-	private boolean inhibited = false;
 
 	public Muscle(String name) {
 		this.name = name;
@@ -43,11 +42,6 @@ public class Muscle implements OutputDataProvider {
 	@Override
 	public int getChannelCount() {
 		return 2;
-	}
-
-	@Override
-	public void setInhihited(boolean inhibited) {
-		this.inhibited = inhibited;
 	}
 
 	@Override

@@ -28,20 +28,8 @@ public class MuscleRenderer extends DataProviderRenderer {
 		g.fill(16);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 		g.stroke(255, 255, 0);
-		float a = (float) ((muscle.getData()[0]) * (Math.PI));
-		g.line(xc, yc, (float) (xc + Math.sin(a) * radius),
-				(float) (yc + Math.cos(a) * radius));
-	}
-
-	@Override
-	public boolean contains(float x1, float y1) {
-		float radius = (Math.min(width, height) / 2) - Renderer.lineMarginWidth
-				/ 2;
-		float xc = x + width / 2;
-		float yc = y + height / 2;
-		float dx = x1 - xc;
-		float dy = y1 - yc;
-		return Math.sqrt(dx * dx + dy * dy) <= radius;
+		float value = (float) ((muscle.getData()[0]));
+		g.line(x, yc, x + (width * value), yc);
 	}
 
 	@Override

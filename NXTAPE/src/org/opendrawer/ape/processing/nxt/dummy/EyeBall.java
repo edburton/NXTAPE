@@ -4,48 +4,40 @@ import org.opendrawer.ape.darwinianneurodynamics.OutputDataProvider;
 
 public class EyeBall implements OutputDataProvider {
 
+	private static String[] channelNames = new String[] { "temp", "temp" };
+	private static final int[] channelTypes = new int[] { INPUT, OUTPUT };
+
 	public EyeBall() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Eye Ball";
 	}
 
 	@Override
 	public double[] getData() {
-		// TODO Auto-generated method stub
-		return null;
+		return new double[] { Math.random(), Math.random() };
 	}
 
 	@Override
 	public String[] getChannelNames() {
-		// TODO Auto-generated method stub
-		return null;
+		return channelNames;
 	}
 
 	@Override
 	public int[] getChannelTypes() {
-		// TODO Auto-generated method stub
-		return null;
+		return channelTypes;
 	}
 
 	@Override
 	public int getChannelCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 2;
 	}
 
 	@Override
 	public void step() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setInhihited(boolean inhibited) {
 		// TODO Auto-generated method stub
 
 	}

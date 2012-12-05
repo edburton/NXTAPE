@@ -9,7 +9,6 @@ public class NXTCompass implements DataProvider {
 	private final String name;
 	private static final String[] channelNames = new String[] { "Heading South" };
 	private static final int[] channelTypes = new int[] { INPUT };
-	private boolean inhibited = false;
 	private double direction;
 
 	public NXTCompass(CompassHTSensor compass, String name) {
@@ -34,10 +33,9 @@ public class NXTCompass implements DataProvider {
 
 	@Override
 	public void step() {
-		if (compass != null && !inhibited) {
+		if (compass != null) {
 			float directionIn = compass.getDegrees();
 			direction = directionIn / 360.0d;
-			// System.out.println(directionIn);
 		}
 
 	}
@@ -45,11 +43,6 @@ public class NXTCompass implements DataProvider {
 	@Override
 	public int getChannelCount() {
 		return 1;
-	}
-
-	@Override
-	public void setInhihited(boolean inhibited) {
-		this.inhibited = inhibited;
 	}
 
 	@Override

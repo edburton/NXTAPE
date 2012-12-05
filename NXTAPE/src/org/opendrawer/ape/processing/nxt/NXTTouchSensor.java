@@ -10,7 +10,6 @@ public class NXTTouchSensor implements DataProvider {
 	private static String[] channelNames = new String[] { "On/Off" };
 	private static int[] channelTypes = new int[] { INPUT };
 	private boolean on = false;
-	private boolean inhibited = false;
 
 	public NXTTouchSensor(TouchSensor touchSensor, String name) {
 		this.touchSensor = touchSensor;
@@ -39,7 +38,7 @@ public class NXTTouchSensor implements DataProvider {
 
 	@Override
 	public void step() {
-		if (touchSensor != null && !inhibited)
+		if (touchSensor != null)
 			on = touchSensor.isPressed();
 	}
 
@@ -54,10 +53,5 @@ public class NXTTouchSensor implements DataProvider {
 
 	public void setOn(boolean on) {
 		this.on = on;
-	}
-
-	@Override
-	public void setInhihited(boolean inhibited) {
-		this.inhibited = inhibited;
 	}
 }

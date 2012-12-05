@@ -5,7 +5,7 @@ import lejos.nxt.remote.RemoteMotor;
 import org.opendrawer.ape.darwinianneurodynamics.OutputDataProvider;
 
 public class NXTMotor implements OutputDataProvider {
-	private RemoteMotor remoteMotor;
+	private final RemoteMotor remoteMotor;
 	private final String name;
 	private final int minAngle;
 	private final int maxAngle;
@@ -16,11 +16,10 @@ public class NXTMotor implements OutputDataProvider {
 	private double virtualSpeed;
 	private double targetAngle;
 	private int actualAngle;
-	private double maxInputRate = 1f;
-	private double maxRate = 40.0f;
+	private final double maxInputRate = 1f;
+	private final double maxRate = 40.0f;
 	private static String[] channelNames = new String[] { "Impulse", "Angle" };
 	private static final int[] channelTypes = new int[] { OUTPUT, INPUT };
-	private boolean inhibited = false;
 	private double topSpeed;
 	private int currentSpeed;
 
@@ -61,19 +60,17 @@ public class NXTMotor implements OutputDataProvider {
 
 	@Override
 	public void step() {
-		if (inhibited) {
-			virtualSpeed = 0;
-			if (remoteMotor != null) {
-				int angle = remoteMotor.getTachoCount();
-				virtualAngle = angle;
-				int iActualAngle = Math.round(actualAngle);
-				if (angle != iActualAngle && iActualAngle != targetAngle) {
-					remoteMotor.rotateTo(iActualAngle, true);
-					targetAngle = iActualAngle;
-				}
+		virtualSpeed = 0;
+		if (remoteMotor != null) {
+			int angle = remoteMotor.getTachoCount();
+			virtualAngle = angle;
+			int iActualAngle = Math.round(actualAngle);
+			if (angle != iActualAngle && iActualAngle != targetAngle) {
+				remoteMotor.rotateTo(iActualAngle, true);
+				targetAngle = iActualAngle;
 			}
-			return;
 		}
+
 		if (remoteMotor != null)
 			actualAngle = remoteMotor.getTachoCount();
 		int iVirtualAngle = (int) Math.round(virtualAngle);
@@ -145,11 +142,6 @@ public class NXTMotor implements OutputDataProvider {
 
 	public void setGUIAngle(int actualAngle) {
 		this.actualAngle = (int) (restAngle + ((actualAngle / 360.0) * (maxAngle - minAngle)));
-	}
-
-	@Override
-	public void setInhihited(boolean inhibited) {
-		this.inhibited = inhibited;
 	}
 
 	@Override

@@ -9,9 +9,8 @@ public class NXTAccelerometer implements DataProvider {
 	private final String name;
 	private static final String[] channelNames = new String[] { "X", "Y", "Z" };
 	private static final int[] channelTypes = new int[] { INPUT, INPUT, INPUT };
-	private boolean inhibited = false;
-	private double values[];
-	private float maxExpectedValue = 256; // Arbitrary
+	private final double values[];
+	private final float maxExpectedValue = 256; // Arbitrary
 
 	public NXTAccelerometer(AccelHTSensor accelerometer, String name) {
 		this.accelerometer = accelerometer;
@@ -36,7 +35,7 @@ public class NXTAccelerometer implements DataProvider {
 
 	@Override
 	public void step() {
-		if (accelerometer != null && !inhibited) {
+		if (accelerometer != null) {
 			int[] intValues = new int[3];
 			accelerometer.getAllAccel(intValues, 0);
 			for (int i = 0; i < 3; i++)
@@ -47,11 +46,6 @@ public class NXTAccelerometer implements DataProvider {
 	@Override
 	public int getChannelCount() {
 		return 3;
-	}
-
-	@Override
-	public void setInhihited(boolean inhibited) {
-		this.inhibited = inhibited;
 	}
 
 	@Override

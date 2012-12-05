@@ -49,11 +49,4 @@ public class Prediction implements DataProvider {
 	public void setData(double[] data) {
 		this.data = data;
 	}
-
-	@Override
-	public void setInhihited(boolean inhibited) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

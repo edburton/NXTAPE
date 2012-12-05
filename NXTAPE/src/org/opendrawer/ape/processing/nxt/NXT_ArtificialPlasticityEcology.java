@@ -45,7 +45,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private NXTMotor armMiddleMotor;
 	private NXTMotor armBodyMotor;
 	private int debugCounter = 0;
-	private int dataStreamWidth = 100;
+	private final int dataStreamWidth = 100;
 	private final NeurodynamicStreamCore neurodynamicStreamCore = new NeurodynamicStreamCore();
 	private boolean dummyMode = false;
 	private static final String touch_left_name = "Touch Left";
@@ -53,7 +53,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private static final String touch_right_name = "Touch Right";
 	private static final String accelerometer_name = "Accelerometer";
 	// private static final String compass_name = "Compass";
-	private List<Renderer> renderers = new ArrayList<Renderer>();
+	private final List<Renderer> renderers = new ArrayList<Renderer>();
 	private float edgeMargin;
 
 	/**
@@ -201,19 +201,17 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				.addReflex(bottomReflexM = new LinearReflex(
 						bottomDataStreamBundle, armHeadMotorDataStreamBundle,
 						0, 0, -1));
-		neurodynamicStreamCore.addReflex(leftReflexM = new LinearReflex(
-				leftDataStreamBundle, armMiddleMotorDataStreamBundle, 0, 0,
-				-0.5d));
-		neurodynamicStreamCore.addReflex(rightReflexM = new LinearReflex(
-				rightDataStreamBundle, armMiddleMotorDataStreamBundle, 0, 0,
-				0.5d));
 		neurodynamicStreamCore
-				.addReflex(leftReflexB = new LinearReflex(leftDataStreamBundle,
-						armBodyMotorDataStreamBundle, 0, 0, -0.5d));
+				.addReflex(leftReflexM = new LinearReflex(leftDataStreamBundle,
+						armMiddleMotorDataStreamBundle, 0, 0, -1));
 		neurodynamicStreamCore
-				.addReflex(rightReflexB = new LinearReflex(
-						rightDataStreamBundle, armBodyMotorDataStreamBundle, 0,
-						0, 0.5d));
+				.addReflex(rightReflexM = new LinearReflex(
+						rightDataStreamBundle, armMiddleMotorDataStreamBundle,
+						0, 0, 1));
+		neurodynamicStreamCore.addReflex(leftReflexB = new LinearReflex(
+				leftDataStreamBundle, armBodyMotorDataStreamBundle, 0, 0, -1));
+		neurodynamicStreamCore.addReflex(rightReflexB = new LinearReflex(
+				rightDataStreamBundle, armBodyMotorDataStreamBundle, 0, 0, 1));
 
 		reflexRenderers.add(new DataStreamBundleListRenderer(
 				accelerometerReflex));
@@ -334,6 +332,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 			homogeneousDataStreamBundleRenderers
 					.add(new HomogeneousDataStreamBundleRenderer(
 							muscleDataStreamBundle, new MuscleRenderer(muscle)));
+			neurodynamicStreamCore.addDataStreamBundle(muscleDataStreamBundle);
 			TwitchReflex twitchReflex = new TwitchReflex(
 					muscleDataStreamBundle, muscleDataStreamBundle, 0, 1);
 			neurodynamicStreamCore.addReflex(twitchReflex);

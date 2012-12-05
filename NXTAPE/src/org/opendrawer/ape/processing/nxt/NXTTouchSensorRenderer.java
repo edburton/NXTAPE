@@ -33,16 +33,6 @@ public class NXTTouchSensorRenderer extends DataProviderRenderer {
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 	}
 
-	@Override
-	public boolean contains(float x1, float y1) {
-		float radius = (Math.min(width, height) / 2) - Renderer.lineMarginWidth
-				/ 2;
-		float xc = x + width / 2;
-		float yc = y + height / 2;
-		float dx = x1 - xc;
-		float dy = y1 - yc;
-		return Math.sqrt(dx * dx + dy * dy) <= radius;
-	}
 
 	@Override
 	public DataProvider getDataProvider() {

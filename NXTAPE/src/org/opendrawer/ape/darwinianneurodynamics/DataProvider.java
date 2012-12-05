@@ -17,6 +17,4 @@ public interface DataProvider {
 	public abstract int getChannelCount();
 
 	public abstract void step();
-
-	public abstract void setInhihited(boolean inhibited);
 }

@@ -47,11 +47,4 @@ public class TestingDataProvider implements DataProvider {
 				Math.random() / 10 + phase * (Math.sin(c / 20.0d)) };
 		c++;
 	}
-
-	@Override
-	public void setInhihited(boolean inhibited) {
-		// TODO Auto-generated method stub
-
-	}
-
 }
