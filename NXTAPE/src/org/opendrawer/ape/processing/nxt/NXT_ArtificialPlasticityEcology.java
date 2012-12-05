@@ -21,6 +21,9 @@ import org.opendrawer.ape.darwinianneurodynamics.Reflex;
 import org.opendrawer.ape.processing.DataStreamBundleListRenderer;
 import org.opendrawer.ape.processing.HomogeneousDataStreamBundleRenderer;
 import org.opendrawer.ape.processing.Renderer;
+import org.opendrawer.ape.processing.nxt.dummy.Muscle;
+import org.opendrawer.ape.processing.nxt.dummy.MuscleRenderer;
+import org.opendrawer.ape.processing.nxt.dummy.TwitchReflex;
 
 import processing.core.PApplet;
 
@@ -79,10 +82,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		rectMode(CORNERS);
 		background(0);
 		frame.setBackground(new java.awt.Color(0, 0, 0));
-		if (false)
-			setupNXT();
-		else
-			setupTestingPlayground();
+		setupNXT();
 	}
 
 	private void setupNXT() {
@@ -92,10 +92,11 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		} catch (NXTCommException e) {
 			e.printStackTrace();
 		}
-		dummyMode = NXTs.length != 1;
 
-		if (dummyMode)
-			println(NXTs.length + " NXTs found. Initiating Dummy mode");
+		if (NXTs.length != 1) {
+			setupDummyMode();
+			return;
+		}
 
 		accelerometer = new NXTAccelerometer(!dummyMode ? new AccelHTSensor(
 				SensorPort.S1) : null, accelerometer_name);
@@ -191,23 +192,23 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		Reflex leftReflexB;
 		Reflex rightReflexB;
 
-		neurodynamicStreamCore.addReflex(accelerometerReflex = new Reflex(
+		neurodynamicStreamCore.addReflex(accelerometerReflex = new LinearReflex(
 				accelerometerDataStreamBundle, armHeadMotorDataStreamBundle, 1,
 				0, -1));
 		neurodynamicStreamCore
-				.addReflex(bottomReflexM = new Reflex(bottomDataStreamBundle,
+				.addReflex(bottomReflexM = new LinearReflex(bottomDataStreamBundle,
 						armHeadMotorDataStreamBundle, 0, 0, -1));
-		neurodynamicStreamCore.addReflex(leftReflexM = new Reflex(
+		neurodynamicStreamCore.addReflex(leftReflexM = new LinearReflex(
 				leftDataStreamBundle, armMiddleMotorDataStreamBundle, 0, 0,
 				-0.5d));
-		neurodynamicStreamCore.addReflex(rightReflexM = new Reflex(
+		neurodynamicStreamCore.addReflex(rightReflexM = new LinearReflex(
 				rightDataStreamBundle, armMiddleMotorDataStreamBundle, 0, 0,
 				0.5d));
 		neurodynamicStreamCore
-				.addReflex(leftReflexB = new Reflex(leftDataStreamBundle,
+				.addReflex(leftReflexB = new LinearReflex(leftDataStreamBundle,
 						armBodyMotorDataStreamBundle, 0, 0, -0.5d));
 		neurodynamicStreamCore
-				.addReflex(rightReflexB = new Reflex(rightDataStreamBundle,
+				.addReflex(rightReflexB = new LinearReflex(rightDataStreamBundle,
 						armBodyMotorDataStreamBundle, 0, 0, 0.5d));
 
 		reflexRenderers.add(new DataStreamBundleListRenderer(
@@ -304,10 +305,25 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		}
 	}
 
-	private void setupTestingPlayground() {
+	private void setupDummyMode() {
 		dummyMode = true;
 
+		List<Muscle> muscles = new ArrayList<Muscle>();
+		List<TwitchReflex> twitchReflexes = new ArrayList<TwitchReflex>();
 		List<HomogeneousDataStreamBundleRenderer> homogeneousDataStreamBundleRenderers = new ArrayList<HomogeneousDataStreamBundleRenderer>();
+		
+		for (int i = 0; i < 3; i++) {
+			Muscle muscle=new Muscle("Muscle "+i);
+			muscles.add(muscle);
+			homogeneousDataStreamBundleRenderers
+			.add(new HomogeneousDataStreamBundleRenderer(
+					 new HomogeneousDataStreamBundle(
+							muscle, dataStreamWidth),
+					new MuscleRenderer(muscle)));
+			//TwitchReflex twitchReflex=new TwitchReflex(null, null, i);
+		}
+
+		
 		List<DataStreamBundleListRenderer> reflexRenderers = new ArrayList<DataStreamBundleListRenderer>();
 		List<DataStreamBundleListRenderer> predictorRenderers = new ArrayList<DataStreamBundleListRenderer>();
 		List<DataStreamBundleListRenderer> actorRenderers = new ArrayList<DataStreamBundleListRenderer>();
