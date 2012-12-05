@@ -60,17 +60,6 @@ public class NXTMotor implements OutputDataProvider {
 
 	@Override
 	public void step() {
-		virtualSpeed = 0;
-		if (remoteMotor != null) {
-			int angle = remoteMotor.getTachoCount();
-			virtualAngle = angle;
-			int iActualAngle = Math.round(actualAngle);
-			if (angle != iActualAngle && iActualAngle != targetAngle) {
-				remoteMotor.rotateTo(iActualAngle, true);
-				targetAngle = iActualAngle;
-			}
-		}
-
 		if (remoteMotor != null)
 			actualAngle = remoteMotor.getTachoCount();
 		int iVirtualAngle = (int) Math.round(virtualAngle);
