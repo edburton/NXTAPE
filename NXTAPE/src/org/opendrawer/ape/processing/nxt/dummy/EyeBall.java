@@ -14,7 +14,7 @@ public class EyeBall implements DataProvider {
 	private double y = 0;
 	private double xv = 0;
 	private double yv = 0;
-	private static final double k = 0.5;
+	private static final double k = 0.2;
 	private static final double f = 0.5;
 
 	public EyeBall() {

@@ -55,6 +55,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	// private static final String compass_name = "Compass";
 	private final List<Renderer> renderers = new ArrayList<Renderer>();
 	private float edgeMargin;
+	private boolean cursorVisible = true;
 
 	/**
 	 * @param args
@@ -326,7 +327,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 		neurodynamicStreamCore.addDataStreamBundle(eyeBallDataStreamBundle);
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 8; i++) {
 			Muscle muscle = new Muscle("Muscle " + i);
 			muscles.add(muscle);
 			eyeBall.addMuscle(muscle);
@@ -363,7 +364,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		nType++;
 
 		int r = 0;
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 12; i++) {
 			r = (int) Math.floor(random(0, reflexRenderers.size()));
 			DataStreamBundleListRenderer reflex = reflexRenderers.get(r);
 			Predictor predictor = new Predictor(reflex
@@ -434,6 +435,13 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 			translate(getWidth() / 2, getHeight() / 2);
 			scale(4, 4);
 			translate(-mouseX, -mouseY);
+			if (cursorVisible) {
+				noCursor();
+				cursorVisible = false;
+			}
+		} else if (!cursorVisible) {
+			cursor();
+			cursorVisible = true;
 		}
 		for (int i = 0; i < renderers.size(); i++) {
 			renderers.get(i).draw(g);

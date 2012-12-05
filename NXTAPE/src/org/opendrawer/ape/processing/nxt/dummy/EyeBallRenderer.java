@@ -34,20 +34,23 @@ public class EyeBallRenderer extends DataProviderRenderer {
 
 		int nm = eyeBall.getMuscleCount();
 		g.strokeWeight(Renderer.lineWidth);
-		g.stroke(255, 128, 128);
+		g.stroke(255, 200, 200);
 		for (int i = 0; i < nm; i++) {
 			float mx = eyeBall.getMuscleX(i) * radius;
 			float my = eyeBall.getMuscleY(i) * radius;
-			g.line(xc + (mx + dx) / 2, yc + (my + dy) / 2, xc + mx, yc + my);
+			g.line(xc + (mx * 3 + dx) / 4, yc + (my * 3 + dy) / 4, xc + mx, yc
+					+ my);
 		}
 		g.noStroke();
 
-		g.fill(64, 128, 224);
-		g.ellipse(dx + xc - radius / 3, dy + yc - radius / 3, dx + xc + radius
-				/ 3, dy + yc + radius / 3);
+		g.fill(100, 200, 250);
+		float idx = dx * 0.75f;
+		float idy = dy * 0.75f;
+		g.ellipse(idx + xc - radius / 2, idy + yc - radius / 2, idx + xc
+				+ radius / 2, idy + yc + radius / 2);
 		g.fill(0, 0, 0);
-		g.ellipse(dx + xc - radius / 5, dy + yc - radius / 5, dx + xc + radius
-				/ 5, dy + yc + radius / 5);
+		g.ellipse(dx + xc - radius / 4, dy + yc - radius / 4, dx + xc + radius
+				/ 4, dy + yc + radius / 4);
 	}
 
 	@Override

@@ -59,8 +59,7 @@ public class Predictor extends DataStreamBundleList {
 
 	public void predict() {
 		// double[] input = inputDataStreamBundle.read(0);
-		if (outputDataStreamBundle == null)
-			return;
+
 		double[] output = outputDataStreamBundle.read(0);
 		predictionStreamBundle.write(output);
 		errorStreamBundle.write(new double[] { Math.cos(System
