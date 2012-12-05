@@ -12,8 +12,9 @@ public abstract class Reflex extends DataStreamBundleList {
 		super(inputDataStreamBundle, outputDataStreamBundle);
 		this.inputChannel = inputChannel;
 		this.outputChannel = outputChannel;
-		outputDataProvider = (OutputDataProvider) outputDataStreamBundle
-				.getDataProvider();
+		if (outputDataStreamBundle != null)
+			outputDataProvider = (OutputDataProvider) outputDataStreamBundle
+					.getDataProvider();
 	}
 
 	public abstract void react();

@@ -13,9 +13,9 @@ public class LinearReflex extends Reflex {
 			int inputChannel, int outputChannel, double weight) {
 		super(inputDataStreamBundle, outputDataStreamBundle, inputChannel,
 				outputChannel);
-		this.weight=weight;
+		this.weight = weight;
 	}
-	
+
 	@Override
 	public void react() {
 		double input = dataStreamBundles.get(0).getDataStreams()

@@ -29,8 +29,8 @@ public class Predictor extends DataStreamBundleList {
 		super(inputDataStreamBundle, outputDataStreamBundle);
 		this.inputDataStreamBundle = inputDataStreamBundle;
 		this.outputDataStreamBundle = outputDataStreamBundle;
-		prediction = new Prediction(outputDataStreamBundle.getDataStreams()
-				.size());
+		if (outputDataStreamBundle == null)
+			return;
 		predictionStreamBundle = new HomogeneousDataStreamBundle(prediction,
 				dataWidth);
 		addDataStreamBundle(predictionStreamBundle);
@@ -59,6 +59,8 @@ public class Predictor extends DataStreamBundleList {
 
 	public void predict() {
 		// double[] input = inputDataStreamBundle.read(0);
+		if (outputDataStreamBundle == null)
+			return;
 		double[] output = outputDataStreamBundle.read(0);
 		predictionStreamBundle.write(output);
 		errorStreamBundle.write(new double[] { Math.cos(System

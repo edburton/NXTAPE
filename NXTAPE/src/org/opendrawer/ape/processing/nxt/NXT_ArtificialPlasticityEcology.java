@@ -21,6 +21,8 @@ import org.opendrawer.ape.darwinianneurodynamics.Reflex;
 import org.opendrawer.ape.processing.DataStreamBundleListRenderer;
 import org.opendrawer.ape.processing.HomogeneousDataStreamBundleRenderer;
 import org.opendrawer.ape.processing.Renderer;
+import org.opendrawer.ape.processing.nxt.dummy.EyeBall;
+import org.opendrawer.ape.processing.nxt.dummy.EyeBallRenderer;
 import org.opendrawer.ape.processing.nxt.dummy.Muscle;
 import org.opendrawer.ape.processing.nxt.dummy.MuscleRenderer;
 import org.opendrawer.ape.processing.nxt.dummy.TwitchReflex;
@@ -192,12 +194,14 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		Reflex leftReflexB;
 		Reflex rightReflexB;
 
-		neurodynamicStreamCore.addReflex(accelerometerReflex = new LinearReflex(
-				accelerometerDataStreamBundle, armHeadMotorDataStreamBundle, 1,
-				0, -1));
 		neurodynamicStreamCore
-				.addReflex(bottomReflexM = new LinearReflex(bottomDataStreamBundle,
-						armHeadMotorDataStreamBundle, 0, 0, -1));
+				.addReflex(accelerometerReflex = new LinearReflex(
+						accelerometerDataStreamBundle,
+						armHeadMotorDataStreamBundle, 1, 0, -1));
+		neurodynamicStreamCore
+				.addReflex(bottomReflexM = new LinearReflex(
+						bottomDataStreamBundle, armHeadMotorDataStreamBundle,
+						0, 0, -1));
 		neurodynamicStreamCore.addReflex(leftReflexM = new LinearReflex(
 				leftDataStreamBundle, armMiddleMotorDataStreamBundle, 0, 0,
 				-0.5d));
@@ -208,8 +212,9 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 				.addReflex(leftReflexB = new LinearReflex(leftDataStreamBundle,
 						armBodyMotorDataStreamBundle, 0, 0, -0.5d));
 		neurodynamicStreamCore
-				.addReflex(rightReflexB = new LinearReflex(rightDataStreamBundle,
-						armBodyMotorDataStreamBundle, 0, 0, 0.5d));
+				.addReflex(rightReflexB = new LinearReflex(
+						rightDataStreamBundle, armBodyMotorDataStreamBundle, 0,
+						0, 0.5d));
 
 		reflexRenderers.add(new DataStreamBundleListRenderer(
 				accelerometerReflex));
@@ -309,24 +314,32 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		dummyMode = true;
 
 		List<Muscle> muscles = new ArrayList<Muscle>();
-		List<TwitchReflex> twitchReflexes = new ArrayList<TwitchReflex>();
 		List<HomogeneousDataStreamBundleRenderer> homogeneousDataStreamBundleRenderers = new ArrayList<HomogeneousDataStreamBundleRenderer>();
-		
-		for (int i = 0; i < 3; i++) {
-			Muscle muscle=new Muscle("Muscle "+i);
-			muscles.add(muscle);
-			homogeneousDataStreamBundleRenderers
-			.add(new HomogeneousDataStreamBundleRenderer(
-					 new HomogeneousDataStreamBundle(
-							muscle, dataStreamWidth),
-					new MuscleRenderer(muscle)));
-			//TwitchReflex twitchReflex=new TwitchReflex(null, null, i);
-		}
-
-		
 		List<DataStreamBundleListRenderer> reflexRenderers = new ArrayList<DataStreamBundleListRenderer>();
 		List<DataStreamBundleListRenderer> predictorRenderers = new ArrayList<DataStreamBundleListRenderer>();
 		List<DataStreamBundleListRenderer> actorRenderers = new ArrayList<DataStreamBundleListRenderer>();
+
+		EyeBall eyeBall = new EyeBall();
+		HomogeneousDataStreamBundle eyeBallDataStreamBundle;
+		homogeneousDataStreamBundleRenderers
+				.add(new HomogeneousDataStreamBundleRenderer(
+						eyeBallDataStreamBundle = new HomogeneousDataStreamBundle(
+								eyeBall, dataStreamWidth), new EyeBallRenderer(
+								eyeBall)));
+
+		for (int i = 0; i < 4; i++) {
+			Muscle muscle = new Muscle("Muscle " + i);
+			muscles.add(muscle);
+			HomogeneousDataStreamBundle muscleDataStreamBundle = new HomogeneousDataStreamBundle(
+					muscle, dataStreamWidth);
+			homogeneousDataStreamBundleRenderers
+					.add(new HomogeneousDataStreamBundleRenderer(
+							muscleDataStreamBundle, new MuscleRenderer(muscle)));
+			TwitchReflex twitchReflex = new TwitchReflex(
+					muscleDataStreamBundle, muscleDataStreamBundle, 0, 1);
+			neurodynamicStreamCore.addReflex(twitchReflex);
+			reflexRenderers.add(new DataStreamBundleListRenderer(twitchReflex));
+		}
 
 		int nTypes = 3;
 		int nType = 0;
@@ -337,9 +350,26 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 							.HSBtoRGB(nType / (float) nTypes, 1.0f, 0.5f)));
 		nType++;
 
+		for (int i = 0; i < 0; i++) {
+			Actor actor = new Actor(null, null);
+			neurodynamicStreamCore.addActor(actor);
+			DataStreamBundleListRenderer renderer = new DataStreamBundleListRenderer(
+					null);
+			renderer.setKeyColor(new Color(Color.HSBtoRGB(nType
+					/ (float) nTypes, 1.0f, 0.5f)));
+			actorRenderers.add(renderer);
+		}
 		nType++;
-		for (int i = 0; i < 6; i++) {
-			Predictor predictor = new Predictor();
+
+		int r = 0;
+		for (int i = 0; i < 26; i++) {
+			r = (int) Math.floor(random(0, reflexRenderers.size()));
+			DataStreamBundleListRenderer reflex = reflexRenderers.get(r);
+			Predictor predictor = new Predictor(reflex
+					.getDataStreamBundleRenderers().get(0)
+					.getDataStreamBundle(), reflex
+					.getDataStreamBundleRenderers().get(1)
+					.getDataStreamBundle());
 			neurodynamicStreamCore.addPredictor(predictor);
 			DataStreamBundleListRenderer renderer = new DataStreamBundleListRenderer(
 					predictor);
@@ -366,8 +396,8 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		float screenWidth = getWidth();
 		float screenHeight = getHeight();
 		float margin = edgeMargin / 2;
-		int gridWidth = 1;// (int) Math.ceil(Math.pow(zones, 1 / 3.0d));
-		int gridHeight = 6;// (int) Math.floor(Math.pow(zones, 2 / 3.0d));
+		int gridWidth = (int) Math.ceil(Math.pow(zones, 1 / 3.0d));
+		int gridHeight = (int) Math.floor(Math.pow(zones, 2 / 3.0d));
 
 		float width = ((screenWidth + margin - edgeMargin * 2) / gridWidth)
 				- margin;
