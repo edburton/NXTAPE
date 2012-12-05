@@ -6,9 +6,8 @@ public class Muscle implements OutputDataProvider {
 	private final String name;
 	private final double friction = 0.9;
 	private double restLength = 1;
-	private static String[] channelNames = new String[] { "Rest Length",
-			"Actual Length" };
-	private static final int[] channelTypes = new int[] { INPUT, OUTPUT };
+	private static String[] channelNames = new String[] { "Rest Length" };
+	private static final int[] channelTypes = new int[] { OUTPUT };
 
 	public Muscle(String name) {
 		this.name = name;
@@ -31,7 +30,7 @@ public class Muscle implements OutputDataProvider {
 
 	@Override
 	public double[] getData() {
-		return new double[] { restLength, 0 };
+		return new double[] { restLength };
 	}
 
 	@Override
@@ -41,11 +40,15 @@ public class Muscle implements OutputDataProvider {
 
 	@Override
 	public int getChannelCount() {
-		return 2;
+		return 1;
 	}
 
 	@Override
 	public int[] getChannelTypes() {
 		return channelTypes;
+	}
+
+	public double getRestLength() {
+		return restLength;
 	}
 }

@@ -1,14 +1,23 @@
 package org.opendrawer.ape.processing.nxt.dummy;
 
-import org.opendrawer.ape.darwinianneurodynamics.OutputDataProvider;
+import java.util.ArrayList;
+import java.util.List;
 
-public class EyeBall implements OutputDataProvider {
+import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
 
-	private static String[] channelNames = new String[] { "temp", "temp" };
-	private static final int[] channelTypes = new int[] { INPUT, OUTPUT };
+public class EyeBall implements DataProvider {
+
+	private static String[] channelNames = new String[] { "X", "Y" };
+	private static final int[] channelTypes = new int[] { INPUT, INPUT };
+	private final List<Muscle> muscles = new ArrayList<Muscle>();
+	private double x = 0;
+	private double y = 0;
+	private double xv = 0;
+	private double yv = 0;
+	private static final double k = 0.5;
+	private static final double f = 0.5;
 
 	public EyeBall() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -18,7 +27,7 @@ public class EyeBall implements OutputDataProvider {
 
 	@Override
 	public double[] getData() {
-		return new double[] { Math.random(), Math.random() };
+		return new double[] { x, y };
 	}
 
 	@Override
@@ -38,14 +47,49 @@ public class EyeBall implements OutputDataProvider {
 
 	@Override
 	public void step() {
-		// TODO Auto-generated method stub
-
+		System.out.println("look!");
+		for (int i = 0; i < muscles.size(); i++) {
+			Muscle muscle = muscles.get(i);
+			double mx = getMuscleX(i);
+			double my = getMuscleY(i);
+			double dx = x + mx;
+			double dy = y + my;
+			double actualLength = Math.sqrt(dx * dx + dy * dy);
+			double restLength = muscle.getRestLength();
+			double fx = (dx / actualLength) * (actualLength - restLength) * k;
+			double fy = (dy / actualLength) * (actualLength - restLength) * k;
+			xv -= fx;
+			yv -= fy;
+		}
+		xv *= f;
+		yv *= f;
+		x += xv;
+		y += yv;
 	}
 
-	@Override
-	public void setOutputChannel(double data, int dataChannel) {
-		// TODO Auto-generated method stub
-
+	public void addMuscle(Muscle muscle) {
+		muscles.add(muscle);
 	}
 
+	public double getX() {
+		return x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public int getMuscleCount() {
+		return muscles.size();
+	}
+
+	public float getMuscleX(int i) {
+		double a = (Math.PI * 2) * (i / (double) muscles.size());
+		return (float) Math.sin(a);
+	}
+
+	public float getMuscleY(int i) {
+		double a = (Math.PI * 2) * (i / (double) muscles.size());
+		return (float) Math.cos(a);
+	}
 }

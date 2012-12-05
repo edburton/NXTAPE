@@ -27,9 +27,17 @@ public class MuscleRenderer extends DataProviderRenderer {
 		radius -= Renderer.lineMarginWidth;
 		g.fill(16);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
-		g.stroke(255, 255, 0);
+
 		float value = (float) ((muscle.getData()[0]));
-		g.line(x, yc, x + (width * value), yc);
+
+		for (int i = 8; i >= 0; i--) {
+			float mh = ((1.2f - value) / 4) * height;
+			float f = ((i + 0.5f) / 8.0f);
+			mh *= f;
+			mh = Math.min(mh, (width * value));
+			g.stroke(255 * (1 - f), 128 * (1 - f), 128 * (1 - f));
+			g.ellipse(x, yc - mh, x + (width * value), yc + mh);
+		}
 	}
 
 	@Override

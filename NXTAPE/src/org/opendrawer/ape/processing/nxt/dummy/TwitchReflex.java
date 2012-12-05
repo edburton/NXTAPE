@@ -20,7 +20,13 @@ public class TwitchReflex extends Reflex {
 	public void react() {
 		if (outputDataProvider == null)
 			return;
-		if (counter > twitchTime && Math.random() > 0.99) {
+		double input = 0;
+		for (int i = 0; i < dataStreamBundles.get(0).getDataStreams().size(); i++) {
+			input += Math.abs(dataStreamBundles.get(0).getDataStreams().get(i)
+					.read(0));
+		}
+		dataStreamBundles.get(0).getDataStreams().get(inputChannel).read(0);
+		if (input < 0.01 && counter > twitchTime && Math.random() > 0.99) {
 			counter = 0;
 			twitchTime = (int) ((1 + Math.random()) * 10);
 			twitchLength = Math.random();
