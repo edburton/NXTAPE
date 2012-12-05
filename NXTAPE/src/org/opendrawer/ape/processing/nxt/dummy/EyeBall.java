@@ -47,7 +47,6 @@ public class EyeBall implements DataProvider {
 
 	@Override
 	public void step() {
-		System.out.println("look!");
 		for (int i = 0; i < muscles.size(); i++) {
 			Muscle muscle = muscles.get(i);
 			double mx = getMuscleX(i);
@@ -55,7 +54,7 @@ public class EyeBall implements DataProvider {
 			double dx = x + mx;
 			double dy = y + my;
 			double actualLength = Math.sqrt(dx * dx + dy * dy);
-			double restLength = muscle.getRestLength();
+			double restLength = muscle.getCurrentRestLength();
 			double fx = (dx / actualLength) * (actualLength - restLength) * k;
 			double fy = (dy / actualLength) * (actualLength - restLength) * k;
 			xv -= fx;

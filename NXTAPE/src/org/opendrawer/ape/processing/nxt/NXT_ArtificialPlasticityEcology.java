@@ -31,7 +31,7 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcology extends PApplet {
-	private static final boolean presentationMode = false;
+	private static final boolean presentationMode = true;
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
@@ -326,7 +326,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 		neurodynamicStreamCore.addDataStreamBundle(eyeBallDataStreamBundle);
 
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 4; i++) {
 			Muscle muscle = new Muscle("Muscle " + i);
 			muscles.add(muscle);
 			eyeBall.addMuscle(muscle);
@@ -363,7 +363,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		nType++;
 
 		int r = 0;
-		for (int i = 0; i < 18; i++) {
+		for (int i = 0; i < 8; i++) {
 			r = (int) Math.floor(random(0, reflexRenderers.size()));
 			DataStreamBundleListRenderer reflex = reflexRenderers.get(r);
 			Predictor predictor = new Predictor(reflex
