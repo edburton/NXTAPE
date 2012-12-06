@@ -23,7 +23,7 @@ public class MuscleRenderer extends DataProviderRenderer {
 
 		float mh = ((1.2f - value) / 4) * width;
 		g.stroke(255, 128, 128);
-		g.fill(240, 90, 90);
+		g.fill(250, 100, 100);
 		g.ellipse(xc - mh, (y + height) - (height * value), xc + mh, y + height);
 
 	}

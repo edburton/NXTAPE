@@ -7,15 +7,16 @@ import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
 
 public class EyeBall implements DataProvider {
 
-	private static String[] channelNames = new String[] { "X", "Y" };
-	private static final int[] channelTypes = new int[] { INPUT, INPUT };
+	private static String[] channelNames = new String[] { "X", "Y", "Speed" };
+	private static final int[] channelTypes = new int[] { INPUT, INPUT, INPUT };
 	private final List<Muscle> muscles = new ArrayList<Muscle>();
 	private double x = 0;
 	private double y = 0;
 	private double xv = 0;
 	private double yv = 0;
-	private static final double k = 0.2;
-	private static final double f = 0.5;
+	private double speed = 0;
+	private static final double k = 0.05;
+	private static final double f = 0.8;
 
 	public EyeBall() {
 	}
@@ -27,7 +28,7 @@ public class EyeBall implements DataProvider {
 
 	@Override
 	public double[] getData() {
-		return new double[] { x, y };
+		return new double[] { x, y, speed };
 	}
 
 	@Override
@@ -42,7 +43,7 @@ public class EyeBall implements DataProvider {
 
 	@Override
 	public int getChannelCount() {
-		return 2;
+		return 3;
 	}
 
 	@Override
@@ -62,6 +63,7 @@ public class EyeBall implements DataProvider {
 		}
 		xv *= f;
 		yv *= f;
+		speed = Math.sqrt(xv * xv + yv * yv);
 		x += xv;
 		y += yv;
 	}

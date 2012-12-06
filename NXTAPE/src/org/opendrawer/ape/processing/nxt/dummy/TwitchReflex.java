@@ -28,7 +28,7 @@ public class TwitchReflex extends Reflex {
 		}
 		input = Math.sqrt(input);
 		dataStreamBundles.get(0).getDataStreams().get(inputChannel).read(0);
-		if (input < 0.0000001 && counter > twitchTime && Math.random() > 0.99) {
+		if (input < 0.1 && counter > twitchTime && Math.random() > 0.99) {
 			counter = 0;
 			twitchTime = 20;
 			twitchLength = Math.random();

@@ -21,7 +21,7 @@ public class EyeBallRenderer extends DataProviderRenderer {
 		float xc = x + width / 2;
 		float yc = y + height / 2;
 		g.noStroke();
-		g.fill(255, 128, 128);
+		g.fill(255, 200, 200);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 		radius -= Renderer.lineMarginWidth;
 		g.fill(255, 240, 240);
