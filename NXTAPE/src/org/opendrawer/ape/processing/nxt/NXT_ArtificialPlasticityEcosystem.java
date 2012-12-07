@@ -31,7 +31,7 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcosystem extends PApplet {
-	private static final boolean presentationMode = false;
+	private static final boolean presentationMode = true;
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;

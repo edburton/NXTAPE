@@ -20,7 +20,7 @@ public class Muscle extends OutputStatesProvider {
 
 	@Override
 	public void updateStates() {
-		currentRestLength = (requestedRestLength + currentRestLength) / 2;
+		currentRestLength = (requestedRestLength + currentRestLength * 3) / 4;
 	}
 
 	@Override
