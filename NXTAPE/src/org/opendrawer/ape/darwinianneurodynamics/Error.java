@@ -1,12 +1,9 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
-public class Prediction extends OutputStatesProvider {
-	int length;
-	double[] states;
+public class Error extends OutputStatesProvider {
+	double error;
 
-	public Prediction(int length) {
-		this.length = length;
-		states = new double[length];
+	public Error() {
 	}
 
 	@Override
@@ -17,7 +14,7 @@ public class Prediction extends OutputStatesProvider {
 
 	@Override
 	public double[] getStates() {
-		return states;
+		return new double[] { error };
 	}
 
 	@Override
@@ -29,7 +26,7 @@ public class Prediction extends OutputStatesProvider {
 	@Override
 	public int getStatesLength() {
 		// TODO Auto-generated method stub
-		return states.length;
+		return 1;
 	}
 
 	@Override
@@ -40,6 +37,6 @@ public class Prediction extends OutputStatesProvider {
 
 	@Override
 	public void setOutputState(double state, int stateChannel) {
-		states[stateChannel] = state;
+		error = state;
 	}
 }

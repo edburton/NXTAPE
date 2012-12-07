@@ -15,8 +15,8 @@ public class StateStreamBundleRenderer extends Renderer {
 		this.stateStreamBundle = stateStreamBundle;
 	}
 
-	public StateStreamBundleRenderer(StateStreamBundle stateStreamBundle, float x,
-			float y, float width, float height) {
+	public StateStreamBundleRenderer(StateStreamBundle stateStreamBundle,
+			float x, float y, float width, float height) {
 		super();
 		this.stateStreamBundle = stateStreamBundle;
 	}
@@ -33,7 +33,8 @@ public class StateStreamBundleRenderer extends Renderer {
 			int nc = stateStreamBundle.getStateStreams().size();
 			float graphHeight = height - Renderer.lineWidth / 2.0f;
 			for (int c = nc - 1; c >= 0; c--) {
-				double[] states = stateStreamBundle.getStateStreams().get(c).read();
+				double[] states = stateStreamBundle.getStateStreams().get(c)
+						.read();
 				if (states != null) {
 					int streamLength = states.length;
 					double min = Double.NaN;
@@ -69,6 +70,7 @@ public class StateStreamBundleRenderer extends Renderer {
 								x1 = (getStreamLeft())
 										+ ((i / (float) (streamLength - 1)) * (width - (getStreamLeft() - x)));
 								y1 = (float) ((y + height) - v * graphHeight);
+								y1 -= c;
 								g.vertex(x1, y1);
 								vertexCount++;
 							} else {

@@ -8,7 +8,6 @@ import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 public class EyeBall extends StatesProvider {
 
 	private static String[] stateNames = new String[] { "X", "Y", "Speed" };
-	private static final int[] stateTypes = new int[] { INPUT, INPUT, INPUT };
 	private final List<Muscle> muscles = new ArrayList<Muscle>();
 	private double x = 0;
 	private double y = 0;
@@ -34,11 +33,6 @@ public class EyeBall extends StatesProvider {
 	@Override
 	public String[] getStateNames() {
 		return stateNames;
-	}
-
-	@Override
-	public int[] getStateTypes() {
-		return stateTypes;
 	}
 
 	@Override

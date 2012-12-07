@@ -4,7 +4,6 @@ public class TestingStatesProvider extends StatesProvider {
 
 	private final double phase;
 	private double[] states;
-	private static final int[] channelTypes = new int[] { INTERNAL, INTERNAL };
 	private int c = 0;
 
 	public TestingStatesProvider(double phase) {
@@ -26,12 +25,6 @@ public class TestingStatesProvider extends StatesProvider {
 	public String[] getStateNames() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public int[] getStateTypes() {
-		// TODO Auto-generated method stub
-		return channelTypes;
 	}
 
 	@Override

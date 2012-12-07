@@ -7,14 +7,16 @@ public abstract class Reflex extends StateStreamBundleGroup {
 	protected OutputStatesProvider outputStatesProvider;
 
 	public Reflex(StateStreamBundle inputStateStreamBundle,
-			HomogeneousStateStreamBundle outputStateStreamBundle,
-			int inputStateIndex, int outputIndex) {
-		super(inputStateStreamBundle, outputStateStreamBundle);
+			OutputStatesProvider outputStatesProvider, int inputStateIndex,
+			int outputIndex) {
+		super();
+		addStateStreamBundle(inputStateStreamBundle);
+		this.outputStatesProvider = outputStatesProvider;
 		this.inputChannel = inputStateIndex;
 		this.outputChannel = outputIndex;
-		if (outputStateStreamBundle != null)
-			outputStatesProvider = (OutputStatesProvider) outputStateStreamBundle
-					.getStateProvider();
+		StateStream outputStream = new StateStream(outputStatesProvider,
+				outputIndex, inputStateStreamBundle.getStreamLength());
+		addStateStreamBundle(new StateStreamBundle(outputStream));
 	}
 
 	public abstract void react();

@@ -18,8 +18,7 @@ public class Ecosytem {
 
 		for (int i = 0; i < allStateStreams.size(); i++) {
 			StateStream stateStream = allStateStreams.get(i);
-			int type = stateStream.getStateType();
-			if (type == StatesProvider.OUTPUT)
+			if (stateStream.getStatesProvider() instanceof OutputStatesProvider)
 				if (!outputStatesProviders.contains(stateStream
 						.getStatesProvider()))
 					outputStatesProviders
@@ -69,16 +68,9 @@ public class Ecosytem {
 	}
 
 	private void stepInputs() {
-		for (int i = 0; i < inputOnlyStatesProviders.size(); i++)
+		for (int i = 0; i < inputOnlyStatesProviders.size(); i++) {
 			inputOnlyStatesProviders.get(i).updateStates();
-
-		for (int i = 0; i < allStateStreams.size(); i++) {
-			StateStream stateStream = allStateStreams.get(i);
-			if (inputOnlyStatesProviders.contains(stateStream
-					.getStatesProvider()))
-				stateStream
-						.write(stateStream.getStatesProvider().getStates()[stateStream
-								.getStatesProviderChannel()]);
+			inputOnlyStatesProviders.get(i).notifyStatesObservers();
 		}
 	}
 
@@ -92,15 +84,9 @@ public class Ecosytem {
 		for (int i = 0; i < reflexes.size(); i++)
 			reflexes.get(i).react();
 
-		for (int i = 0; i < outputStatesProviders.size(); i++)
+		for (int i = 0; i < outputStatesProviders.size(); i++) {
 			outputStatesProviders.get(i).updateStates();
-
-		for (int i = 0; i < allStateStreams.size(); i++) {
-			StateStream stateStream = allStateStreams.get(i);
-			if (outputStatesProviders.contains(stateStream.getStatesProvider()))
-				stateStream
-						.write(stateStream.getStatesProvider().getStates()[stateStream
-								.getStatesProviderChannel()]);
+			outputStatesProviders.get(i).notifyStatesObservers();
 		}
 
 		for (int i = 0; i < predictors.size(); i++)

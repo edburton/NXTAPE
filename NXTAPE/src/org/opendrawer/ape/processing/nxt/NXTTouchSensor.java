@@ -8,7 +8,6 @@ public class NXTTouchSensor extends StatesProvider {
 	private final TouchSensor touchSensor;
 	private final String name;
 	private static String[] stateNames = new String[] { "On/Off" };
-	private static int[] stateTypes = new int[] { INPUT };
 	private boolean on = false;
 
 	public NXTTouchSensor(TouchSensor touchSensor, String name) {
@@ -29,11 +28,6 @@ public class NXTTouchSensor extends StatesProvider {
 	@Override
 	public String[] getStateNames() {
 		return stateNames;
-	}
-
-	@Override
-	public int[] getStateTypes() {
-		return stateTypes;
 	}
 
 	@Override

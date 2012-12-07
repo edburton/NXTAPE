@@ -1,6 +1,6 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
-public class StateStream {
+public class StateStream implements StatesObserver {
 	private int streamLength;
 	private double[] stateStream;
 	private int writeHead = 0;
@@ -27,6 +27,7 @@ public class StateStream {
 
 	public void setStatesProvider(StatesProvider statesProvider,
 			int statesProviderChannel, int streamLength) {
+		statesProvider.addStreamObserver(this);
 		this.streamLength = streamLength;
 		this.statesProvider = statesProvider;
 		this.statesProviderChannel = statesProviderChannel;
@@ -37,17 +38,6 @@ public class StateStream {
 	private void setToNaN() {
 		for (int i = 0; i < streamLength; i++)
 			stateStream[i] = Double.NaN;
-	}
-
-	public void write(double value) {
-		if (stateStream != null) {
-			stateStream[writeHead] = value;
-			writeHead++;
-			totalWriteHead++;
-			if (writeHead >= streamLength)
-				writeHead = 0;
-		}
-
 	}
 
 	public double read(int pastPosition) {
@@ -87,13 +77,24 @@ public class StateStream {
 		return "no StatesProvider";
 	}
 
-	public int getStateType() {
-		if (statesProvider != null)
-			return statesProvider.getStateTypes()[statesProviderChannel];
-		return StatesProvider.NULL;
-	}
-
 	public int getStatesProviderChannel() {
 		return statesProviderChannel;
+	}
+
+	@Override
+	public void statesUpdated(StatesProvider statesProvider) {
+		double[] states = statesProvider.getStates();
+		if (states != null)
+			write(states[statesProviderChannel]);
+	}
+
+	private void write(double value) {
+		if (stateStream != null) {
+			stateStream[writeHead] = value;
+			writeHead++;
+			totalWriteHead++;
+			if (writeHead >= streamLength)
+				writeHead = 0;
+		}
 	}
 }

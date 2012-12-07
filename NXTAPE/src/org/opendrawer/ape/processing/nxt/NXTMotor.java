@@ -19,7 +19,6 @@ public class NXTMotor extends OutputStatesProvider {
 	private final double maxInputRate = 1f;
 	private final double maxRate = 40.0f;
 	private static String[] stateNames = new String[] { "Impulse", "Angle" };
-	private static final int[] stateTypes = new int[] { OUTPUT, INPUT };
 	private double topSpeed;
 	private int currentSpeed;
 
@@ -131,10 +130,5 @@ public class NXTMotor extends OutputStatesProvider {
 
 	public void setGUIAngle(int actualAngle) {
 		this.actualAngle = (int) (restAngle + ((actualAngle / 360.0) * (maxAngle - minAngle)));
-	}
-
-	@Override
-	public int[] getStateTypes() {
-		return stateTypes;
 	}
 }

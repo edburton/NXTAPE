@@ -18,17 +18,19 @@ public class Predictor extends StateStreamBundleGroup {
 	StateStreamBundle outputStateStreamBundle;
 
 	HomogeneousStateStreamBundle predictionStreamBundle;
-	StateStreamBundle errorStreamBundle;
+	HomogeneousStateStreamBundle errorStreamBundle;
 
 	Prediction prediction;
+	Error error;
 
-	private static final int streamLength = 20;
+	private int streamLength = 20;
 
 	public Predictor(StateStreamBundle inputStateStreamBundle,
 			StateStreamBundle outputStateStreamBundle) {
 		super(inputStateStreamBundle, outputStateStreamBundle);
 		this.inputStateStreamBundle = inputStateStreamBundle;
 		this.outputStateStreamBundle = outputStateStreamBundle;
+		streamLength = inputStateStreamBundle.getStreamLength();
 		if (outputStateStreamBundle == null)
 			return;
 		prediction = new Prediction(outputStateStreamBundle.getStateStreams()
@@ -36,35 +38,11 @@ public class Predictor extends StateStreamBundleGroup {
 		predictionStreamBundle = new HomogeneousStateStreamBundle(prediction,
 				streamLength);
 		addStateStreamBundle(predictionStreamBundle);
-		errorStreamBundle = new StateStreamBundle(
-				inputStateStreamBundle.getStreamLength());
-		errorStreamBundle.addEmptyStateStreams(1);
-		addStateStreamBundle(errorStreamBundle);
-	}
 
-	public Predictor() { // Constructor used for testing only
-		super();
-		addStateStreamBundle(inputStateStreamBundle = new HomogeneousStateStreamBundle(
-				new TestingStatesProvider(1), 200));
-		addStateStreamBundle(outputStateStreamBundle = new HomogeneousStateStreamBundle(
-				new TestingStatesProvider(-1), 200));
-		prediction = new Prediction(outputStateStreamBundle.getStateStreams()
-				.size());
-		predictionStreamBundle = new HomogeneousStateStreamBundle(prediction,
+		error = new Error();
+		errorStreamBundle = new HomogeneousStateStreamBundle(error,
 				streamLength);
-		addStateStreamBundle(predictionStreamBundle);
-		errorStreamBundle = new StateStreamBundle(
-				inputStateStreamBundle.getStreamLength());
-		errorStreamBundle.addEmptyStateStreams(1);
 		addStateStreamBundle(errorStreamBundle);
-	}
-
-	public void predict_placeholder() {
-		// double[] input = inputStateStreamBundle.read(0);
-
-		double[] output = outputStateStreamBundle.read(0);
-		predictionStreamBundle.write(output);
-		errorStreamBundle.write(new double[] { Math.pow(Math.random(), 16) });
 	}
 
 	public void predict() {
@@ -76,13 +54,16 @@ public class Predictor extends StateStreamBundleGroup {
 				streamLength);
 		MLDataSet trainingSet = new BasicMLDataSet(inputPeriod, outputPeriod);
 		MLDataPair currentPair = trainingSet.get(0);
-		MLData prediction = predictorNetwork.compute(currentPair.getInput());
-		predictionStreamBundle.write(prediction.getData());
+		MLData predictionResult = predictorNetwork.compute(currentPair
+				.getInput());
+		for (int i = 0; i < prediction.getStatesLength(); i++)
+			prediction.setOutputState(predictionResult.getData()[i], i);
 		predictor.setTraining(trainingSet);
 		predictor.iteration();
-		double error = predictor.getError();
-		// System.out.println(error);
-		errorStreamBundle.getStateStreams().get(0).write(error);
+		double errorValue = predictor.getError();
+		error.setOutputState(errorValue, 0);
+		prediction.notifyStatesObservers();
+		error.notifyStatesObservers();
 	}
 
 	private void initiatePredictor() {

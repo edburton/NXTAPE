@@ -11,9 +11,9 @@ public class StateStreamBundle {
 		this.streamLength = streamLength;
 	}
 
-	public void write(double[] states) {
-		for (int i = 0; i < stateStreams.size() && i < states.length; i++)
-			stateStreams.get(i).write(states[i]);
+	public StateStreamBundle(StateStream stateStream) {
+		this.streamLength = stateStream.getStreamLength();
+		addStateStream(stateStream);
 	}
 
 	public double[] read(int pastPosition) {
@@ -47,18 +47,18 @@ public class StateStreamBundle {
 		return stateStreams;
 	}
 
-	public void addStatesStream(StateStream stateStream) {
+	public void addStateStream(StateStream stateStream) {
 		stateStreams.add(stateStream);
 	}
 
 	public void addStatesProviderStreams(StatesProvider statesProvider) {
 		for (int i = 0; i < statesProvider.getStatesLength(); i++)
-			addStatesStream(new StateStream(statesProvider, i, streamLength));
+			addStateStream(new StateStream(statesProvider, i, streamLength));
 	}
 
 	public void addEmptyStateStreams(int n) {
 		for (int i = 0; i < n; i++)
-			addStatesStream(new StateStream(streamLength));
+			addStateStream(new StateStream(streamLength));
 	}
 
 	public void removeStatesStream(StateStream stateStream) {

@@ -1,17 +1,17 @@
 package org.opendrawer.ape.processing.nxt;
 
-import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
-import org.opendrawer.ape.darwinianneurodynamics.HomogeneousStateStreamBundle;
+import org.opendrawer.ape.darwinianneurodynamics.OutputStatesProvider;
 import org.opendrawer.ape.darwinianneurodynamics.Reflex;
+import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
 
 public class LinearReflex extends Reflex {
 
-	private double weight;
+	private final double weight;
 
 	public LinearReflex(StateStreamBundle inputStatesStreamBundle,
-			HomogeneousStateStreamBundle outputStatesStreamBundle,
-			int inputChannel, int outputChannel, double weight) {
-		super(inputStatesStreamBundle, outputStatesStreamBundle, inputChannel,
+			OutputStatesProvider outputStatesProvider, int inputChannel,
+			int outputChannel, double weight) {
+		super(inputStatesStreamBundle, outputStatesProvider, inputChannel,
 				outputChannel);
 		this.weight = weight;
 	}

@@ -8,7 +8,6 @@ public class Muscle extends OutputStatesProvider {
 	private double currentRestLength = requestedRestLength;
 	private static String[] stateNames = new String[] {
 			"Requested rest length", "Current rest length" };
-	private static final int[] stateTypes = new int[] { OUTPUT, INPUT };
 
 	public Muscle(String name) {
 		this.name = name;
@@ -42,11 +41,6 @@ public class Muscle extends OutputStatesProvider {
 	@Override
 	public int getStatesLength() {
 		return 2;
-	}
-
-	@Override
-	public int[] getStateTypes() {
-		return stateTypes;
 	}
 
 	public double getCurrentRestLength() {

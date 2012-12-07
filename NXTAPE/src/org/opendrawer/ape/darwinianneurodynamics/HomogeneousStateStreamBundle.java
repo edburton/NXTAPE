@@ -12,11 +12,10 @@ public class HomogeneousStateStreamBundle extends StateStreamBundle {
 			return;
 		int channels = statesProvider.getStatesLength();
 		for (int i = 0; i < channels; i++)
-			stateStreams.add(new StateStream(statesProvider, i, streamLength));
+			addStateStream(new StateStream(statesProvider, i, streamLength));
 	}
 
 	public StatesProvider getStateProvider() {
 		return statesProvider;
 	}
-
 }
