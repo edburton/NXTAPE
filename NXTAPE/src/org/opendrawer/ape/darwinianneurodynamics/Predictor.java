@@ -59,7 +59,7 @@ public class Predictor extends StateStreamBundleGroup {
 		addStateStreamBundle(errorStreamBundle);
 	}
 
-	public void predict() {
+	public void predict_placeholder() {
 		// double[] input = inputStateStreamBundle.read(0);
 
 		double[] output = outputStateStreamBundle.read(0);
@@ -67,11 +67,11 @@ public class Predictor extends StateStreamBundleGroup {
 		errorStreamBundle.write(new double[] { Math.pow(Math.random(), 16) });
 	}
 
-	public void predict_backup() {
+	public void predict() {
 		if (predictor == null)
 			initiatePredictor();
-		double[][] inputPeriod = inputStateStreamBundle
-				.readPortion(0, streamLength);
+		double[][] inputPeriod = inputStateStreamBundle.readPortion(0,
+				streamLength);
 		double[][] outputPeriod = outputStateStreamBundle.readPortion(0,
 				streamLength);
 		MLDataSet trainingSet = new BasicMLDataSet(inputPeriod, outputPeriod);
