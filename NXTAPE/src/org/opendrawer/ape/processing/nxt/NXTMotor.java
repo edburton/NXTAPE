@@ -2,9 +2,9 @@ package org.opendrawer.ape.processing.nxt;
 
 import lejos.nxt.remote.RemoteMotor;
 
-import org.opendrawer.ape.darwinianneurodynamics.OutputDataProvider;
+import org.opendrawer.ape.darwinianneurodynamics.OutputStatesProvider;
 
-public class NXTMotor implements OutputDataProvider {
+public class NXTMotor extends OutputStatesProvider {
 	private final RemoteMotor remoteMotor;
 	private final String name;
 	private final int minAngle;
@@ -18,8 +18,8 @@ public class NXTMotor implements OutputDataProvider {
 	private int actualAngle;
 	private final double maxInputRate = 1f;
 	private final double maxRate = 40.0f;
-	private static String[] channelNames = new String[] { "Impulse", "Angle" };
-	private static final int[] channelTypes = new int[] { OUTPUT, INPUT };
+	private static String[] stateNames = new String[] { "Impulse", "Angle" };
+	private static final int[] stateTypes = new int[] { OUTPUT, INPUT };
 	private double topSpeed;
 	private int currentSpeed;
 
@@ -59,7 +59,7 @@ public class NXTMotor implements OutputDataProvider {
 	}
 
 	@Override
-	public void step() {
+	public void updateStates() {
 		if (remoteMotor != null)
 			actualAngle = remoteMotor.getTachoCount();
 		int iVirtualAngle = (int) Math.round(virtualAngle);
@@ -101,8 +101,8 @@ public class NXTMotor implements OutputDataProvider {
 	}
 
 	@Override
-	public void setOutputChannel(double data, int dataChannel) {
-		inputRate = data;
+	public void setOutputState(double state, int stateIndex) {
+		inputRate = state;
 		if (inputRate < -1)
 			inputRate = -1;
 		else if (inputRate > 1)
@@ -110,18 +110,18 @@ public class NXTMotor implements OutputDataProvider {
 	}
 
 	@Override
-	public double[] getData() {
+	public double[] getStates() {
 		return new double[] { inputRate,
 				((double) actualAngle - restAngle) / (maxAngle - minAngle) };
 	}
 
 	@Override
-	public String[] getChannelNames() {
-		return channelNames;
+	public String[] getStateNames() {
+		return stateNames;
 	}
 
 	@Override
-	public int getChannelCount() {
+	public int getStatesLength() {
 		return 2;
 	}
 
@@ -134,7 +134,7 @@ public class NXTMotor implements OutputDataProvider {
 	}
 
 	@Override
-	public int[] getChannelTypes() {
-		return channelTypes;
+	public int[] getStateTypes() {
+		return stateTypes;
 	}
 }

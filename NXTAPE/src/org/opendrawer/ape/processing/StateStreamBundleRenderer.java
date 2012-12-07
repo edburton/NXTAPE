@@ -2,52 +2,52 @@ package org.opendrawer.ape.processing;
 
 import java.awt.Color;
 
-import org.opendrawer.ape.darwinianneurodynamics.DataStreamBundle;
+import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
 
 import processing.core.PGraphics;
 
-public class DataStreamBundleRenderer extends Renderer {
+public class StateStreamBundleRenderer extends Renderer {
 
-	protected DataStreamBundle dataStreamBundle;
+	protected StateStreamBundle stateStreamBundle;
 
-	public DataStreamBundleRenderer(DataStreamBundle dataStreamBundle) {
+	public StateStreamBundleRenderer(StateStreamBundle stateStreamBundle) {
 		super();
-		this.dataStreamBundle = dataStreamBundle;
+		this.stateStreamBundle = stateStreamBundle;
 	}
 
-	public DataStreamBundleRenderer(DataStreamBundle dataStreamBundle, float x,
+	public StateStreamBundleRenderer(StateStreamBundle stateStreamBundle, float x,
 			float y, float width, float height) {
 		super();
-		this.dataStreamBundle = dataStreamBundle;
+		this.stateStreamBundle = stateStreamBundle;
 	}
 
-	public DataStreamBundleRenderer(float x, float y, float width, float height) {
+	public StateStreamBundleRenderer(float x, float y, float width, float height) {
 		super(x, y, width, height);
 	}
 
 	@Override
 	public void draw(PGraphics g) {
 		super.draw(g);
-		if (dataStreamBundle != null) {
+		if (stateStreamBundle != null) {
 			g.noFill();
-			int nc = dataStreamBundle.getDataStreams().size();
+			int nc = stateStreamBundle.getStateStreams().size();
 			float graphHeight = height - Renderer.lineWidth / 2.0f;
 			for (int c = nc - 1; c >= 0; c--) {
-				double[] data = dataStreamBundle.getDataStreams().get(c).read();
-				if (data != null) {
-					int dataWidth = data.length;
+				double[] states = stateStreamBundle.getStateStreams().get(c).read();
+				if (states != null) {
+					int streamLength = states.length;
 					double min = Double.NaN;
 					double max = Double.NaN;
-					for (int i = 0; i < dataWidth; i++) {
-						if (!Double.isNaN(data[i])) {
+					for (int i = 0; i < streamLength; i++) {
+						if (!Double.isNaN(states[i])) {
 							if (Double.isNaN(min))
-								min = data[i];
-							else if (data[i] < min)
-								min = data[i];
+								min = states[i];
+							else if (states[i] < min)
+								min = states[i];
 							if (Double.isNaN(max))
-								max = data[i];
-							else if (data[i] > max)
-								max = data[i];
+								max = states[i];
+							else if (states[i] > max)
+								max = states[i];
 						}
 					}
 					if (!(Double.isNaN(min) || Double.isNaN(max) || max == min)) {
@@ -57,8 +57,8 @@ public class DataStreamBundleRenderer extends Renderer {
 						int vertexCount = 0;
 						float x1 = 0;
 						float y1 = 0;
-						for (int i = 0; i < dataWidth; i++) {
-							double v = data[i];
+						for (int i = 0; i < streamLength; i++) {
+							double v = states[i];
 							if (!Double.isNaN(v)) {
 								if (!drawing) {
 									g.beginShape();
@@ -67,7 +67,7 @@ public class DataStreamBundleRenderer extends Renderer {
 								}
 								v = (v - min) / (max - min);
 								x1 = (getStreamLeft())
-										+ ((i / (float) (dataWidth - 1)) * (width - (getStreamLeft() - x)));
+										+ ((i / (float) (streamLength - 1)) * (width - (getStreamLeft() - x)));
 								y1 = (float) ((y + height) - v * graphHeight);
 								g.vertex(x1, y1);
 								vertexCount++;
@@ -97,8 +97,8 @@ public class DataStreamBundleRenderer extends Renderer {
 		return x;
 	}
 
-	public DataStreamBundle getDataStreamBundle() {
-		return dataStreamBundle;
+	public StateStreamBundle getStatesStreamBundle() {
+		return stateStreamBundle;
 	}
 
 }

@@ -2,25 +2,25 @@ package org.opendrawer.ape.processing.nxt;
 
 import lejos.nxt.addon.AccelHTSensor;
 
-import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
+import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 
-public class NXTAccelerometer implements DataProvider {
+public class NXTAccelerometer extends StatesProvider {
 	private final AccelHTSensor accelerometer;
 	private final String name;
-	private static final String[] channelNames = new String[] { "X", "Y", "Z" };
-	private static final int[] channelTypes = new int[] { INPUT, INPUT, INPUT };
-	private final double values[];
+	private static final String[] stateNames = new String[] { "X", "Y", "Z" };
+	private static final int[] stateTypes = new int[] { INPUT, INPUT, INPUT };
+	private final double states[];
 	private final float maxExpectedValue = 256; // Arbitrary
 
 	public NXTAccelerometer(AccelHTSensor accelerometer, String name) {
 		this.accelerometer = accelerometer;
 		this.name = name;
-		values = new double[3];
+		states = new double[3];
 	}
 
 	@Override
-	public double[] getData() {
-		return values;
+	public double[] getStates() {
+		return states;
 	}
 
 	@Override
@@ -29,27 +29,27 @@ public class NXTAccelerometer implements DataProvider {
 	}
 
 	@Override
-	public String[] getChannelNames() {
-		return channelNames;
+	public String[] getStateNames() {
+		return stateNames;
 	}
 
 	@Override
-	public void step() {
+	public void updateStates() {
 		if (accelerometer != null) {
 			int[] intValues = new int[3];
 			accelerometer.getAllAccel(intValues, 0);
 			for (int i = 0; i < 3; i++)
-				values[i] = intValues[i] / maxExpectedValue;
+				states[i] = intValues[i] / maxExpectedValue;
 		}
 	}
 
 	@Override
-	public int getChannelCount() {
+	public int getStatesLength() {
 		return 3;
 	}
 
 	@Override
-	public int[] getChannelTypes() {
-		return channelTypes;
+	public int[] getStateTypes() {
+		return stateTypes;
 	}
 }

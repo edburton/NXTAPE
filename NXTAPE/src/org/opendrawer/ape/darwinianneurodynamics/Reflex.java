@@ -1,20 +1,20 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
-public abstract class Reflex extends DataStreamBundleList {
+public abstract class Reflex extends StateStreamBundleGroup {
 
 	protected int inputChannel;
 	protected int outputChannel;
-	protected OutputDataProvider outputDataProvider;
+	protected OutputStatesProvider outputStatesProvider;
 
-	public Reflex(DataStreamBundle inputDataStreamBundle,
-			HomogeneousDataStreamBundle outputDataStreamBundle,
-			int inputChannel, int outputChannel) {
-		super(inputDataStreamBundle, outputDataStreamBundle);
-		this.inputChannel = inputChannel;
-		this.outputChannel = outputChannel;
-		if (outputDataStreamBundle != null)
-			outputDataProvider = (OutputDataProvider) outputDataStreamBundle
-					.getDataProvider();
+	public Reflex(StateStreamBundle inputStateStreamBundle,
+			HomogeneousStateStreamBundle outputStateStreamBundle,
+			int inputStateIndex, int outputIndex) {
+		super(inputStateStreamBundle, outputStateStreamBundle);
+		this.inputChannel = inputStateIndex;
+		this.outputChannel = outputIndex;
+		if (outputStateStreamBundle != null)
+			outputStatesProvider = (OutputStatesProvider) outputStateStreamBundle
+					.getStateProvider();
 	}
 
 	public abstract void react();

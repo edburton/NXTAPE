@@ -1,12 +1,12 @@
 package org.opendrawer.ape.processing.nxt.dummy;
 
-import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
-import org.opendrawer.ape.processing.DataProviderRenderer;
+import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
+import org.opendrawer.ape.processing.StatesProviderRenderer;
 import org.opendrawer.ape.processing.Renderer;
 
 import processing.core.PGraphics;
 
-public class MuscleRenderer extends DataProviderRenderer {
+public class MuscleRenderer extends StatesProviderRenderer {
 	Muscle muscle;
 
 	public MuscleRenderer(Muscle muscle) {
@@ -29,7 +29,7 @@ public class MuscleRenderer extends DataProviderRenderer {
 	}
 
 	@Override
-	public DataProvider getDataProvider() {
+	public StatesProvider getStatesProvider() {
 		return muscle;
 	}
 }

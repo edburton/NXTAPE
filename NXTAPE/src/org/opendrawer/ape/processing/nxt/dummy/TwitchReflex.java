@@ -1,7 +1,7 @@
 package org.opendrawer.ape.processing.nxt.dummy;
 
-import org.opendrawer.ape.darwinianneurodynamics.DataStreamBundle;
-import org.opendrawer.ape.darwinianneurodynamics.HomogeneousDataStreamBundle;
+import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
+import org.opendrawer.ape.darwinianneurodynamics.HomogeneousStateStreamBundle;
 import org.opendrawer.ape.darwinianneurodynamics.Reflex;
 
 public class TwitchReflex extends Reflex {
@@ -9,31 +9,31 @@ public class TwitchReflex extends Reflex {
 	double twitchLength = 0;
 	int counter = 0;
 
-	public TwitchReflex(DataStreamBundle inputDataStreamBundle,
-			HomogeneousDataStreamBundle outputDataStreamBundle,
-			int inputChannel, int outputChannel) {
-		super(inputDataStreamBundle, outputDataStreamBundle, inputChannel,
-				outputChannel);
+	public TwitchReflex(StateStreamBundle inputStatesStreamBundle,
+			HomogeneousStateStreamBundle outputStatesStreamBundle,
+			int inputIndex, int outputIndex) {
+		super(inputStatesStreamBundle, outputStatesStreamBundle, inputIndex,
+				outputIndex);
 	}
 
 	@Override
 	public void react() {
-		if (outputDataProvider == null)
+		if (outputStatesProvider == null)
 			return;
 		double input = 0;
-		for (int i = 0; i < dataStreamBundles.get(0).getDataStreams().size(); i++) {
-			double v = Math.abs(dataStreamBundles.get(0).getDataStreams()
+		for (int i = 0; i < stateStreamBundles.get(0).getStateStreams().size(); i++) {
+			double v = Math.abs(stateStreamBundles.get(0).getStateStreams()
 					.get(i).read(0));
 			input += v * v;
 		}
 		input = Math.sqrt(input);
-		dataStreamBundles.get(0).getDataStreams().get(inputChannel).read(0);
+		stateStreamBundles.get(0).getStateStreams().get(inputChannel).read(0);
 		if (input < 0.1 && counter > twitchTime && Math.random() > 0.99) {
 			counter = 0;
 			twitchTime = 20;
 			twitchLength = Math.random();
 		}
 		double output = counter++ > twitchTime ? 1 : twitchLength;
-		outputDataProvider.setOutputChannel(output, outputChannel);
+		outputStatesProvider.setOutputState(output, outputChannel);
 	}
 }

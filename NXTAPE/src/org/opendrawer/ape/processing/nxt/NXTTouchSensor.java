@@ -2,13 +2,13 @@ package org.opendrawer.ape.processing.nxt;
 
 import lejos.nxt.TouchSensor;
 
-import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
+import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 
-public class NXTTouchSensor implements DataProvider {
+public class NXTTouchSensor extends StatesProvider {
 	private final TouchSensor touchSensor;
 	private final String name;
-	private static String[] channelNames = new String[] { "On/Off" };
-	private static int[] channelTypes = new int[] { INPUT };
+	private static String[] stateNames = new String[] { "On/Off" };
+	private static int[] stateTypes = new int[] { INPUT };
 	private boolean on = false;
 
 	public NXTTouchSensor(TouchSensor touchSensor, String name) {
@@ -17,7 +17,7 @@ public class NXTTouchSensor implements DataProvider {
 	}
 
 	@Override
-	public double[] getData() {
+	public double[] getStates() {
 		return new double[] { on ? 1 : 0 };
 	}
 
@@ -27,23 +27,23 @@ public class NXTTouchSensor implements DataProvider {
 	}
 
 	@Override
-	public String[] getChannelNames() {
-		return channelNames;
+	public String[] getStateNames() {
+		return stateNames;
 	}
 
 	@Override
-	public int[] getChannelTypes() {
-		return channelTypes;
+	public int[] getStateTypes() {
+		return stateTypes;
 	}
 
 	@Override
-	public void step() {
+	public void updateStates() {
 		if (touchSensor != null)
 			on = touchSensor.isPressed();
 	}
 
 	@Override
-	public int getChannelCount() {
+	public int getStatesLength() {
 		return 1;
 	}
 

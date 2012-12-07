@@ -14,12 +14,12 @@ import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
 import org.opendrawer.ape.darwinianneurodynamics.Actor;
-import org.opendrawer.ape.darwinianneurodynamics.HomogeneousDataStreamBundle;
-import org.opendrawer.ape.darwinianneurodynamics.NeurodynamicStreamCore;
+import org.opendrawer.ape.darwinianneurodynamics.HomogeneousStateStreamBundle;
+import org.opendrawer.ape.darwinianneurodynamics.Ecosytem;
 import org.opendrawer.ape.darwinianneurodynamics.Predictor;
 import org.opendrawer.ape.darwinianneurodynamics.Reflex;
-import org.opendrawer.ape.processing.DataStreamBundleListRenderer;
-import org.opendrawer.ape.processing.HomogeneousDataStreamBundleRenderer;
+import org.opendrawer.ape.processing.StateStreamBundleListRenderer;
+import org.opendrawer.ape.processing.HomogeneousStateStreamBundleRenderer;
 import org.opendrawer.ape.processing.Renderer;
 import org.opendrawer.ape.processing.nxt.dummy.EyeBall;
 import org.opendrawer.ape.processing.nxt.dummy.EyeBallRenderer;
@@ -30,7 +30,7 @@ import org.opendrawer.ape.processing.nxt.dummy.TwitchReflex;
 import processing.core.PApplet;
 
 @SuppressWarnings("serial")
-public class NXT_ArtificialPlasticityEcology extends PApplet {
+public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	private static final boolean presentationMode = true;
 
 	private NXTComm nxtComm;
@@ -45,8 +45,8 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	private NXTMotor armMiddleMotor;
 	private NXTMotor armBodyMotor;
 	private int debugCounter = 0;
-	private final int dataStreamWidth = 100;
-	private final NeurodynamicStreamCore neurodynamicStreamCore = new NeurodynamicStreamCore();
+	private final int statesStreamLength = 100;
+	private final Ecosytem ecosytem = new Ecosytem();
 	private boolean dummyMode = false;
 	private static final String touch_left_name = "Touch Left";
 	private static final String touch_bottom_name = "Touch Bottom";
@@ -63,9 +63,9 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 	public static void main(String[] args) {
 		if (presentationMode)
 			PApplet.main(new String[] { "--present",
-					"org.opendrawer.ape.processing.nxt.NXT_ArtificialPlasticityEcology" });
+					"org.opendrawer.ape.processing.nxt.NXT_ArtificialPlasticityEcosystem" });
 		else
-			PApplet.main("org.opendrawer.ape.processing.nxt.NXT_ArtificialPlasticityEcology");
+			PApplet.main("org.opendrawer.ape.processing.nxt.NXT_ArtificialPlasticityEcosystem");
 	}
 
 	@Override
@@ -120,72 +120,72 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		armBodyMotor = new NXTMotor(!dummyMode ? Motor.C : null,
 				"arm body motor", -60, 60, 0, 0.8f);
 
-		List<HomogeneousDataStreamBundleRenderer> homogeneousDataStreamBundleRenderers = new ArrayList<HomogeneousDataStreamBundleRenderer>();
-		List<DataStreamBundleListRenderer> reflexRenderers = new ArrayList<DataStreamBundleListRenderer>();
-		List<DataStreamBundleListRenderer> predictorRenderers = new ArrayList<DataStreamBundleListRenderer>();
-		List<DataStreamBundleListRenderer> actorRenderers = new ArrayList<DataStreamBundleListRenderer>();
+		List<HomogeneousStateStreamBundleRenderer> homogeneousStateStreamBundleRenderers = new ArrayList<HomogeneousStateStreamBundleRenderer>();
+		List<StateStreamBundleListRenderer> reflexRenderers = new ArrayList<StateStreamBundleListRenderer>();
+		List<StateStreamBundleListRenderer> predictorRenderers = new ArrayList<StateStreamBundleListRenderer>();
+		List<StateStreamBundleListRenderer> actorRenderers = new ArrayList<StateStreamBundleListRenderer>();
 
-		HomogeneousDataStreamBundle bottomDataStreamBundle;
-		HomogeneousDataStreamBundle leftDataStreamBundle;
-		HomogeneousDataStreamBundle rightDataStreamBundle;
-		HomogeneousDataStreamBundle accelerometerDataStreamBundle;
-		HomogeneousDataStreamBundle armHeadMotorDataStreamBundle;
-		HomogeneousDataStreamBundle armMiddleMotorDataStreamBundle;
-		HomogeneousDataStreamBundle armBodyMotorDataStreamBundle;
+		HomogeneousStateStreamBundle bottomStatesStreamBundle;
+		HomogeneousStateStreamBundle leftStatesStreamBundle;
+		HomogeneousStateStreamBundle rightStatesStreamBundle;
+		HomogeneousStateStreamBundle accelerometerStatesStreamBundle;
+		HomogeneousStateStreamBundle armHeadMotorStatesStreamBundle;
+		HomogeneousStateStreamBundle armMiddleMotorStatesStreamBundle;
+		HomogeneousStateStreamBundle armBodyMotorStatesStreamBundle;
 
-		homogeneousDataStreamBundleRenderers
-				.add(new HomogeneousDataStreamBundleRenderer(
-						accelerometerDataStreamBundle = new HomogeneousDataStreamBundle(
-								accelerometer, dataStreamWidth),
+		homogeneousStateStreamBundleRenderers
+				.add(new HomogeneousStateStreamBundleRenderer(
+						accelerometerStatesStreamBundle = new HomogeneousStateStreamBundle(
+								accelerometer, statesStreamLength),
 						new NXTAccelerometerRenderer(accelerometer)));
 		// homogeneousDataStreamBundleRenderers.add(new
-		// HomogeneousDataStreamBundleRenderer(
-		// new DataStreamBundle(compass, dataStreamWidth),
+		// HomogeneousStateStreamBundleRenderer(
+		// new DataStreamBundle(compass, statesStreamLength),
 		// new NXTCompassRenderer(compass), edgeMargin, y,
 		// width, height));
 		// y += height + margin;
 		// homogeneousDataStreamBundleRenderers.add(new
-		// HomogeneousDataStreamBundleRenderer(
-		// new DataStreamBundle(touchTop, dataStreamWidth),
+		// HomogeneousStateStreamBundleRenderer(
+		// new DataStreamBundle(touchTop, statesStreamLength),
 		// new NXTTouchSensorRenderer(touchTop), edgeMargin, y, width,
 		// height));
 		// y += height + margin;
 
-		homogeneousDataStreamBundleRenderers
-				.add(new HomogeneousDataStreamBundleRenderer(
-						bottomDataStreamBundle = new HomogeneousDataStreamBundle(
-								touchBottom, dataStreamWidth),
+		homogeneousStateStreamBundleRenderers
+				.add(new HomogeneousStateStreamBundleRenderer(
+						bottomStatesStreamBundle = new HomogeneousStateStreamBundle(
+								touchBottom, statesStreamLength),
 						new NXTTouchSensorRenderer(touchBottom)));
-		homogeneousDataStreamBundleRenderers
-				.add(new HomogeneousDataStreamBundleRenderer(
-						leftDataStreamBundle = new HomogeneousDataStreamBundle(
-								touchLeft, dataStreamWidth),
+		homogeneousStateStreamBundleRenderers
+				.add(new HomogeneousStateStreamBundleRenderer(
+						leftStatesStreamBundle = new HomogeneousStateStreamBundle(
+								touchLeft, statesStreamLength),
 						new NXTTouchSensorRenderer(touchLeft)));
-		homogeneousDataStreamBundleRenderers
-				.add(new HomogeneousDataStreamBundleRenderer(
-						rightDataStreamBundle = new HomogeneousDataStreamBundle(
-								touchRight, dataStreamWidth),
+		homogeneousStateStreamBundleRenderers
+				.add(new HomogeneousStateStreamBundleRenderer(
+						rightStatesStreamBundle = new HomogeneousStateStreamBundle(
+								touchRight, statesStreamLength),
 						new NXTTouchSensorRenderer(touchRight)));
-		homogeneousDataStreamBundleRenderers
-				.add(new HomogeneousDataStreamBundleRenderer(
-						armHeadMotorDataStreamBundle = new HomogeneousDataStreamBundle(
-								armHeadMotor, dataStreamWidth),
+		homogeneousStateStreamBundleRenderers
+				.add(new HomogeneousStateStreamBundleRenderer(
+						armHeadMotorStatesStreamBundle = new HomogeneousStateStreamBundle(
+								armHeadMotor, statesStreamLength),
 						new NXTMotorRenderer(armHeadMotor)));
-		homogeneousDataStreamBundleRenderers
-				.add(new HomogeneousDataStreamBundleRenderer(
-						armMiddleMotorDataStreamBundle = new HomogeneousDataStreamBundle(
-								armMiddleMotor, dataStreamWidth),
+		homogeneousStateStreamBundleRenderers
+				.add(new HomogeneousStateStreamBundleRenderer(
+						armMiddleMotorStatesStreamBundle = new HomogeneousStateStreamBundle(
+								armMiddleMotor, statesStreamLength),
 						new NXTMotorRenderer(armMiddleMotor)));
-		homogeneousDataStreamBundleRenderers
-				.add(new HomogeneousDataStreamBundleRenderer(
-						armBodyMotorDataStreamBundle = new HomogeneousDataStreamBundle(
-								armBodyMotor, dataStreamWidth),
+		homogeneousStateStreamBundleRenderers
+				.add(new HomogeneousStateStreamBundleRenderer(
+						armBodyMotorStatesStreamBundle = new HomogeneousStateStreamBundle(
+								armBodyMotor, statesStreamLength),
 						new NXTMotorRenderer(armBodyMotor)));
 
-		for (int i = 0; i < homogeneousDataStreamBundleRenderers.size(); i++)
-			neurodynamicStreamCore
-					.addDataStreamBundle(homogeneousDataStreamBundleRenderers
-							.get(i).getDataStreamBundle());
+		for (int i = 0; i < homogeneousStateStreamBundleRenderers.size(); i++)
+			ecosytem
+					.addStatesStreamBundle(homogeneousStateStreamBundleRenderers
+							.get(i).getStatesStreamBundle());
 
 		Reflex accelerometerReflex;
 		Reflex bottomReflexM;
@@ -194,33 +194,33 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		Reflex leftReflexB;
 		Reflex rightReflexB;
 
-		neurodynamicStreamCore
+		ecosytem
 				.addReflex(accelerometerReflex = new LinearReflex(
-						accelerometerDataStreamBundle,
-						armHeadMotorDataStreamBundle, 1, 0, -1));
-		neurodynamicStreamCore
+						accelerometerStatesStreamBundle,
+						armHeadMotorStatesStreamBundle, 1, 0, -1));
+		ecosytem
 				.addReflex(bottomReflexM = new LinearReflex(
-						bottomDataStreamBundle, armHeadMotorDataStreamBundle,
+						bottomStatesStreamBundle, armHeadMotorStatesStreamBundle,
 						0, 0, -1));
-		neurodynamicStreamCore
-				.addReflex(leftReflexM = new LinearReflex(leftDataStreamBundle,
-						armMiddleMotorDataStreamBundle, 0, 0, -1));
-		neurodynamicStreamCore
+		ecosytem
+				.addReflex(leftReflexM = new LinearReflex(leftStatesStreamBundle,
+						armMiddleMotorStatesStreamBundle, 0, 0, -1));
+		ecosytem
 				.addReflex(rightReflexM = new LinearReflex(
-						rightDataStreamBundle, armMiddleMotorDataStreamBundle,
+						rightStatesStreamBundle, armMiddleMotorStatesStreamBundle,
 						0, 0, 1));
-		neurodynamicStreamCore.addReflex(leftReflexB = new LinearReflex(
-				leftDataStreamBundle, armBodyMotorDataStreamBundle, 0, 0, -1));
-		neurodynamicStreamCore.addReflex(rightReflexB = new LinearReflex(
-				rightDataStreamBundle, armBodyMotorDataStreamBundle, 0, 0, 1));
+		ecosytem.addReflex(leftReflexB = new LinearReflex(
+				leftStatesStreamBundle, armBodyMotorStatesStreamBundle, 0, 0, -1));
+		ecosytem.addReflex(rightReflexB = new LinearReflex(
+				rightStatesStreamBundle, armBodyMotorStatesStreamBundle, 0, 0, 1));
 
-		reflexRenderers.add(new DataStreamBundleListRenderer(
+		reflexRenderers.add(new StateStreamBundleListRenderer(
 				accelerometerReflex));
-		reflexRenderers.add(new DataStreamBundleListRenderer(bottomReflexM));
-		reflexRenderers.add(new DataStreamBundleListRenderer(leftReflexM));
-		reflexRenderers.add(new DataStreamBundleListRenderer(rightReflexM));
-		reflexRenderers.add(new DataStreamBundleListRenderer(leftReflexB));
-		reflexRenderers.add(new DataStreamBundleListRenderer(rightReflexB));
+		reflexRenderers.add(new StateStreamBundleListRenderer(bottomReflexM));
+		reflexRenderers.add(new StateStreamBundleListRenderer(leftReflexM));
+		reflexRenderers.add(new StateStreamBundleListRenderer(rightReflexM));
+		reflexRenderers.add(new StateStreamBundleListRenderer(leftReflexB));
+		reflexRenderers.add(new StateStreamBundleListRenderer(rightReflexB));
 
 		int nTypes = 3;
 		int nType = 0;
@@ -233,8 +233,8 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 		for (int i = 0; i < 50; i++) {
 			Actor actor = new Actor(null, null);
-			neurodynamicStreamCore.addActor(actor);
-			DataStreamBundleListRenderer renderer = new DataStreamBundleListRenderer(
+			ecosytem.addActor(actor);
+			StateStreamBundleListRenderer renderer = new StateStreamBundleListRenderer(
 					null);
 			renderer.setKeyColor(new Color(Color.HSBtoRGB(nType
 					/ (float) nTypes, 1.0f, 0.5f)));
@@ -245,28 +245,28 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		int r = 0;
 		for (int i = 0; i < 50; i++) {
 			r = (int) Math.floor(random(0, reflexRenderers.size()));
-			DataStreamBundleListRenderer reflex = reflexRenderers.get(r);
-			Predictor predictor = new Predictor(reflex
-					.getDataStreamBundleRenderers().get(0)
-					.getDataStreamBundle(), reflex
-					.getDataStreamBundleRenderers().get(1)
-					.getDataStreamBundle());
-			neurodynamicStreamCore.addPredictor(predictor);
-			DataStreamBundleListRenderer renderer = new DataStreamBundleListRenderer(
+			StateStreamBundleListRenderer reflexRenderer = reflexRenderers.get(r);
+			Predictor predictor = new Predictor(reflexRenderer
+					.getStatesStreamBundleRenderers().get(0)
+					.getStatesStreamBundle(), reflexRenderer
+					.getStatesStreamBundleRenderers().get(1)
+					.getStatesStreamBundle());
+			ecosytem.addPredictor(predictor);
+			StateStreamBundleListRenderer renderer = new StateStreamBundleListRenderer(
 					predictor);
 			renderer.setKeyColor(new Color(Color.HSBtoRGB(nType
 					/ (float) nTypes, 1.0f, 0.5f)));
 			predictorRenderers.add(renderer);
 		}
 
-		neurodynamicStreamCore.prepareDataStreams();
+		ecosytem.prepareStatesStreams();
 
-		renderers.addAll(homogeneousDataStreamBundleRenderers);
+		renderers.addAll(homogeneousStateStreamBundleRenderers);
 		renderers.addAll(reflexRenderers);
 		renderers.addAll(actorRenderers);
 		renderers.addAll(predictorRenderers);
 
-		int sensorimotors = homogeneousDataStreamBundleRenderers.size();
+		int sensorimotors = homogeneousStateStreamBundleRenderers.size();
 		int reflexes = reflexRenderers.size();
 		int actors = actorRenderers.size();
 		int predictors = predictorRenderers.size();
@@ -276,7 +276,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 		float screenWidth = getWidth();
 		float screenHeight = getHeight();
-		float margin = edgeMargin / 2;
+		float margin = edgeMargin;
 		int gridWidth = (int) Math.ceil(Math.pow(zones, 1 / 3.0d));
 		int gridHeight = (int) Math.floor(Math.pow(zones, 2 / 3.0d));
 
@@ -312,35 +312,35 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		dummyMode = true;
 
 		List<Muscle> muscles = new ArrayList<Muscle>();
-		List<HomogeneousDataStreamBundleRenderer> homogeneousDataStreamBundleRenderers = new ArrayList<HomogeneousDataStreamBundleRenderer>();
-		List<DataStreamBundleListRenderer> reflexRenderers = new ArrayList<DataStreamBundleListRenderer>();
-		List<DataStreamBundleListRenderer> predictorRenderers = new ArrayList<DataStreamBundleListRenderer>();
-		List<DataStreamBundleListRenderer> actorRenderers = new ArrayList<DataStreamBundleListRenderer>();
+		List<HomogeneousStateStreamBundleRenderer> homogeneousStateStreamBundleRenderers = new ArrayList<HomogeneousStateStreamBundleRenderer>();
+		List<StateStreamBundleListRenderer> reflexRenderers = new ArrayList<StateStreamBundleListRenderer>();
+		List<StateStreamBundleListRenderer> predictorRenderers = new ArrayList<StateStreamBundleListRenderer>();
+		List<StateStreamBundleListRenderer> actorRenderers = new ArrayList<StateStreamBundleListRenderer>();
 
 		EyeBall eyeBall = new EyeBall();
-		HomogeneousDataStreamBundle eyeBallDataStreamBundle;
-		homogeneousDataStreamBundleRenderers
-				.add(new HomogeneousDataStreamBundleRenderer(
-						eyeBallDataStreamBundle = new HomogeneousDataStreamBundle(
-								eyeBall, dataStreamWidth), new EyeBallRenderer(
+		HomogeneousStateStreamBundle eyeBallStatesStreamBundle;
+		homogeneousStateStreamBundleRenderers
+				.add(new HomogeneousStateStreamBundleRenderer(
+						eyeBallStatesStreamBundle = new HomogeneousStateStreamBundle(
+								eyeBall, statesStreamLength), new EyeBallRenderer(
 								eyeBall)));
 
-		neurodynamicStreamCore.addDataStreamBundle(eyeBallDataStreamBundle);
+		ecosytem.addStatesStreamBundle(eyeBallStatesStreamBundle);
 
 		for (int i = 0; i < 8; i++) {
 			Muscle muscle = new Muscle("Muscle " + i);
 			muscles.add(muscle);
 			eyeBall.addMuscle(muscle);
-			HomogeneousDataStreamBundle muscleDataStreamBundle = new HomogeneousDataStreamBundle(
-					muscle, dataStreamWidth);
-			homogeneousDataStreamBundleRenderers
-					.add(new HomogeneousDataStreamBundleRenderer(
-							muscleDataStreamBundle, new MuscleRenderer(muscle)));
-			neurodynamicStreamCore.addDataStreamBundle(muscleDataStreamBundle);
+			HomogeneousStateStreamBundle muscleStatesStreamBundle = new HomogeneousStateStreamBundle(
+					muscle, statesStreamLength);
+			homogeneousStateStreamBundleRenderers
+					.add(new HomogeneousStateStreamBundleRenderer(
+							muscleStatesStreamBundle, new MuscleRenderer(muscle)));
+			ecosytem.addStatesStreamBundle(muscleStatesStreamBundle);
 			TwitchReflex twitchReflex = new TwitchReflex(
-					eyeBallDataStreamBundle, muscleDataStreamBundle, 0, 1);
-			neurodynamicStreamCore.addReflex(twitchReflex);
-			reflexRenderers.add(new DataStreamBundleListRenderer(twitchReflex));
+					eyeBallStatesStreamBundle, muscleStatesStreamBundle, 0, 1);
+			ecosytem.addReflex(twitchReflex);
+			reflexRenderers.add(new StateStreamBundleListRenderer(twitchReflex));
 		}
 
 		int nTypes = 3;
@@ -354,8 +354,8 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 		for (int i = 0; i < 0; i++) {
 			Actor actor = new Actor(null, null);
-			neurodynamicStreamCore.addActor(actor);
-			DataStreamBundleListRenderer renderer = new DataStreamBundleListRenderer(
+			ecosytem.addActor(actor);
+			StateStreamBundleListRenderer renderer = new StateStreamBundleListRenderer(
 					null);
 			renderer.setKeyColor(new Color(Color.HSBtoRGB(nType
 					/ (float) nTypes, 1.0f, 0.5f)));
@@ -366,26 +366,28 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 		int r = 0;
 		for (int i = 0; i < 12; i++) {
 			r = (int) Math.floor(random(0, reflexRenderers.size()));
-			DataStreamBundleListRenderer reflex = reflexRenderers.get(r);
+			StateStreamBundleListRenderer reflex = reflexRenderers.get(r);
 			Predictor predictor = new Predictor(reflex
-					.getDataStreamBundleRenderers().get(0)
-					.getDataStreamBundle(), eyeBallDataStreamBundle);
-			neurodynamicStreamCore.addPredictor(predictor);
-			DataStreamBundleListRenderer renderer = new DataStreamBundleListRenderer(
+					.getStatesStreamBundleRenderers().get(0)
+					.getStatesStreamBundle(), reflex
+					.getStatesStreamBundleRenderers().get(1)
+					.getStatesStreamBundle());
+			ecosytem.addPredictor(predictor);
+			StateStreamBundleListRenderer renderer = new StateStreamBundleListRenderer(
 					predictor);
 			renderer.setKeyColor(new Color(Color.HSBtoRGB(nType
 					/ (float) nTypes, 1.0f, 0.5f)));
 			predictorRenderers.add(renderer);
 		}
 
-		neurodynamicStreamCore.prepareDataStreams();
+		ecosytem.prepareStatesStreams();
 
-		renderers.addAll(homogeneousDataStreamBundleRenderers);
+		renderers.addAll(homogeneousStateStreamBundleRenderers);
 		renderers.addAll(reflexRenderers);
 		renderers.addAll(actorRenderers);
 		renderers.addAll(predictorRenderers);
 
-		int sensorimotors = homogeneousDataStreamBundleRenderers.size();
+		int sensorimotors = homogeneousStateStreamBundleRenderers.size();
 		int reflexes = reflexRenderers.size();
 		int actors = actorRenderers.size();
 		int predictors = predictorRenderers.size();
@@ -395,7 +397,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 		float screenWidth = getWidth();
 		float screenHeight = getHeight();
-		float margin = edgeMargin / 2;
+		float margin = edgeMargin;
 		int gridWidth = (int) Math.ceil(Math.pow(zones, 1 / 3.0d));
 		int gridHeight = (int) Math.floor(Math.pow(zones, 2 / 3.0d));
 
@@ -429,7 +431,7 @@ public class NXT_ArtificialPlasticityEcology extends PApplet {
 
 	@Override
 	public void draw() {
-		neurodynamicStreamCore.step();
+		ecosytem.step();
 		background(0);
 		if (mousePressed) {
 			translate(getWidth() / 2, getHeight() / 2);

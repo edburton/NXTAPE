@@ -1,15 +1,15 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
-public class Prediction implements DataProvider {
-	int channels;
-	private int[] channelTypes;
-	double[] data;
+public class Prediction extends StatesProvider {
+	int states;
+	private final int[] stateTypes;
+	double[] state;
 
-	public Prediction(int channels) {
-		this.channels = channels;
-		channelTypes = new int[channels];
-		for (int i = 0; i < channels; i++)
-			channelTypes[i] = INTERNAL;
+	public Prediction(int states) {
+		this.states = states;
+		stateTypes = new int[states];
+		for (int i = 0; i < states; i++)
+			stateTypes[i] = INTERNAL;
 	}
 
 	@Override
@@ -19,34 +19,34 @@ public class Prediction implements DataProvider {
 	}
 
 	@Override
-	public double[] getData() {
-		return data;
+	public double[] getStates() {
+		return state;
 	}
 
 	@Override
-	public String[] getChannelNames() {
+	public String[] getStateNames() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public int[] getChannelTypes() {
-		return channelTypes;
+	public int[] getStateTypes() {
+		return stateTypes;
 	}
 
 	@Override
-	public int getChannelCount() {
+	public int getStatesLength() {
 		// TODO Auto-generated method stub
-		return channels;
+		return states;
 	}
 
 	@Override
-	public void step() {
+	public void updateStates() {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void setData(double[] data) {
-		this.data = data;
+	public void setState(double[] state) {
+		this.state = state;
 	}
 }

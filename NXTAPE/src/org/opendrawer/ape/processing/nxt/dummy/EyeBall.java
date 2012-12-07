@@ -3,12 +3,12 @@ package org.opendrawer.ape.processing.nxt.dummy;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
+import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 
-public class EyeBall implements DataProvider {
+public class EyeBall extends StatesProvider {
 
-	private static String[] channelNames = new String[] { "X", "Y", "Speed" };
-	private static final int[] channelTypes = new int[] { INPUT, INPUT, INPUT };
+	private static String[] stateNames = new String[] { "X", "Y", "Speed" };
+	private static final int[] stateTypes = new int[] { INPUT, INPUT, INPUT };
 	private final List<Muscle> muscles = new ArrayList<Muscle>();
 	private double x = 0;
 	private double y = 0;
@@ -27,27 +27,27 @@ public class EyeBall implements DataProvider {
 	}
 
 	@Override
-	public double[] getData() {
+	public double[] getStates() {
 		return new double[] { x, y, speed };
 	}
 
 	@Override
-	public String[] getChannelNames() {
-		return channelNames;
+	public String[] getStateNames() {
+		return stateNames;
 	}
 
 	@Override
-	public int[] getChannelTypes() {
-		return channelTypes;
+	public int[] getStateTypes() {
+		return stateTypes;
 	}
 
 	@Override
-	public int getChannelCount() {
+	public int getStatesLength() {
 		return 3;
 	}
 
 	@Override
-	public void step() {
+	public void updateStates() {
 		for (int i = 0; i < muscles.size(); i++) {
 			Muscle muscle = muscles.get(i);
 			double mx = getMuscleX(i);

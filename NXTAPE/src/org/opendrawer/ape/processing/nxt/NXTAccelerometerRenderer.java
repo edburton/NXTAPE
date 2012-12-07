@@ -2,13 +2,13 @@ package org.opendrawer.ape.processing.nxt;
 
 import java.awt.Color;
 
-import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
-import org.opendrawer.ape.processing.DataProviderRenderer;
+import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
+import org.opendrawer.ape.processing.StatesProviderRenderer;
 import org.opendrawer.ape.processing.Renderer;
 
 import processing.core.PGraphics;
 
-public class NXTAccelerometerRenderer extends DataProviderRenderer {
+public class NXTAccelerometerRenderer extends StatesProviderRenderer {
 	NXTAccelerometer nxtAccelerometer;
 
 	public NXTAccelerometerRenderer(NXTAccelerometer nxtAccelerometer) {
@@ -28,7 +28,7 @@ public class NXTAccelerometerRenderer extends DataProviderRenderer {
 		radius -= Renderer.lineMarginWidth;
 		g.fill(16);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
-		double[] values = nxtAccelerometer.getData();
+		double[] states = nxtAccelerometer.getStates();
 		g.strokeWeight(Renderer.lineWidth);
 		float r = Renderer.lineMarginWidth * 2;
 		for (int i = 0; i < 3; i++) {
@@ -36,8 +36,8 @@ public class NXTAccelerometerRenderer extends DataProviderRenderer {
 			g.stroke(c);
 			g.fill(c);
 			float a = ((float) Math.PI * (2 / 3.0f)) * i;
-			float rdx = (float) ((Math.sin(a) * radius) * values[i]);
-			float rdy = (float) ((Math.cos(a) * radius) * values[i]);
+			float rdx = (float) ((Math.sin(a) * radius) * states[i]);
+			float rdy = (float) ((Math.cos(a) * radius) * states[i]);
 			g.line(xc, yc, xc + rdx, yc + rdy);
 			g.noStroke();
 			g.ellipse(xc + (rdx - r), yc + (rdy - r), xc + (rdx + r), yc
@@ -46,7 +46,7 @@ public class NXTAccelerometerRenderer extends DataProviderRenderer {
 	}
 
 	@Override
-	public DataProvider getDataProvider() {
+	public StatesProvider getStatesProvider() {
 		return nxtAccelerometer;
 	}
 }

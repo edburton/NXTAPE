@@ -2,13 +2,13 @@ package org.opendrawer.ape.processing.nxt;
 
 import lejos.nxt.addon.CompassHTSensor;
 
-import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
+import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 
-public class NXTCompass implements DataProvider {
+public class NXTCompass extends StatesProvider {
 	private final CompassHTSensor compass;
 	private final String name;
-	private static final String[] channelNames = new String[] { "Heading South" };
-	private static final int[] channelTypes = new int[] { INPUT };
+	private static final String[] stateNames = new String[] { "Heading South" };
+	private static final int[] stateTypes = new int[] { INPUT };
 	private double direction;
 
 	public NXTCompass(CompassHTSensor compass, String name) {
@@ -17,7 +17,7 @@ public class NXTCompass implements DataProvider {
 	}
 
 	@Override
-	public double[] getData() {
+	public double[] getStates() {
 		return new double[] { direction };
 	}
 
@@ -27,12 +27,12 @@ public class NXTCompass implements DataProvider {
 	}
 
 	@Override
-	public String[] getChannelNames() {
-		return channelNames;
+	public String[] getStateNames() {
+		return stateNames;
 	}
 
 	@Override
-	public void step() {
+	public void updateStates() {
 		if (compass != null) {
 			float directionIn = compass.getDegrees();
 			direction = directionIn / 360.0d;
@@ -41,12 +41,12 @@ public class NXTCompass implements DataProvider {
 	}
 
 	@Override
-	public int getChannelCount() {
+	public int getStatesLength() {
 		return 1;
 	}
 
 	@Override
-	public int[] getChannelTypes() {
-		return channelTypes;
+	public int[] getStateTypes() {
+		return stateTypes;
 	}
 }

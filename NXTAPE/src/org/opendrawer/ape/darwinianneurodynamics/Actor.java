@@ -1,9 +1,9 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
-public class Actor extends DataStreamBundleList {
+public class Actor extends StateStreamBundleGroup {
 
-	public Actor(DataStreamBundle inputDataStreamBundle,
-			DataStreamBundle outputDataStreamBundle) {
-		super(inputDataStreamBundle, outputDataStreamBundle);
+	public Actor(StateStreamBundle inputStatesStreamBundle,
+			StateStreamBundle outputStatesStreamBundle) {
+		super(inputStatesStreamBundle, outputStatesStreamBundle);
 	}
 }

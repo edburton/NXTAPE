@@ -1,12 +1,12 @@
 package org.opendrawer.ape.processing.nxt;
 
-import org.opendrawer.ape.darwinianneurodynamics.DataProvider;
-import org.opendrawer.ape.processing.DataProviderRenderer;
+import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
+import org.opendrawer.ape.processing.StatesProviderRenderer;
 import org.opendrawer.ape.processing.Renderer;
 
 import processing.core.PGraphics;
 
-public class NXTCompassRenderer extends DataProviderRenderer {
+public class NXTCompassRenderer extends StatesProviderRenderer {
 	NXTCompass nxtCompass;
 
 	public NXTCompassRenderer(NXTCompass nxtCompass) {
@@ -28,13 +28,13 @@ public class NXTCompassRenderer extends DataProviderRenderer {
 		g.fill(16);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 		g.stroke(255, 255, 0);
-		float a = (float) ((nxtCompass.getData()[0]) * (Math.PI * 2));
+		float a = (float) ((nxtCompass.getStates()[0]) * (Math.PI * 2));
 		g.line(xc, yc, (float) (xc + Math.sin(a) * radius),
 				(float) (yc + Math.cos(a) * radius));
 	}
 
 	@Override
-	public DataProvider getDataProvider() {
+	public StatesProvider getStatesProvider() {
 		return nxtCompass;
 	}
 }
