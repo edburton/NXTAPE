@@ -329,7 +329,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 							new MuscleRenderer(muscle)));
 			ecosytem.addStatesStreamBundle(muscleStatesStreamBundle);
 			TwitchReflex twitchReflex = new TwitchReflex(
-					eyeBallStatesStreamBundle, muscle, 0, 1);
+					eyeBallStatesStreamBundle, muscle, 0, 0);
 			ecosytem.addReflex(twitchReflex);
 			reflexRenderers
 					.add(new StateStreamBundleListRenderer(twitchReflex));

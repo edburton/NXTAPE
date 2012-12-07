@@ -48,10 +48,8 @@ public class Predictor extends StateStreamBundleGroup {
 	public void predict() {
 		if (predictor == null)
 			initiatePredictor();
-		double[][] inputPeriod = inputStateStreamBundle.readPortion(0,
-				streamLength);
-		double[][] outputPeriod = outputStateStreamBundle.readPortion(0,
-				streamLength);
+		double[][] inputPeriod = inputStateStreamBundle.readPortion(0, 1);
+		double[][] outputPeriod = outputStateStreamBundle.readPortion(0, 1);
 		MLDataSet trainingSet = new BasicMLDataSet(inputPeriod, outputPeriod);
 		MLDataPair currentPair = trainingSet.get(0);
 		MLData predictionResult = predictorNetwork.compute(currentPair
