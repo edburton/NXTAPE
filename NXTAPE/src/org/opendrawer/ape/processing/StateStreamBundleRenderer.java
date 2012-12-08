@@ -31,7 +31,6 @@ public class StateStreamBundleRenderer extends Renderer {
 		if (stateStreamBundle != null) {
 			g.noFill();
 			int nc = stateStreamBundle.getStateStreams().size();
-			float graphHeight = height - Renderer.lineWidth / 2.0f;
 			for (int c = nc - 1; c >= 0; c--) {
 				double[] states = stateStreamBundle.getStateStreams().get(c)
 						.read();
@@ -67,11 +66,12 @@ public class StateStreamBundleRenderer extends Renderer {
 									vertexCount = 0;
 								}
 								v = (v - min) / (max - min);
-								x1 = (getStreamLeft())
-										+ ((i / (float) (streamLength - 1)) * (width - (getStreamLeft() - x)));
-								y1 = (float) ((y + height) - v * graphHeight);
-								y1 -= c;
-								x1 += c;
+								x1 = (getStreamLeft() + Renderer.lineWidth)
+										+ ((i / (float) (streamLength - 1)) * ((width - Renderer.lineWidth * 2) - (getStreamLeft() - x)));
+								y1 = (float) ((y + height - Renderer.lineWidth) - v
+										* (height - Renderer.lineWidth * 2));
+								y1 -= ((c - (nc - 1)) * Renderer.lineWidth) / 8.0f;
+								x1 -= ((c - (nc - 1)) * Renderer.lineWidth) / 8.0f;
 								g.vertex(x1, y1);
 								vertexCount++;
 							} else {

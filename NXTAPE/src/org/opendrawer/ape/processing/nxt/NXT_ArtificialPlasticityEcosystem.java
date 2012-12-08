@@ -118,9 +118,9 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		armHeadMotor = new NXTMotor(!dummyMode ? Motor.A : null,
 				"arm head motor", -180, 0, 0, 0.925f);
 		armMiddleMotor = new NXTMotor(!dummyMode ? Motor.B : null,
-				"arm midle motor", -60, 60, 0, 0.8f);
+				"arm midle motor", -90, 90, 0, 0.8f);
 		armBodyMotor = new NXTMotor(!dummyMode ? Motor.C : null,
-				"arm body motor", -60, 60, 0, 0.8f);
+				"arm body motor", -90, 90, 0, 0.8f);
 
 		List<HomogeneousStateStreamBundleRenderer> homogeneousStateStreamBundleRenderers = new ArrayList<HomogeneousStateStreamBundleRenderer>();
 		List<StateStreamBundleListRenderer> reflexRenderers = new ArrayList<StateStreamBundleListRenderer>();
@@ -239,7 +239,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 					.addAll(homogeneousStateStreamBundleRenderers.get(i)
 							.getStatesStreamBundle().getStateStreams());
 
-		for (int i = 0; i < 12; i++) {
+		for (int i = 0; i < 50; i++) {
 			int streams = (int) Math.floor(random(2,
 					allPotentialPredictorStateStreams.size()));
 			int outputsIndex = (int) Math.floor(random(1, streams - 1));
