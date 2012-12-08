@@ -71,6 +71,7 @@ public class StateStreamBundleRenderer extends Renderer {
 										+ ((i / (float) (streamLength - 1)) * (width - (getStreamLeft() - x)));
 								y1 = (float) ((y + height) - v * graphHeight);
 								y1 -= c;
+								x1 += c;
 								g.vertex(x1, y1);
 								vertexCount++;
 							} else {

@@ -48,16 +48,19 @@ public class Predictor extends StateStreamBundleGroup {
 	public void predict() {
 		if (predictor == null)
 			initiatePredictor();
-		double[][] inputPeriod = inputStateStreamBundle.readPortion(0, 1);
-		double[][] outputPeriod = outputStateStreamBundle.readPortion(0, 1);
+		double[][] inputPeriod = inputStateStreamBundle.readPortion(0,
+				streamLength);
+		double[][] outputPeriod = outputStateStreamBundle.readPortion(0,
+				streamLength);
 		MLDataSet trainingSet = new BasicMLDataSet(inputPeriod, outputPeriod);
 		MLDataPair currentPair = trainingSet.get(0);
+		predictor.setTraining(trainingSet);
+		predictor.iteration();
 		MLData predictionResult = predictorNetwork.compute(currentPair
 				.getInput());
 		for (int i = 0; i < prediction.getStatesLength(); i++)
 			prediction.setOutputState(predictionResult.getData()[i], i);
-		predictor.setTraining(trainingSet);
-		predictor.iteration();
+
 		double errorValue = predictor.getError();
 		error.setOutputState(errorValue, 0);
 		prediction.notifyStatesObservers();
@@ -65,10 +68,10 @@ public class Predictor extends StateStreamBundleGroup {
 	}
 
 	private void initiatePredictor() {
-		double[][] inputPrototype = new double[][] { inputStateStreamBundle
-				.read(0) };
-		double[][] outputPrototype = new double[][] { outputStateStreamBundle
-				.read(0) };
+		double[][] inputPrototype = inputStateStreamBundle.readPortion(0,
+				streamLength);
+		double[][] outputPrototype = outputStateStreamBundle.readPortion(0,
+				streamLength);
 		predictorNetwork = new BasicNetwork();
 		predictorNetwork.addLayer(new BasicLayer(null, true,
 				inputStateStreamBundle.getStateStreams().size()));
