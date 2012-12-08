@@ -1,8 +1,8 @@
 package org.opendrawer.ape.processing.nxt.dummy;
 
 import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
-import org.opendrawer.ape.processing.StatesProviderRenderer;
 import org.opendrawer.ape.processing.Renderer;
+import org.opendrawer.ape.processing.StatesProviderRenderer;
 
 import processing.core.PGraphics;
 
@@ -36,8 +36,8 @@ public class EyeBallRenderer extends StatesProviderRenderer {
 		g.strokeWeight(Renderer.lineWidth);
 		g.stroke(255, 200, 200);
 		for (int i = 0; i < nm; i++) {
-			float mx = eyeBall.getMuscleX(i) * radius;
-			float my = eyeBall.getMuscleY(i) * radius;
+			float mx = -eyeBall.getMuscleX(i) * radius;
+			float my = -eyeBall.getMuscleY(i) * radius;
 			g.line(xc + (mx * 3 + dx) / 4, yc + (my * 3 + dy) / 4, xc + mx, yc
 					+ my);
 		}
