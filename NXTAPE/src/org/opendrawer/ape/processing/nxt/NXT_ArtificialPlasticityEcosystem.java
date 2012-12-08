@@ -233,16 +233,50 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		}
 		nType++;
 
-		int r = 0;
-		for (int i = 0; i < 50; i++) {
-			r = (int) Math.floor(random(0, reflexRenderers.size()));
-			StateStreamBundleListRenderer reflexRenderer = reflexRenderers
-					.get(r);
-			Predictor predictor = new Predictor(reflexRenderer
-					.getStatesStreamBundleRenderers().get(0)
-					.getStatesStreamBundle(), reflexRenderer
-					.getStatesStreamBundleRenderers().get(1)
-					.getStatesStreamBundle());
+		List<StateStream> allPotentialPredictorStateStreams = new ArrayList<StateStream>();
+		for (int i = 0; i < homogeneousStateStreamBundleRenderers.size(); i++)
+			allPotentialPredictorStateStreams
+					.addAll(homogeneousStateStreamBundleRenderers.get(i)
+							.getStatesStreamBundle().getStateStreams());
+
+		for (int i = 0; i < 12; i++) {
+			int streams = (int) Math.floor(random(2,
+					allPotentialPredictorStateStreams.size()));
+			int outputsIndex = (int) Math.floor(random(1, streams - 1));
+			int[] streamIndexes = new int[streams];
+			for (int s = 0; s < streams; s++)
+				streamIndexes[s] = -1;
+
+			for (int s = 0; s < streams; s++) {
+				boolean original = false;
+				int p = -1;
+				while (!original) {
+					original = true;
+					p = (int) Math.floor(random(0,
+							allPotentialPredictorStateStreams.size()));
+					for (int ss = 0; ss < streams; ss++)
+						if (p == streamIndexes[ss])
+							original = false;
+				}
+				streamIndexes[s] = p;
+			}
+
+			StateStreamBundle inputStateStreamBundle = new StateStreamBundle(
+					statesStreamLength);
+			StateStreamBundle oututStateStreamBundle = new StateStreamBundle(
+					statesStreamLength);
+
+			for (int ins = 0; ins < outputsIndex; ins++)
+				inputStateStreamBundle
+						.addStateStream(allPotentialPredictorStateStreams
+								.get(streamIndexes[ins]));
+			for (int outs = outputsIndex; outs < streams; outs++)
+				oututStateStreamBundle
+						.addStateStream(allPotentialPredictorStateStreams
+								.get(streamIndexes[outs]));
+
+			Predictor predictor = new Predictor(inputStateStreamBundle,
+					oututStateStreamBundle);
 			ecosytem.addPredictor(predictor);
 			StateStreamBundleListRenderer renderer = new StateStreamBundleListRenderer(
 					predictor);
@@ -401,11 +435,6 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 
 			Predictor predictor = new Predictor(inputStateStreamBundle,
 					oututStateStreamBundle);
-			// Predictor predictor = new Predictor(reflexRenderer
-			// .getStatesStreamBundleRenderers().get(0)
-			// .getStatesStreamBundle(), reflexRenderer
-			// .getStatesStreamBundleRenderers().get(1)
-			// .getStatesStreamBundle());
 			ecosytem.addPredictor(predictor);
 			StateStreamBundleListRenderer renderer = new StateStreamBundleListRenderer(
 					predictor);
