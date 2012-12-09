@@ -410,8 +410,8 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		float screenWidth = getWidth();
 		float screenHeight = getHeight();
 		float margin = edgeMargin;
-		int gridWidth = (int) Math.ceil(Math.pow(zones, 1 / 3.0d));
-		int gridHeight = (int) Math.floor(Math.pow(zones, 2 / 3.0d));
+		int gridWidth = (int) Math.ceil(Math.pow(zones, 1));
+		int gridHeight = (int) Math.floor(Math.pow(zones, 2));
 
 		float width = ((screenWidth + margin - edgeMargin * 2) / gridWidth)
 				- margin;
@@ -430,7 +430,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 				c++;
 			}
 		}
-		zoom = (screenWidth / (width + edgeMargin));
+		zoom = (screenWidth / (width + edgeMargin)) / 3;
 	}
 
 	@Override
