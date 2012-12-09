@@ -9,14 +9,15 @@ import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundleGroup;
 import processing.core.PGraphics;
 
 public class StateStreamBundleListRenderer extends Renderer {
-	private ArrayList<StateStreamBundleRenderer> stateStreamBundleRenderers = new ArrayList<StateStreamBundleRenderer>();
+	private final ArrayList<StateStreamBundleRenderer> stateStreamBundleRenderers = new ArrayList<StateStreamBundleRenderer>();
 
 	public StateStreamBundleListRenderer(
 			StateStreamBundleGroup statesStreamBundleList, float x, float y,
 			float width, float height) {
 		super();
 		if (statesStreamBundleList != null) {
-			addStatesStreamBundles(statesStreamBundleList.getStatesStreamBundles());
+			addStatesStreamBundles(statesStreamBundleList
+					.getStatesStreamBundles());
 		}
 		setVisibleAt(x, y, width, height);
 	}
@@ -25,7 +26,8 @@ public class StateStreamBundleListRenderer extends Renderer {
 			StateStreamBundleGroup statesStreamBundleList) {
 		super();
 		if (statesStreamBundleList != null) {
-			addStatesStreamBundles(statesStreamBundleList.getStatesStreamBundles());
+			addStatesStreamBundles(statesStreamBundleList
+					.getStatesStreamBundles());
 		}
 	}
 
@@ -51,7 +53,7 @@ public class StateStreamBundleListRenderer extends Renderer {
 		if (stateStreamBundleRenderers.size() == 0)
 			super.draw(g);
 		else
-			for (int i = 0; i < stateStreamBundleRenderers.size(); i++)
+			for (int i = stateStreamBundleRenderers.size() - 1; i >= 0; i--)
 				stateStreamBundleRenderers.get(i).draw(g);
 	}
 
@@ -63,14 +65,15 @@ public class StateStreamBundleListRenderer extends Renderer {
 	public void setVisibleAt(float x, float y, float width, float height) {
 		super.setVisibleAt(x, y, width, height);
 		if (stateStreamBundleRenderers.size() > 0) {
-			float moduleWidth = (width / stateStreamBundleRenderers.size());
+			float moduleWidth = ((width - ((lineMarginWidth / 2) * (stateStreamBundleRenderers
+					.size() - 1))) / stateStreamBundleRenderers.size());
 			float moduleX = x;
 			for (int i = 0; i < stateStreamBundleRenderers.size(); i++) {
 				StateStreamBundleRenderer statesStreamBundleRender = stateStreamBundleRenderers
 						.get(i);
 				statesStreamBundleRender.setVisibleAt(moduleX, y, moduleWidth,
 						height);
-				moduleX += moduleWidth;
+				moduleX += moduleWidth + (lineMarginWidth / 2);
 			}
 		}
 	}

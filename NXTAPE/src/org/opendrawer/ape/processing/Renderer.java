@@ -2,6 +2,7 @@ package org.opendrawer.ape.processing;
 
 import java.awt.Color;
 
+import processing.core.PConstants;
 import processing.core.PGraphics;
 
 public class Renderer {
@@ -30,13 +31,27 @@ public class Renderer {
 	public void draw(PGraphics g) {
 		if (keyColor != null) {
 			g.noStroke();
-			g.fill(keyColor.getRed(), keyColor.getGreen(), keyColor.getBlue());
+			g.fill(keyColor.getRed() * .75f, keyColor.getGreen() * .75f,
+					keyColor.getBlue() * .75f);
+			g.beginShape(PConstants.QUADS);
+			g.vertex(x - lineMarginWidth, y - lineMarginWidth);
+			g.vertex(x + width - lineMarginWidth, y - lineMarginWidth);
+			g.vertex(x + width, y);
+			g.vertex(x, y);
+			g.endShape();
+			g.fill(Math.round(keyColor.getRed()),
+					Math.round(keyColor.getGreen()),
+					Math.round(keyColor.getBlue()));
+			g.beginShape(PConstants.QUADS);
+			g.vertex(x - lineMarginWidth, y - lineMarginWidth);
+			g.vertex(x - lineMarginWidth, y + height - lineMarginWidth);
+			g.vertex(x, y + height);
+			g.vertex(x, y);
+			g.endShape();
+			g.fill(Math.round(keyColor.getRed() * .25f),
+					Math.round(keyColor.getGreen() * .25f),
+					Math.round(keyColor.getBlue() * .25f));
 			g.rect(x, y, x + width, y + height);
-			g.fill(keyColor.getRed() / 4, keyColor.getGreen() / 4,
-					keyColor.getBlue() / 4);
-			g.rect(x + Renderer.lineMarginWidth, y + Renderer.lineMarginWidth,
-					(x + width) - Renderer.lineMarginWidth, (y + height)
-							- Renderer.lineMarginWidth);
 		}
 	}
 

@@ -40,6 +40,8 @@ public class HomogeneousStateStreamBundleRenderer extends
 	@Override
 	public void setVisibleAt(float x, float y, float width, float height) {
 		super.setVisibleAt(x, y, width, height);
-		statesProviderRenderer.setVisibleAt(x, y, height, height);
+		statesProviderRenderer.setVisibleAt(x + Renderer.lineWidth, y
+				+ Renderer.lineWidth, height - Renderer.lineWidth * 2, height
+				- Renderer.lineWidth * 2);
 	}
 }
