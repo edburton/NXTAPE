@@ -12,27 +12,12 @@ public class StateStreamBundleListRenderer extends Renderer {
 	private final ArrayList<StateStreamBundleRenderer> stateStreamBundleRenderers = new ArrayList<StateStreamBundleRenderer>();
 
 	public StateStreamBundleListRenderer(
-			StateStreamBundleGroup statesStreamBundleList, float x, float y,
-			float width, float height) {
-		super();
-		if (statesStreamBundleList != null) {
-			addStatesStreamBundles(statesStreamBundleList
-					.getStatesStreamBundles());
-		}
-		setVisibleAt(x, y, width, height);
-	}
-
-	public StateStreamBundleListRenderer(
 			StateStreamBundleGroup statesStreamBundleList) {
-		super();
+		super(statesStreamBundleList);
 		if (statesStreamBundleList != null) {
 			addStatesStreamBundles(statesStreamBundleList
 					.getStatesStreamBundles());
 		}
-	}
-
-	public StateStreamBundleListRenderer() {
-		super();
 	}
 
 	public void addStatesStreamBundle(StateStreamBundle stateStreamBundle) {

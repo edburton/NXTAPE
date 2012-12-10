@@ -1,8 +1,8 @@
 package org.opendrawer.ape.processing.nxt;
 
 import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
-import org.opendrawer.ape.processing.StatesProviderRenderer;
 import org.opendrawer.ape.processing.Renderer;
+import org.opendrawer.ape.processing.StatesProviderRenderer;
 
 import processing.core.PGraphics;
 
@@ -10,7 +10,7 @@ public class NXTTouchSensorRenderer extends StatesProviderRenderer {
 	NXTTouchSensor nxtTouchSensor;
 
 	public NXTTouchSensorRenderer(NXTTouchSensor nxtTouchSensor) {
-		super();
+		super(nxtTouchSensor);
 		this.nxtTouchSensor = nxtTouchSensor;
 	}
 
@@ -32,7 +32,6 @@ public class NXTTouchSensorRenderer extends StatesProviderRenderer {
 
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 	}
-
 
 	@Override
 	public StatesProvider getStatesProvider() {

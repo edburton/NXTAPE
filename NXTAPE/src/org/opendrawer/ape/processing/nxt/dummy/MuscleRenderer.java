@@ -10,7 +10,7 @@ public class MuscleRenderer extends StatesProviderRenderer {
 	Muscle muscle;
 
 	public MuscleRenderer(Muscle muscle) {
-		super();
+		super(muscle);
 		this.muscle = muscle;
 	}
 

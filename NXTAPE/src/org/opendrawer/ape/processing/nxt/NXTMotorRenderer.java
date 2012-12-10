@@ -1,8 +1,8 @@
 package org.opendrawer.ape.processing.nxt;
 
 import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
-import org.opendrawer.ape.processing.StatesProviderRenderer;
 import org.opendrawer.ape.processing.Renderer;
+import org.opendrawer.ape.processing.StatesProviderRenderer;
 
 import processing.core.PGraphics;
 
@@ -10,7 +10,7 @@ public class NXTMotorRenderer extends StatesProviderRenderer {
 	NXTMotor nxtMotor;
 
 	public NXTMotorRenderer(NXTMotor nxtMotor) {
-		super();
+		super(nxtMotor);
 		this.nxtMotor = nxtMotor;
 	}
 

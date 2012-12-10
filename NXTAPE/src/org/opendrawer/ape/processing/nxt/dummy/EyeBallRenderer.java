@@ -10,7 +10,7 @@ public class EyeBallRenderer extends StatesProviderRenderer {
 	EyeBall eyeBall;
 
 	public EyeBallRenderer(EyeBall eyeBall) {
-		super();
+		super(eyeBall);
 		this.eyeBall = eyeBall;
 	}
 

@@ -12,18 +12,8 @@ public class StateStreamBundleRenderer extends Renderer {
 	protected StateStreamBundle stateStreamBundle;
 
 	public StateStreamBundleRenderer(StateStreamBundle stateStreamBundle) {
-		super();
+		super(stateStreamBundle);
 		this.stateStreamBundle = stateStreamBundle;
-	}
-
-	public StateStreamBundleRenderer(StateStreamBundle stateStreamBundle,
-			float x, float y, float width, float height) {
-		super();
-		this.stateStreamBundle = stateStreamBundle;
-	}
-
-	public StateStreamBundleRenderer(float x, float y, float width, float height) {
-		super(x, y, width, height);
 	}
 
 	@Override
@@ -137,5 +127,4 @@ public class StateStreamBundleRenderer extends Renderer {
 	public StateStreamBundle getStatesStreamBundle() {
 		return stateStreamBundle;
 	}
-
 }
