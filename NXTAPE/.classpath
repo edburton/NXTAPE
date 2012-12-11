@@ -11,6 +11,5 @@
 	<classpathentry kind="lib" path="libs/processing/core.jar"/>
 	<classpathentry kind="lib" path="libs/processing/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="libs/processing/jogl-all.jar"/>
-	<classpathentry kind="lib" path="libs/encog-core-3.1.0.jar" sourcepath="/encog-core/src/main/java/"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
