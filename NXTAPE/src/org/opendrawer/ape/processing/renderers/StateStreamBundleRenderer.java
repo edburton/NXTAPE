@@ -42,6 +42,8 @@ public class StateStreamBundleRenderer extends Renderer {
 								max = states[i];
 						}
 					}
+					min = -1;
+					max = 1;
 					if (!(Double.isNaN(min) || Double.isNaN(max) || max == min)) {
 						boolean drawing = false;
 						int vertexCount = 0;

@@ -19,14 +19,16 @@ public class Renderer {
 
 	@SuppressWarnings("unchecked")
 	public static Renderer makeRendererFor(Object object) {
+		if (object == null)
+			return null;
 		try {
-
+			String rendererClassName = "null";
 			Class<? extends Renderer> objectClass = (Class<? extends Renderer>) object
 					.getClass();
 
 			Class<Renderer> rendererClass = null;
 			while (objectClass != null && rendererClass == null) {
-				String rendererClassName = objectClass.getName() + "Renderer";
+				rendererClassName = objectClass.getName() + "Renderer";
 				rendererClassName = "org.opendrawer.ape.processing.renderers"
 						+ rendererClassName.substring(rendererClassName
 								.lastIndexOf('.'));
@@ -38,12 +40,13 @@ public class Renderer {
 				}
 			}
 			if (rendererClass == null)
-				return new Renderer();
+				return null;
 			@SuppressWarnings("rawtypes")
 			Class[] rendererArgsType = new Class[] { objectClass };
 			Object[] rendererArgs = new Object[] { object };
 			Constructor<Renderer> rendererConstructor = rendererClass
 					.getConstructor(rendererArgsType);
+			// System.out.println("CREATING " + rendererClassName);
 			return rendererConstructor.newInstance(rendererArgs);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
@@ -58,7 +61,7 @@ public class Renderer {
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		}
-		return new Renderer();
+		return null;
 	}
 
 	public void setVisibleAt(float x, float y, float width, float height) {
@@ -117,7 +120,7 @@ public class Renderer {
 		this.keyColor = keyColor;
 	}
 
-	public static Color createKeyColour(int index, int outOf, float intensity) {
-		return new Color(Color.HSBtoRGB(index / (float) outOf, 1.0f, intensity));
+	public static Color createKeyColour(int index, int outOf) {
+		return new Color(Color.HSBtoRGB(index / (float) outOf, 1.0f, 1.0f));
 	}
 }

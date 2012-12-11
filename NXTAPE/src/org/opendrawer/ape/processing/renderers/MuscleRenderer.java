@@ -1,11 +1,10 @@
 package org.opendrawer.ape.processing.renderers;
 
-import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 import org.opendrawer.ape.processing.nxt.dummy.Muscle;
 
 import processing.core.PGraphics;
 
-public class MuscleRenderer extends StatesProviderRenderer {
+public class MuscleRenderer extends Renderer {
 	Muscle muscle;
 
 	public MuscleRenderer(Muscle muscle) {
@@ -23,10 +22,5 @@ public class MuscleRenderer extends StatesProviderRenderer {
 		g.stroke(255, 128, 128);
 		g.fill(250, 100, 100);
 		g.ellipse(xc - mh, (y + height) - (height * value), xc + mh, y + height);
-	}
-
-	@Override
-	public StatesProvider getStatesProvider() {
-		return muscle;
 	}
 }

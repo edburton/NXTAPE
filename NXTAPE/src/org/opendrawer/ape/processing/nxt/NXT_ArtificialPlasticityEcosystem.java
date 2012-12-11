@@ -29,11 +29,11 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcosystem extends PApplet {
-	private static final boolean presentationMode = false;
+	private static final boolean presentationMode = true;
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
-	private int debugCounter = 0;
+	private final int debugCounter = 0;
 	private Ecosystem ecosystem;
 	private EcosystemRenderer ecosytemRenderer;
 	private boolean dummyMode = false;
@@ -133,7 +133,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 					.getOutputStatesProvider(), 0, 0, 1));
 
 			for (int i = 0; i < 50; i++) {
-				Actor actor = new Actor(null, null);
+				Actor actor = new Actor();
 				ecosystem.addActor(actor);
 			}
 
@@ -187,24 +187,27 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			}
 		} else {
 			dummyMode = true;
-			ecosystem = new Ecosystem(40);
+			ecosystem = new Ecosystem(120);
 			List<Muscle> muscles = new ArrayList<Muscle>();
 			EyeBall eyeBall = new EyeBall();
 
-			SensorimotorInput eyeBallInput = ecosystem.makeInput(eyeBall);
+			ecosystem.makeInput(eyeBall);
 
 			for (int i = 0; i < 8; i++) {
 				Muscle muscle = new Muscle("Muscle " + i);
 				muscles.add(muscle);
 				eyeBall.addMuscle(muscle);
 				ecosystem.makeOutput(muscle);
-				TwitchReflex twitchReflex = new TwitchReflex(eyeBallInput,
-						muscle, 0, 0);
+				StateStreamBundle reflexStateStreamBundle = new StateStreamBundle(
+						ecosystem.getStatesStreamLength());
+				reflexStateStreamBundle.addStatesProviderStreams(eyeBall);
+				TwitchReflex twitchReflex = new TwitchReflex(
+						reflexStateStreamBundle, muscle, 0, 0);
 				ecosystem.addReflex(twitchReflex);
 			}
 
-			for (int i = 0; i < 4; i++) {
-				Actor actor = new Actor(null, null);
+			for (int i = 0; i < 0; i++) {
+				Actor actor = new Actor();
 				ecosystem.addActor(actor);
 			}
 
@@ -216,10 +219,11 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 				allPotentialPredictorStateStreams.addAll(ecosystem.getOutputs()
 						.get(i).getStateStreams());
 
-			for (int i = 0; i < 12; i++) {
-				int streams = (int) Math.floor(random(2,
-						allPotentialPredictorStateStreams.size()));
-				int outputsIndex = (int) Math.floor(random(1, streams - 1));
+			for (int i = 0; i < 16; i++) {
+				int streams = 6;// (int) Math.floor(random(2,
+				// allPotentialPredictorStateStreams.size()));
+				int outputsIndex = 4;// (int) Math.floor(random(1, streams -
+										// 1));
 				int[] streamIndexes = new int[streams];
 				for (int s = 0; s < streams; s++)
 					streamIndexes[s] = -1;
@@ -243,14 +247,25 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 				StateStreamBundle oututStateStreamBundle = new StateStreamBundle(
 						ecosystem.getStatesStreamLength());
 
-				for (int ins = 0; ins < outputsIndex; ins++)
-					inputStateStreamBundle
-							.addStateStream(allPotentialPredictorStateStreams
-									.get(streamIndexes[ins]));
-				for (int outs = outputsIndex; outs < streams; outs++)
-					oututStateStreamBundle
-							.addStateStream(allPotentialPredictorStateStreams
-									.get(streamIndexes[outs]));
+				for (int ins = 0; ins < outputsIndex; ins++) {
+					StateStream stream = allPotentialPredictorStateStreams
+							.get(streamIndexes[ins]);
+					StateStream streamCopy = new StateStream(
+							stream.getStatesProvider(),
+							stream.getStatesProviderChannel(),
+							stream.getStreamLength());
+					inputStateStreamBundle.addStateStream(streamCopy);
+				}
+
+				for (int outs = outputsIndex; outs < streams; outs++) {
+					StateStream stream = allPotentialPredictorStateStreams
+							.get(streamIndexes[outs]);
+					StateStream streamCopy = new StateStream(
+							stream.getStatesProvider(),
+							stream.getStatesProviderChannel(),
+							stream.getStreamLength());
+					oututStateStreamBundle.addStateStream(streamCopy);
+				}
 
 				Predictor predictor = new Predictor(inputStateStreamBundle,
 						oututStateStreamBundle);
@@ -279,7 +294,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			cursorVisible = true;
 		}
 		ecosytemRenderer.draw(g);
-		if (++debugCounter % 100 == 0)
-			println("frameRate: " + frameRate);
+		// if (++debugCounter % 100 == 0)
+		// println("frameRate: " + frameRate);
 	}
 }

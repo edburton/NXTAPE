@@ -6,10 +6,9 @@ import java.util.ArrayList;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundleGroup;
 
-import processing.core.PGraphics;
-
 public class StateStreamBundleGroupRenderer extends Renderer {
-	private final ArrayList<StateStreamBundleRenderer> stateStreamBundleRenderers = new ArrayList<StateStreamBundleRenderer>();
+	// private final ArrayList<StateStreamBundleRenderer>
+	// stateStreamBundleRenderers = new ArrayList<StateStreamBundleRenderer>();
 
 	public StateStreamBundleGroupRenderer(
 			StateStreamBundleGroup statesStreamBundleList) {
@@ -20,25 +19,15 @@ public class StateStreamBundleGroupRenderer extends Renderer {
 	}
 
 	public void addStatesStreamBundle(StateStreamBundle stateStreamBundle) {
-		stateStreamBundleRenderers.add(new StateStreamBundleRenderer(
-				stateStreamBundle));
+		Renderer renderer = Renderer.makeRendererFor(stateStreamBundle);
+		addChild(Renderer.makeRendererFor(stateStreamBundle));
 	}
 
 	public void addStatesStreamBundles(
 			ArrayList<StateStreamBundle> stateStreamBundles) {
 		for (int i = 0; i < stateStreamBundles.size(); i++)
-			stateStreamBundleRenderers.add(new StateStreamBundleRenderer(
-					stateStreamBundles.get(i)));
-		setKeyColor(keyColor);
-	}
-
-	@Override
-	public void draw(PGraphics g) {
-		if (stateStreamBundleRenderers.size() == 0)
-			super.draw(g);
-		else
-			for (int i = stateStreamBundleRenderers.size() - 1; i >= 0; i--)
-				stateStreamBundleRenderers.get(i).draw(g);
+			addChild(Renderer.makeRendererFor(stateStreamBundles.get(i)));
+		// setKeyColor(keyColor);
 	}
 
 	protected float getStreamLeft() {
@@ -48,29 +37,27 @@ public class StateStreamBundleGroupRenderer extends Renderer {
 	@Override
 	public void setVisibleAt(float x, float y, float width, float height) {
 		super.setVisibleAt(x, y, width, height);
-		if (stateStreamBundleRenderers.size() > 0) {
-			float moduleWidth = ((width - ((lineMarginWidth / 2) * (stateStreamBundleRenderers
-					.size() - 1))) / stateStreamBundleRenderers.size());
-			float moduleX = x;
-			for (int i = 0; i < stateStreamBundleRenderers.size(); i++) {
-				StateStreamBundleRenderer statesStreamBundleRender = stateStreamBundleRenderers
-						.get(i);
-				statesStreamBundleRender.setVisibleAt(moduleX, y, moduleWidth,
-						height);
-				moduleX += moduleWidth + (lineMarginWidth / 2);
+		if (children != null)
+			if (children.size() > 0) {
+				float moduleWidth = ((width - ((lineMarginWidth / 2) * (children
+						.size() - 1))) / children.size());
+				float moduleX = x;
+				for (int i = 0; i < children.size(); i++) {
+					StateStreamBundleRenderer statesStreamBundleRender = (StateStreamBundleRenderer) children
+							.get(i);
+					statesStreamBundleRender.setVisibleAt(moduleX, y,
+							moduleWidth, height);
+					moduleX += moduleWidth + (lineMarginWidth / 2);
+				}
 			}
-		}
-	}
-
-	public ArrayList<StateStreamBundleRenderer> getStatesStreamBundleRenderers() {
-		return stateStreamBundleRenderers;
 	}
 
 	@Override
 	public void setKeyColor(Color keyColor) {
 		super.setKeyColor(keyColor);
-		for (int i = 0; i < stateStreamBundleRenderers.size(); i++) {
-			stateStreamBundleRenderers.get(i).setKeyColor(keyColor);
-		}
+		if (children != null)
+			for (int i = 0; i < children.size(); i++) {
+				children.get(i).setKeyColor(keyColor);
+			}
 	}
 }

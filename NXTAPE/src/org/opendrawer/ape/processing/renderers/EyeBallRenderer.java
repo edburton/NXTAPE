@@ -1,11 +1,10 @@
 package org.opendrawer.ape.processing.renderers;
 
-import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 import org.opendrawer.ape.processing.nxt.dummy.EyeBall;
 
 import processing.core.PGraphics;
 
-public class EyeBallRenderer extends StatesProviderRenderer {
+public class EyeBallRenderer extends Renderer {
 	EyeBall eyeBall;
 
 	public EyeBallRenderer(EyeBall eyeBall) {
@@ -49,10 +48,5 @@ public class EyeBallRenderer extends StatesProviderRenderer {
 		g.fill(0, 0, 0);
 		g.ellipse(dx + xc - radius / 4, dy + yc - radius / 4, dx + xc + radius
 				/ 4, dy + yc + radius / 4);
-	}
-
-	@Override
-	public StatesProvider getStatesProvider() {
-		return eyeBall;
 	}
 }

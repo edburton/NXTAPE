@@ -1,11 +1,10 @@
 package org.opendrawer.ape.processing.renderers;
 
-import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 import org.opendrawer.ape.processing.nxt.NXTMotor;
 
 import processing.core.PGraphics;
 
-public class NXTMotorRenderer extends StatesProviderRenderer {
+public class NXTMotorRenderer extends Renderer {
 	NXTMotor nxtMotor;
 
 	public NXTMotorRenderer(NXTMotor nxtMotor) {
@@ -29,10 +28,5 @@ public class NXTMotorRenderer extends StatesProviderRenderer {
 		float a = (float) ((nxtMotor.getStates()[1]) * (Math.PI));
 		g.line(xc, yc, (float) (xc + Math.sin(a) * radius),
 				(float) (yc + Math.cos(a) * radius));
-	}
-
-	@Override
-	public StatesProvider getStatesProvider() {
-		return nxtMotor;
 	}
 }

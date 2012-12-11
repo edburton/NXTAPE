@@ -16,7 +16,7 @@ public class EcosystemRenderer extends Renderer {
 			Renderer renderer = Renderer.makeRendererFor(ecosystem.getInputs()
 					.get(i));
 			addChild(renderer);
-			renderer.setKeyColor(createKeyColour(nType, nTypes, 1));
+			renderer.setKeyColor(createKeyColour(nType, nTypes));
 		}
 
 		nType++;
@@ -25,7 +25,7 @@ public class EcosystemRenderer extends Renderer {
 			Renderer renderer = Renderer.makeRendererFor(ecosystem.getOutputs()
 					.get(i));
 			addChild(renderer);
-			renderer.setKeyColor(createKeyColour(nType, nTypes, 1));
+			renderer.setKeyColor(createKeyColour(nType, nTypes));
 		}
 
 		nType++;
@@ -34,7 +34,7 @@ public class EcosystemRenderer extends Renderer {
 			Renderer renderer = Renderer.makeRendererFor(ecosystem
 					.getReflexes().get(i));
 			addChild(renderer);
-			renderer.setKeyColor(createKeyColour(nType, nTypes, 1));
+			renderer.setKeyColor(createKeyColour(nType, nTypes));
 		}
 
 		nType++;
@@ -43,7 +43,7 @@ public class EcosystemRenderer extends Renderer {
 			Renderer renderer = Renderer.makeRendererFor(ecosystem.getActors()
 					.get(i));
 			addChild(renderer);
-			renderer.setKeyColor(createKeyColour(nType, nTypes, 1));
+			renderer.setKeyColor(createKeyColour(nType, nTypes));
 		}
 
 		nType++;
@@ -52,7 +52,7 @@ public class EcosystemRenderer extends Renderer {
 			Renderer renderer = Renderer.makeRendererFor(ecosystem
 					.getPredictors().get(i));
 			addChild(renderer);
-			renderer.setKeyColor(createKeyColour(nType, nTypes, 1));
+			renderer.setKeyColor(createKeyColour(nType, nTypes));
 		}
 	}
 

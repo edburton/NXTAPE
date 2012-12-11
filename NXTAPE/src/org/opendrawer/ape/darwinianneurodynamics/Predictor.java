@@ -1,18 +1,6 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
-import org.encog.engine.network.activation.ActivationSigmoid;
-import org.encog.ml.data.MLData;
-import org.encog.ml.data.MLDataPair;
-import org.encog.ml.data.MLDataSet;
-import org.encog.ml.data.basic.BasicMLDataSet;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
-
 public class Predictor extends StateStreamBundleGroup {
-	BasicNetwork inputResponder;
-	ResilientPropagation predictor;
-	BasicNetwork predictorNetwork;
 
 	StateStreamBundle inputStateStreamBundle;
 	StateStreamBundle outputStateStreamBundle;
@@ -23,7 +11,12 @@ public class Predictor extends StateStreamBundleGroup {
 	Prediction prediction;
 	Error error;
 
-	private int streamLength = 20;
+	private int streamLength;
+
+	int inputLength;
+	int outputLength;
+	double weightsMatrix[][];
+	double learningRate = 0.01;
 
 	public Predictor(StateStreamBundle inputStateStreamBundle,
 			StateStreamBundle outputStateStreamBundle) {
@@ -39,54 +32,68 @@ public class Predictor extends StateStreamBundleGroup {
 				streamLength);
 		addStateStreamBundle(predictionStreamBundle);
 
+		inputLength = inputStateStreamBundle.getStateStreams().size();
+		outputLength = outputStateStreamBundle.getStateStreams().size();
+		weightsMatrix = new double[inputLength + 1][outputLength];
+		for (int i = 0; i < inputLength + 1; i++)
+			for (int o = 0; o < outputLength; o++) {
+				// weightsMatrix[i][o] = (Math.random() * 2) - 1;
+				if (i - 1 == o)
+					weightsMatrix[i][o] = 1;
+				else
+					weightsMatrix[i][o] = 0;
+			}
+
+		System.out.println("");
+		for (int i = 0; i < inputLength + 1; i++) {
+			System.out.println("");
+			for (int o = 0; o < outputLength; o++) {
+				System.out.print("[" + weightsMatrix[i][o] + "]");
+			}
+		}
+		System.out.println("");
+
 		error = new Error();
-		errorStreamBundle = new HomogeneousStateStreamBundle(error,
-				streamLength);
+		errorStreamBundle = new HomogeneousStateStreamBundle(error, 1000);
 		addStateStreamBundle(errorStreamBundle);
 	}
 
 	public void predict() {
-		if (predictor == null)
-			initiatePredictor();
-		double[][] inputPeriod = inputStateStreamBundle.readPortion(0,
-				streamLength);
-		double[][] outputPeriod = outputStateStreamBundle.readPortion(0,
-				streamLength);
-		MLDataSet trainingSet = new BasicMLDataSet(inputPeriod, outputPeriod);
-		MLDataPair currentPair = trainingSet.get(0);
-		predictor.setTraining(trainingSet);
-		predictor.iteration();
-		MLData predictionResult = predictorNetwork.compute(currentPair
-				.getInput());
-		for (int i = 0; i < prediction.getStatesLength(); i++)
-			prediction.setOutputState(predictionResult.getData()[i], i);
 
-		double errorValue = predictor.getError();
+		double[][] inputPeriod = inputStateStreamBundle.readPortion(0, 1);
+		double[][] outputPeriod = outputStateStreamBundle.readPortion(0, 1);
+
+		double input[] = new double[inputLength + 1];
+		input[0] = 1;
+		for (int i = 0; i < inputLength; i++)
+			if (!Double.isNaN(inputPeriod[0][i]))
+				input[i + 1] = inputPeriod[0][i];
+
+		double output[] = new double[outputLength];
+		for (int i = 0; i < outputLength; i++)
+			if (!Double.isNaN(outputPeriod[0][i]))
+				output[i] = outputPeriod[0][i];
+
+		double resultingPrediction[] = new double[outputLength];
+
+		for (int i = 0; i < inputLength + 1; i++)
+			for (int o = 0; o < outputLength; o++)
+				resultingPrediction[o] += input[i] * weightsMatrix[i][o];
+
+		for (int i = 0; i < outputLength; i++)
+			prediction.setOutputState(resultingPrediction[i], i);
+
+		double errorValue = 0;
+		for (int i = 0; i < inputLength + 1; i++)
+			for (int o = 0; o < outputLength; o++) {
+				weightsMatrix[i][o] = weightsMatrix[i][o] - learningRate
+						* ((resultingPrediction[o] - output[o]) * input[i]);
+				errorValue += Math.pow(resultingPrediction[o] - output[o], 2);
+			}
+		errorValue = Math.sqrt(errorValue) / (inputLength + 1);
+
 		error.setOutputState(errorValue, 0);
 		prediction.notifyStatesObservers();
 		error.notifyStatesObservers();
-	}
-
-	private void initiatePredictor() {
-		double[][] inputPrototype = inputStateStreamBundle.readPortion(0,
-				streamLength);
-		double[][] outputPrototype = outputStateStreamBundle.readPortion(0,
-				streamLength);
-		predictorNetwork = new BasicNetwork();
-		predictorNetwork.addLayer(new BasicLayer(null, true,
-				inputStateStreamBundle.getStateStreams().size()));
-		predictorNetwork.addLayer(new BasicLayer(new ActivationSigmoid(), true,
-				inputStateStreamBundle.getStateStreams().size()
-						+ outputStateStreamBundle.getStateStreams().size()));
-		predictorNetwork.addLayer(new BasicLayer(new ActivationSigmoid(),
-				false, outputStateStreamBundle.getStateStreams().size()));
-		predictorNetwork.getStructure().finalizeStructure();
-		predictorNetwork.reset();
-
-		MLDataSet prototypeTrainingSet = new BasicMLDataSet(inputPrototype,
-				outputPrototype);
-
-		predictor = new ResilientPropagation(predictorNetwork,
-				prototypeTrainingSet);
 	}
 }

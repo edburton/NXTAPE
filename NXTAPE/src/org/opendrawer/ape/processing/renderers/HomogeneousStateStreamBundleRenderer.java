@@ -5,26 +5,32 @@ import org.opendrawer.ape.darwinianneurodynamics.HomogeneousStateStreamBundle;
 public class HomogeneousStateStreamBundleRenderer extends
 		StateStreamBundleRenderer {
 
-	private final Renderer statesProviderRenderer;
+	private Renderer statesProviderRenderer = null;
 
 	public HomogeneousStateStreamBundleRenderer(
 			HomogeneousStateStreamBundle statesStreamBundle) {
 		super(statesStreamBundle);
-		statesProviderRenderer = Renderer.makeRendererFor(statesStreamBundle
-				.getStateProvider());
-		addChild(statesProviderRenderer);
+		if (statesStreamBundle.getStateProvider() != null)
+			this.statesProviderRenderer = Renderer
+					.makeRendererFor(statesStreamBundle.getStateProvider());
+		if (this.statesProviderRenderer != null)
+			addChild(this.statesProviderRenderer);
 	}
 
 	@Override
 	protected float getStreamLeft() {
-		return x + height;
+		if (statesProviderRenderer != null)
+			return x + height;
+		else
+			return x;
 	}
 
 	@Override
 	public void setVisibleAt(float x, float y, float width, float height) {
 		super.setVisibleAt(x, y, width, height);
-		statesProviderRenderer.setVisibleAt(x + Renderer.lineWidth, y
-				+ Renderer.lineWidth, height - Renderer.lineWidth * 2, height
-				- Renderer.lineWidth * 2);
+		if (statesProviderRenderer != null)
+			statesProviderRenderer.setVisibleAt(x + Renderer.lineWidth, y
+					+ Renderer.lineWidth, height - Renderer.lineWidth * 2,
+					height - Renderer.lineWidth * 2);
 	}
 }
