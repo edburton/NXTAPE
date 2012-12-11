@@ -1,6 +1,8 @@
-package org.opendrawer.ape.processing;
+package org.opendrawer.ape.processing.renderers;
 
 import java.awt.Color;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +17,48 @@ public class Renderer {
 	public static float lineWidth;
 	protected List<Renderer> children;
 
-	public Renderer(Object object) {
+	@SuppressWarnings("unchecked")
+	public static Renderer makeRendererFor(Object object) {
+		try {
 
+			Class<? extends Renderer> objectClass = (Class<? extends Renderer>) object
+					.getClass();
+
+			Class<Renderer> rendererClass = null;
+			while (objectClass != null && rendererClass == null) {
+				String rendererClassName = objectClass.getName() + "Renderer";
+				rendererClassName = "org.opendrawer.ape.processing.renderers"
+						+ rendererClassName.substring(rendererClassName
+								.lastIndexOf('.'));
+				try {
+					rendererClass = (Class<Renderer>) Class
+							.forName(rendererClassName);
+				} catch (ClassNotFoundException e) {
+					objectClass = (Class<Renderer>) objectClass.getSuperclass();
+				}
+			}
+			if (rendererClass == null)
+				return new Renderer();
+			@SuppressWarnings("rawtypes")
+			Class[] rendererArgsType = new Class[] { objectClass };
+			Object[] rendererArgs = new Object[] { object };
+			Constructor<Renderer> rendererConstructor = rendererClass
+					.getConstructor(rendererArgsType);
+			return rendererConstructor.newInstance(rendererArgs);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		}
+		return new Renderer();
 	}
 
 	public void setVisibleAt(float x, float y, float width, float height) {

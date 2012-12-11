@@ -1,10 +1,9 @@
-package org.opendrawer.ape.processing.nxt;
+package org.opendrawer.ape.processing.renderers;
 
 import java.awt.Color;
 
 import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
-import org.opendrawer.ape.processing.Renderer;
-import org.opendrawer.ape.processing.StatesProviderRenderer;
+import org.opendrawer.ape.processing.nxt.NXTAccelerometer;
 
 import processing.core.PGraphics;
 
@@ -12,7 +11,6 @@ public class NXTAccelerometerRenderer extends StatesProviderRenderer {
 	NXTAccelerometer nxtAccelerometer;
 
 	public NXTAccelerometerRenderer(NXTAccelerometer nxtAccelerometer) {
-		super(nxtAccelerometer);
 		this.nxtAccelerometer = nxtAccelerometer;
 	}
 

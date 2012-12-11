@@ -1,4 +1,4 @@
-package org.opendrawer.ape.processing;
+package org.opendrawer.ape.processing.renderers;
 
 import org.opendrawer.ape.darwinianneurodynamics.Ecosystem;
 
@@ -8,15 +8,13 @@ public class EcosystemRenderer extends Renderer {
 	private float zoomToChild;
 
 	public EcosystemRenderer(Ecosystem ecosystem) {
-		super(ecosystem);
 		this.ecosystem = ecosystem;
 		int nTypes = 5;
 		int nType = 0;
 
 		for (int i = 0; i < ecosystem.getInputs().size(); i++) {
-			HomogeneousStateStreamBundleRenderer renderer = new HomogeneousStateStreamBundleRenderer(
-					ecosystem.getInputs().get(i), new Renderer(ecosystem
-							.getInputs().get(i).getStateProvider()));
+			Renderer renderer = Renderer.makeRendererFor(ecosystem.getInputs()
+					.get(i));
 			addChild(renderer);
 			renderer.setKeyColor(createKeyColour(nType, nTypes, 1));
 		}
@@ -24,7 +22,8 @@ public class EcosystemRenderer extends Renderer {
 		nType++;
 
 		for (int i = 0; i < ecosystem.getOutputs().size(); i++) {
-			Renderer renderer = new Renderer(ecosystem.getOutputs().get(i));
+			Renderer renderer = Renderer.makeRendererFor(ecosystem.getOutputs()
+					.get(i));
 			addChild(renderer);
 			renderer.setKeyColor(createKeyColour(nType, nTypes, 1));
 		}
@@ -32,7 +31,8 @@ public class EcosystemRenderer extends Renderer {
 		nType++;
 
 		for (int i = 0; i < ecosystem.getReflexes().size(); i++) {
-			Renderer renderer = new Renderer(ecosystem.getReflexes().get(i));
+			Renderer renderer = Renderer.makeRendererFor(ecosystem
+					.getReflexes().get(i));
 			addChild(renderer);
 			renderer.setKeyColor(createKeyColour(nType, nTypes, 1));
 		}
@@ -40,7 +40,8 @@ public class EcosystemRenderer extends Renderer {
 		nType++;
 
 		for (int i = 0; i < ecosystem.getActors().size(); i++) {
-			Renderer renderer = new Renderer(ecosystem.getActors().get(i));
+			Renderer renderer = Renderer.makeRendererFor(ecosystem.getActors()
+					.get(i));
 			addChild(renderer);
 			renderer.setKeyColor(createKeyColour(nType, nTypes, 1));
 		}
@@ -48,7 +49,8 @@ public class EcosystemRenderer extends Renderer {
 		nType++;
 
 		for (int i = 0; i < ecosystem.getPredictors().size(); i++) {
-			Renderer renderer = new Renderer(ecosystem.getPredictors().get(i));
+			Renderer renderer = Renderer.makeRendererFor(ecosystem
+					.getPredictors().get(i));
 			addChild(renderer);
 			renderer.setKeyColor(createKeyColour(nType, nTypes, 1));
 		}

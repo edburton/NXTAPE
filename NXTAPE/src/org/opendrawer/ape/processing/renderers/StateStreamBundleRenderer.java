@@ -1,4 +1,4 @@
-package org.opendrawer.ape.processing;
+package org.opendrawer.ape.processing.renderers;
 
 import java.awt.Color;
 
@@ -12,7 +12,6 @@ public class StateStreamBundleRenderer extends Renderer {
 	protected StateStreamBundle stateStreamBundle;
 
 	public StateStreamBundleRenderer(StateStreamBundle stateStreamBundle) {
-		super(stateStreamBundle);
 		this.stateStreamBundle = stateStreamBundle;
 	}
 

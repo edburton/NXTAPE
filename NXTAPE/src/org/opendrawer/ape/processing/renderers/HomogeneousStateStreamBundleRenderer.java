@@ -1,17 +1,17 @@
-package org.opendrawer.ape.processing;
+package org.opendrawer.ape.processing.renderers;
 
 import org.opendrawer.ape.darwinianneurodynamics.HomogeneousStateStreamBundle;
 
 public class HomogeneousStateStreamBundleRenderer extends
 		StateStreamBundleRenderer {
 
-	Renderer statesProviderRenderer;
+	private final Renderer statesProviderRenderer;
 
 	public HomogeneousStateStreamBundleRenderer(
-			HomogeneousStateStreamBundle statesStreamBundle,
-			Renderer statesProviderRenderer) {
+			HomogeneousStateStreamBundle statesStreamBundle) {
 		super(statesStreamBundle);
-		this.statesProviderRenderer = statesProviderRenderer;
+		statesProviderRenderer = Renderer.makeRendererFor(statesStreamBundle
+				.getStateProvider());
 		addChild(statesProviderRenderer);
 	}
 

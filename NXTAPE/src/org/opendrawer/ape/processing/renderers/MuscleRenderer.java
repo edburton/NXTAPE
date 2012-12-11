@@ -1,8 +1,7 @@
-package org.opendrawer.ape.processing.nxt.dummy;
+package org.opendrawer.ape.processing.renderers;
 
 import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
-import org.opendrawer.ape.processing.Renderer;
-import org.opendrawer.ape.processing.StatesProviderRenderer;
+import org.opendrawer.ape.processing.nxt.dummy.Muscle;
 
 import processing.core.PGraphics;
 
@@ -10,7 +9,6 @@ public class MuscleRenderer extends StatesProviderRenderer {
 	Muscle muscle;
 
 	public MuscleRenderer(Muscle muscle) {
-		super(muscle);
 		this.muscle = muscle;
 	}
 

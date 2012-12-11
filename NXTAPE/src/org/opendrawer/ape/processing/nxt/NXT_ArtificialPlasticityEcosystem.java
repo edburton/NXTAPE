@@ -19,11 +19,11 @@ import org.opendrawer.ape.darwinianneurodynamics.SensorimotorInput;
 import org.opendrawer.ape.darwinianneurodynamics.SensorimotorOutput;
 import org.opendrawer.ape.darwinianneurodynamics.StateStream;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
-import org.opendrawer.ape.processing.EcosystemRenderer;
-import org.opendrawer.ape.processing.Renderer;
 import org.opendrawer.ape.processing.nxt.dummy.EyeBall;
 import org.opendrawer.ape.processing.nxt.dummy.Muscle;
 import org.opendrawer.ape.processing.nxt.dummy.TwitchReflex;
+import org.opendrawer.ape.processing.renderers.EcosystemRenderer;
+import org.opendrawer.ape.processing.renderers.Renderer;
 
 import processing.core.PApplet;
 

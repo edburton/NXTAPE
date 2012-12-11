@@ -1,4 +1,4 @@
-package org.opendrawer.ape.processing;
+package org.opendrawer.ape.processing.renderers;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -8,12 +8,11 @@ import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundleGroup;
 
 import processing.core.PGraphics;
 
-public class StateStreamBundleListRenderer extends Renderer {
+public class StateStreamBundleGroupRenderer extends Renderer {
 	private final ArrayList<StateStreamBundleRenderer> stateStreamBundleRenderers = new ArrayList<StateStreamBundleRenderer>();
 
-	public StateStreamBundleListRenderer(
+	public StateStreamBundleGroupRenderer(
 			StateStreamBundleGroup statesStreamBundleList) {
-		super(statesStreamBundleList);
 		if (statesStreamBundleList != null) {
 			addStatesStreamBundles(statesStreamBundleList
 					.getStatesStreamBundles());
