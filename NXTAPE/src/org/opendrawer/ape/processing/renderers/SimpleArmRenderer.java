@@ -30,7 +30,7 @@ public class SimpleArmRenderer extends Renderer {
 		float yp = 0;
 		for (int i = 0; i < xs.length; i++) {
 			g.strokeWeight(Renderer.lineWidth
-					+ (Renderer.lineWidth * (4 * ((xs.length - 1) - i))));
+					* (float) Math.sqrt((xs.length) - i));
 			float xn = (float) xs[i];
 			float yn = (float) ys[i];
 			g.line(xc + xp * radius, yc + yp * radius, xc + xn * radius, yc

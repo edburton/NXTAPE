@@ -37,11 +37,11 @@ public class Predictor extends StateStreamBundleGroup {
 		weightsMatrix = new double[inputLength + 1][outputLength];
 		for (int i = 0; i < inputLength + 1; i++)
 			for (int o = 0; o < outputLength; o++) {
-				// weightsMatrix[i][o] = (Math.random() * 2) - 1;
-				if (i - 1 == o)
-					weightsMatrix[i][o] = 1;
-				else
-					weightsMatrix[i][o] = 0;
+				weightsMatrix[i][o] = (Math.random() * 2) - 1;
+				// if (i - 1 == o)
+				// weightsMatrix[i][o] = 1;
+				// else
+				// weightsMatrix[i][o] = 0;
 			}
 
 		System.out.println("");

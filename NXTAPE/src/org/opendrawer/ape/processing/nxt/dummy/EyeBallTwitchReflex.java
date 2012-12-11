@@ -4,12 +4,12 @@ import org.opendrawer.ape.darwinianneurodynamics.OutputStatesProvider;
 import org.opendrawer.ape.darwinianneurodynamics.Reflex;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
 
-public class TwitchReflex extends Reflex {
+public class EyeBallTwitchReflex extends Reflex {
 	int twitchTime = 0;
 	double twitchLength = 0;
 	int counter = 0;
 
-	public TwitchReflex(StateStreamBundle inputStatesStreamBundle,
+	public EyeBallTwitchReflex(StateStreamBundle inputStatesStreamBundle,
 			OutputStatesProvider outputStatesProvider, int inputIndex,
 			int outputIndex) {
 		super(inputStatesStreamBundle, outputStatesProvider, inputIndex,
@@ -27,7 +27,6 @@ public class TwitchReflex extends Reflex {
 			input += v * v;
 		}
 		input = Math.sqrt(input);
-		stateStreamBundles.get(0).getStateStreams().get(inputChannel).read(0);
 		if (input < 0.1 && counter > twitchTime && Math.random() > 0.99) {
 			counter = 0;
 			twitchTime = 20;

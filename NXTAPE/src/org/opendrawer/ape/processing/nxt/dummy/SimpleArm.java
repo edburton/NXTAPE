@@ -20,19 +20,19 @@ public class SimpleArm extends OutputStatesProvider {
 		xs = new double[joints];
 		ys = new double[joints];
 		jointLength = new double[joints];
-		states = new double[joints * 4];
-		stateNames = new String[joints * 4];
+		states = new double[joints * 2 + 2];
+		stateNames = new String[states.length];
 		double totalJointLength = 0;
 		for (int i = 0; i < joints; i++) {
 			int c = 0;
-			stateNames[(c++ * joints) + i] = "Joint Movement " + i;
-			stateNames[(c++ * joints) + i] = "Joint Angle " + i;
-			stateNames[(c++ * joints) + i] = "Joint X " + i;
-			stateNames[(c++ * joints) + i] = "Joint Y " + i;
+			stateNames[(c++ * joints) + i] = "Joint Movement " + (i + 1);
+			stateNames[(c++ * joints) + i] = "Joint Angle " + (i + 1);
 			double l = (joints + 1) - i;
 			jointLength[i] = l;
 			totalJointLength += l;
 		}
+		stateNames[states.length - 2] = "X extremity";
+		stateNames[states.length - 1] = "Y extremity";
 		for (int i = 0; i < joints; i++)
 			jointLength[i] /= totalJointLength;
 		System.out.println("");
@@ -58,7 +58,7 @@ public class SimpleArm extends OutputStatesProvider {
 
 	@Override
 	public int getStatesLength() {
-		return joints * 4;
+		return states.length;
 	}
 
 	@Override
@@ -67,8 +67,12 @@ public class SimpleArm extends OutputStatesProvider {
 		double y = 0;
 		double a = 0;
 		for (int i = 0; i < joints; i++) {
-			jointAngle[i] += jointMovement[i];
-			a += jointAngle[i];
+			jointAngle[i] += (jointMovement[i] * Math.PI * 2) / 360;
+			if (jointAngle[i] < -1)
+				jointAngle[i] = 1;
+			else if (jointAngle[i] > 1)
+				jointAngle[i] = 1;
+			a += (jointAngle[i]) * Math.PI * 2;
 			x += Math.cos(a) * jointLength[i];
 			y += Math.sin(a) * jointLength[i];
 			xs[i] = x;
@@ -76,15 +80,15 @@ public class SimpleArm extends OutputStatesProvider {
 			int c = 0;
 			states[(c++ * joints) + i] = jointMovement[i];
 			states[(c++ * joints) + i] = jointAngle[i];
-			states[(c++ * joints) + i] = xs[i];
-			states[(c++ * joints) + i] = ys[i];
 		}
+		states[states.length - 2] = x;
+		states[states.length - 1] = y;
 	}
 
 	@Override
 	public void setOutputState(double state, int stateChannel) {
 		if (stateChannel < joints)
-			jointMovement[stateChannel] = state + 0.01;
+			jointMovement[stateChannel] = state;
 	}
 
 	public double[] getXs() {
