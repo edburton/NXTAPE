@@ -22,7 +22,7 @@ public class SimpleArmTwitchReflex extends Reflex {
 			return;
 		if (counter > twitchTime && Math.random() > 0.95) {
 			counter = 0;
-			twitchTime = (int) ((Math.random() + 1) * 10);
+			twitchTime = (int) ((Math.random() + 1) * 20);
 			twitchAmount = (Math.random() - 0.5) * 2;
 		}
 		double output = counter++ > twitchTime ? 0 : twitchAmount;
