@@ -8,8 +8,6 @@ import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
 import lejos.nxt.addon.AccelHTSensor;
 import lejos.pc.comm.NXTComm;
-import lejos.pc.comm.NXTCommException;
-import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
 import org.opendrawer.ape.darwinianneurodynamics.Actor;
@@ -21,6 +19,7 @@ import org.opendrawer.ape.darwinianneurodynamics.StateStream;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
 import org.opendrawer.ape.processing.nxt.dummy.EyeBall;
 import org.opendrawer.ape.processing.nxt.dummy.Muscle;
+import org.opendrawer.ape.processing.nxt.dummy.SimpleArm;
 import org.opendrawer.ape.processing.nxt.dummy.TwitchReflex;
 import org.opendrawer.ape.processing.renderers.EcosystemRenderer;
 import org.opendrawer.ape.processing.renderers.Renderer;
@@ -29,7 +28,7 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcosystem extends PApplet {
-	private static final boolean presentationMode = true;
+	private static final boolean presentationMode = false;
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
@@ -74,18 +73,18 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	}
 
 	private void setupNXT() {
-		try {
-			nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
-			NXTs = nxtComm.search(null);
-		} catch (NXTCommException e) {
-			e.printStackTrace();
-		}
+		// try {
+		// nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
+		// NXTs = nxtComm.search(null);
+		// } catch (NXTCommException e) {
+		// e.printStackTrace();
+		// }
 
-		if (NXTs.length == 1) {
+		if (NXTs != null && NXTs.length == 1) {
 			ecosystem = makeNXTEcology();
 		} else {
 			dummyMode = true;
-			ecosystem = makeEyeBallEcology();
+			ecosystem = makeSimpleArmEcology();
 		}
 		ecosytemRenderer = new EcosystemRenderer(ecosystem);
 		ecosytemRenderer.setVisibleAt(0, 0, getWidth(), getHeight());
@@ -252,6 +251,79 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			// allPotentialPredictorStateStreams.size()));
 			int outputsIndex = 4;// (int) Math.floor(random(1, streams -
 									// 1));
+			int[] streamIndexes = new int[streams];
+			for (int s = 0; s < streams; s++)
+				streamIndexes[s] = -1;
+
+			for (int s = 0; s < streams; s++) {
+				boolean original = false;
+				int p = -1;
+				while (!original) {
+					original = true;
+					p = (int) Math.floor(random(0,
+							allPotentialPredictorStateStreams.size()));
+					for (int ss = 0; ss < streams; ss++)
+						if (p == streamIndexes[ss])
+							original = false;
+				}
+				streamIndexes[s] = p;
+			}
+
+			StateStreamBundle inputStateStreamBundle = new StateStreamBundle(
+					eco.getStatesStreamLength());
+			StateStreamBundle oututStateStreamBundle = new StateStreamBundle(
+					eco.getStatesStreamLength());
+
+			for (int ins = 0; ins < outputsIndex; ins++) {
+				StateStream stream = allPotentialPredictorStateStreams
+						.get(streamIndexes[ins]);
+				StateStream streamCopy = new StateStream(
+						stream.getStatesProvider(),
+						stream.getStatesProviderChannel(),
+						stream.getStreamLength());
+				inputStateStreamBundle.addStateStream(streamCopy);
+			}
+
+			for (int outs = outputsIndex; outs < streams; outs++) {
+				StateStream stream = allPotentialPredictorStateStreams
+						.get(streamIndexes[outs]);
+				StateStream streamCopy = new StateStream(
+						stream.getStatesProvider(),
+						stream.getStatesProviderChannel(),
+						stream.getStreamLength());
+				oututStateStreamBundle.addStateStream(streamCopy);
+			}
+
+			Predictor predictor = new Predictor(inputStateStreamBundle,
+					oututStateStreamBundle);
+			eco.addPredictor(predictor);
+		}
+		return eco;
+	}
+
+	private Ecosystem makeSimpleArmEcology() {
+		Ecosystem eco = new Ecosystem(120);
+		SimpleArm simpleArm = new SimpleArm(3);
+
+		eco.makeOutput(simpleArm);
+
+		for (int i = 0; i < 0; i++) {
+			Actor actor = new Actor();
+			eco.addActor(actor);
+		}
+
+		List<StateStream> allPotentialPredictorStateStreams = new ArrayList<StateStream>();
+		for (int i = 0; i < eco.getInputs().size(); i++)
+			allPotentialPredictorStateStreams.addAll(eco.getInputs().get(i)
+					.getStateStreams());
+		for (int i = 0; i < eco.getOutputs().size(); i++)
+			allPotentialPredictorStateStreams.addAll(eco.getOutputs().get(i)
+					.getStateStreams());
+
+		for (int i = 0; i < 0; i++) {
+			int streams = (int) Math.floor(random(2,
+					allPotentialPredictorStateStreams.size()));
+			int outputsIndex = (int) Math.floor(random(1, streams - 1));
 			int[] streamIndexes = new int[streams];
 			for (int s = 0; s < streams; s++)
 				streamIndexes[s] = -1;
