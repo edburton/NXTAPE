@@ -29,7 +29,7 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcosystem extends PApplet {
-	private static final boolean presentationMode = true;
+	private static final boolean presentationMode = false;
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
@@ -305,7 +305,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 
 	private Ecosystem makeSimpleArmEcology() {
 		Ecosystem eco = new Ecosystem(120);
-		int joints = 2;
+		int joints = 4;
 		SimpleArm simpleArm = new SimpleArm(joints);
 
 		eco.makeOutput(simpleArm);
@@ -323,32 +323,32 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			eco.addActor(actor);
 		}
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 4; i++) {
 
 			StateStreamBundle inputStateStreamBundle = new StateStreamBundle(
 					eco.getStatesStreamLength());
 			StateStreamBundle oututStateStreamBundle = new StateStreamBundle(
 					eco.getStatesStreamLength());
 
-			// for (int j = 0; j < joints; j++) {
-			// inputStateStreamBundle.addStateStream(new StateStream(
-			// simpleArm, joints + j, eco.getStatesStreamLength()));
-			// }
-
-			// oututStateStreamBundle.addStateStream(new StateStream(simpleArm,
-			// joints * 2, eco.getStatesStreamLength()));
-			// oututStateStreamBundle.addStateStream(new StateStream(simpleArm,
-			// joints * 2 + 1, eco.getStatesStreamLength()));
-
-			for (int j = 0; j < simpleArm.getStatesLength(); j++) {
+			for (int j = 0; j < joints; j++) {
 				inputStateStreamBundle.addStateStream(new StateStream(
-						simpleArm, j, eco.getStatesStreamLength()));
+						simpleArm, joints + j, eco.getStatesStreamLength()));
 			}
 
-			for (int j = 0; j < simpleArm.getStatesLength(); j++) {
-				oututStateStreamBundle.addStateStream(new StateStream(
-						simpleArm, j, eco.getStatesStreamLength()));
-			}
+			oututStateStreamBundle.addStateStream(new StateStream(simpleArm,
+					joints * 2, eco.getStatesStreamLength()));
+			oututStateStreamBundle.addStateStream(new StateStream(simpleArm,
+					joints * 2 + 1, eco.getStatesStreamLength()));
+
+			// for (int j = 0; j < simpleArm.getStatesLength(); j++) {
+			// inputStateStreamBundle.addStateStream(new StateStream(
+			// simpleArm, j, eco.getStatesStreamLength()));
+			// }
+			//
+			// for (int j = 0; j < simpleArm.getStatesLength(); j++) {
+			// oututStateStreamBundle.addStateStream(new StateStream(
+			// simpleArm, j, eco.getStatesStreamLength()));
+			// }
 
 			Predictor predictor = new Predictor(inputStateStreamBundle,
 					oututStateStreamBundle);

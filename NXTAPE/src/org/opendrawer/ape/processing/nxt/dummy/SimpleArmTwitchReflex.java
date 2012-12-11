@@ -20,9 +20,9 @@ public class SimpleArmTwitchReflex extends Reflex {
 	public void react() {
 		if (outputStatesProvider == null)
 			return;
-		if (counter > twitchTime && Math.random() > 0.95) {
+		if (counter > twitchTime && Math.random() > 0.9) {
 			counter = 0;
-			twitchTime = (int) ((Math.random() + 1) * 20);
+			twitchTime = (int) ((Math.random()) * 10);
 			twitchAmount = (Math.random() - 0.5) * 2;
 		}
 		double output = counter++ > twitchTime ? 0 : twitchAmount;

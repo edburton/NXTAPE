@@ -18,6 +18,8 @@ public class Predictor extends StateStreamBundleGroup {
 	double weightsMatrix[][];
 	double learningRate = 0.01;
 
+	private int counter = 0;
+
 	public Predictor(StateStreamBundle inputStateStreamBundle,
 			StateStreamBundle outputStateStreamBundle) {
 		super(inputStateStreamBundle, outputStateStreamBundle);
@@ -95,5 +97,16 @@ public class Predictor extends StateStreamBundleGroup {
 		error.setOutputState(errorValue, 0);
 		prediction.notifyStatesObservers();
 		error.notifyStatesObservers();
+
+		if (++counter % 100 == 0) {
+			System.out.println("");
+			for (int i = 0; i < inputLength + 1; i++) {
+				System.out.println("");
+				for (int o = 0; o < outputLength; o++) {
+					System.out.print("[" + weightsMatrix[i][o] + "]");
+				}
+			}
+			System.out.println("");
+		}
 	}
 }
