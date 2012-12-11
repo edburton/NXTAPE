@@ -110,8 +110,8 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		background(0);
 		ecosystem.step();
 		ecosytemRenderer.draw(g);
-		// if (frameCount % 100 == 0)
-		// println("frameRate: " + frameRate);
+		if (frameCount % 100 == 0)
+			println("frameRate: " + frameRate);
 	}
 
 	private Ecosystem makeNXTEcology() {
@@ -222,7 +222,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 
 		eco.makeInput(eyeBall);
 
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 3; i++) {
 			Muscle muscle = new Muscle("Muscle " + i);
 			muscles.add(muscle);
 			eyeBall.addMuscle(muscle);
@@ -248,11 +248,10 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			allPotentialPredictorStateStreams.addAll(eco.getOutputs().get(i)
 					.getStateStreams());
 
-		for (int i = 0; i < 16; i++) {
-			int streams = 6;// (int) Math.floor(random(2,
-			// allPotentialPredictorStateStreams.size()));
-			int outputsIndex = 4;// (int) Math.floor(random(1, streams -
-									// 1));
+		for (int i = 0; i < 8; i++) {
+			int streams = (int) Math.floor(random(2,
+					allPotentialPredictorStateStreams.size()));
+			int outputsIndex = (int) Math.floor(random(1, streams - 1));
 			int[] streamIndexes = new int[streams];
 			for (int s = 0; s < streams; s++)
 				streamIndexes[s] = -1;

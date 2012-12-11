@@ -9,10 +9,12 @@ public class Ecosystem {
 	private final List<Reflex> reflexes = new ArrayList<Reflex>();
 	private final List<Actor> actors = new ArrayList<Actor>();
 	private final List<Predictor> predictors = new ArrayList<Predictor>();
+	private final StateStreamBundle allErrors;
 	private final int statesStreamLength;
 
 	public Ecosystem(int statesStreamLength) {
 		this.statesStreamLength = statesStreamLength;
+		allErrors = new StateStreamBundle(6000);
 	}
 
 	public SensorimotorInput makeInput(StatesProvider statesProvider) {
@@ -35,10 +37,12 @@ public class Ecosystem {
 
 	public void addActor(Actor actor) {
 		actors.add(actor);
+
 	}
 
 	public void addPredictor(Predictor predictor) {
 		predictors.add(predictor);
+		allErrors.addStatesProviderStreams(predictor.getError());
 	}
 
 	public void step() {
@@ -95,5 +99,9 @@ public class Ecosystem {
 
 	public int getStatesStreamLength() {
 		return statesStreamLength;
+	}
+
+	public StateStreamBundle getAllErrors() {
+		return allErrors;
 	}
 }
