@@ -66,7 +66,7 @@ public class EcosystemRenderer extends Renderer {
 	public void setVisibleAt(float x, float y, float width, float height) {
 		super.setVisibleAt(x, y, width, height);
 
-		int zones = children.size();
+		int zones = children.size() + 1;
 
 		float margin = Renderer.lineMarginWidth * 4;
 		int gridWidth = (int) Math.ceil(Math.pow(zones, 1 / 3.0d));
@@ -78,8 +78,8 @@ public class EcosystemRenderer extends Renderer {
 		int c = 0;
 		for (int gx = 0; gx < gridWidth; gx++) {
 			for (int gy = 0; gy < gridHeight; gy++) {
-				float x1 = margin + gx * (w + margin);
-				float y1 = margin + gy * (h + margin);
+				float x1 = x + margin + gx * (w + margin);
+				float y1 = y + margin + gy * (h + margin);
 				if (c < children.size()) {
 					children.get(c).setVisibleAt(x1, y1, w, h);
 				}

@@ -35,14 +35,15 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
-	private Ecosystem ecosystem;
-	private EcosystemRenderer ecosytemRenderer;
+	private final List<Ecosystem> ecosystems = new ArrayList<Ecosystem>();
+	private final List<EcosystemRenderer> ecosytemRenderers = new ArrayList<EcosystemRenderer>();
 	private boolean dummyMode = false;
 	private static final String touch_left_name = "Touch Left";
 	private static final String touch_bottom_name = "Touch Bottom";
 	private static final String touch_right_name = "Touch Right";
 	private static final String accelerometer_name = "Accelerometer";
 	// private static final String compass_name = "Compass";
+	private float zoomToModule = 1;
 
 	private boolean cursorVisible = true;
 
@@ -84,22 +85,35 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		}
 
 		if (NXTs != null && NXTs.length == 1) {
-			ecosystem = makeNXTEcology();
+			ecosystems.add(makeNXTEcology());
 		} else {
 			dummyMode = true;
-			// ecosystem = makeEyeBallEcology();
-			ecosystem = makeSimpleArmEcology();
+			ecosystems.add(makeEyeBallEcology());
+			ecosystems.add(makeSimpleArmEcology());
 		}
-		ecosytemRenderer = new EcosystemRenderer(ecosystem);
-		ecosytemRenderer.setVisibleAt(0, 0, getWidth(), getHeight());
+		float height = getHeight() / (float) ecosystems.size();
+		for (int i = 0; i < ecosystems.size(); i++) {
+			ecosytemRenderers.add(new EcosystemRenderer(ecosystems.get(i)));
+			ecosytemRenderers.get(i).setVisibleAt(0, height * i, getWidth(),
+					height);
+		}
+		setZoomToModule();
+	}
+
+	private void setZoomToModule() {
+		zoomToModule = Float.MIN_VALUE;
+		for (int i = 0; i < ecosytemRenderers.size(); i++) {
+			float zoom = ecosytemRenderers.get(0).getZoomToChild();
+			if (zoom > zoomToModule)
+				zoomToModule = zoom;
+		}
 	}
 
 	@Override
 	public void draw() {
 		if (mousePressed) {
 			translate(getWidth() / 2, getHeight() / 2);
-			scale(ecosytemRenderer.getZoomToChild(),
-					ecosytemRenderer.getZoomToChild());
+			scale(zoomToModule, zoomToModule);
 			translate(-mouseX, -mouseY);
 			if (cursorVisible) {
 				noCursor();
@@ -110,8 +124,10 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			cursorVisible = true;
 		}
 		background(0);
-		ecosystem.step();
-		ecosytemRenderer.draw(g);
+		for (int i = 0; i < ecosystems.size(); i++)
+			ecosystems.get(i).step();
+		for (int i = 0; i < ecosytemRenderers.size(); i++)
+			ecosytemRenderers.get(i).draw(g);
 		if (frameCount % 100 == 0)
 			println("frameRate: " + frameRate);
 	}
