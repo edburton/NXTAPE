@@ -7,8 +7,10 @@ public abstract class StateStreamBundleGroup {
 
 	public StateStreamBundleGroup(StateStreamBundle inputStatesStreamBundle,
 			StateStreamBundle outputStatesStreamBundle) {
-		stateStreamBundles.add(inputStatesStreamBundle);
-		stateStreamBundles.add(outputStatesStreamBundle);
+		if (inputStatesStreamBundle != null)
+			stateStreamBundles.add(inputStatesStreamBundle);
+		if (outputStatesStreamBundle != null)
+			stateStreamBundles.add(outputStatesStreamBundle);
 	}
 
 	public StateStreamBundleGroup() {
@@ -19,6 +21,7 @@ public abstract class StateStreamBundleGroup {
 	}
 
 	public void addStateStreamBundle(StateStreamBundle stateStreamBundle) {
-		stateStreamBundles.add(stateStreamBundle);
+		if (stateStreamBundle != null)
+			stateStreamBundles.add(stateStreamBundle);
 	}
 }

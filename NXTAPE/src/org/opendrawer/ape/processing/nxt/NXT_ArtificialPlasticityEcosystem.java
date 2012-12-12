@@ -8,6 +8,8 @@ import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
 import lejos.nxt.addon.AccelHTSensor;
 import lejos.pc.comm.NXTComm;
+import lejos.pc.comm.NXTCommException;
+import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
 import org.opendrawer.ape.darwinianneurodynamics.Actor;
@@ -74,12 +76,12 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	}
 
 	private void setupNXT() {
-		// try {
-		// nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
-		// NXTs = nxtComm.search(null);
-		// } catch (NXTCommException e) {
-		// e.printStackTrace();
-		// }
+		try {
+			nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
+			NXTs = nxtComm.search(null);
+		} catch (NXTCommException e) {
+			e.printStackTrace();
+		}
 
 		if (NXTs != null && NXTs.length == 1) {
 			ecosystem = makeNXTEcology();
@@ -159,7 +161,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 				.getOutputStatesProvider(), 0, 0, 1));
 
 		for (int i = 0; i < 50; i++) {
-			Actor actor = new Actor();
+			Actor actor = new Actor(null, null);
 			eco.addActor(actor);
 		}
 
@@ -216,7 +218,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	}
 
 	private Ecosystem makeEyeBallEcology() {
-		Ecosystem eco = new Ecosystem(120);
+		Ecosystem eco = new Ecosystem(60);
 		List<Muscle> muscles = new ArrayList<Muscle>();
 		EyeBall eyeBall = new EyeBall();
 
@@ -236,7 +238,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		}
 
 		for (int i = 0; i < 0; i++) {
-			Actor actor = new Actor();
+			Actor actor = new Actor(null, null);
 			eco.addActor(actor);
 		}
 
@@ -303,7 +305,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	}
 
 	private Ecosystem makeSimpleArmEcology() {
-		Ecosystem eco = new Ecosystem(120);
+		Ecosystem eco = new Ecosystem(60);
 		int joints = 4;
 		SimpleArm simpleArm = new SimpleArm(joints);
 
@@ -317,42 +319,71 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			eco.addReflex(simpleArmTwitchReflex);
 		}
 
-		for (int i = 0; i < 0; i++) {
-			Actor actor = new Actor();
+		for (int i = 0; i < 12; i++) {
+			Actor actor = new Actor(null, null);
 			eco.addActor(actor);
 		}
 
-		for (int i = 0; i < 4; i++) {
+		List<StateStream> allPotentialPredictorStateStreams = new ArrayList<StateStream>();
+		for (int i = 0; i < eco.getInputs().size(); i++)
+			allPotentialPredictorStateStreams.addAll(eco.getInputs().get(i)
+					.getStateStreams());
+		for (int i = 0; i < eco.getOutputs().size(); i++)
+			allPotentialPredictorStateStreams.addAll(eco.getOutputs().get(i)
+					.getStateStreams());
+
+		for (int i = 0; i < 12; i++) {
+			int streams = (int) Math.floor(random(2,
+					allPotentialPredictorStateStreams.size()));
+			int outputsIndex = (int) Math.floor(random(1, streams - 1));
+			int[] streamIndexes = new int[streams];
+			for (int s = 0; s < streams; s++)
+				streamIndexes[s] = -1;
+
+			for (int s = 0; s < streams; s++) {
+				boolean original = false;
+				int p = -1;
+				while (!original) {
+					original = true;
+					p = (int) Math.floor(random(0,
+							allPotentialPredictorStateStreams.size()));
+					for (int ss = 0; ss < streams; ss++)
+						if (p == streamIndexes[ss])
+							original = false;
+				}
+				streamIndexes[s] = p;
+			}
 
 			StateStreamBundle inputStateStreamBundle = new StateStreamBundle(
 					eco.getStatesStreamLength());
 			StateStreamBundle oututStateStreamBundle = new StateStreamBundle(
 					eco.getStatesStreamLength());
 
-			for (int j = 0; j < joints; j++) {
-				inputStateStreamBundle.addStateStream(new StateStream(
-						simpleArm, joints + j, eco.getStatesStreamLength()));
+			for (int ins = 0; ins < outputsIndex; ins++) {
+				StateStream stream = allPotentialPredictorStateStreams
+						.get(streamIndexes[ins]);
+				StateStream streamCopy = new StateStream(
+						stream.getStatesProvider(),
+						stream.getStatesProviderChannel(),
+						stream.getStreamLength());
+				inputStateStreamBundle.addStateStream(streamCopy);
 			}
 
-			oututStateStreamBundle.addStateStream(new StateStream(simpleArm,
-					joints * 2, eco.getStatesStreamLength()));
-			oututStateStreamBundle.addStateStream(new StateStream(simpleArm,
-					joints * 2 + 1, eco.getStatesStreamLength()));
-
-			// for (int j = 0; j < simpleArm.getStatesLength(); j++) {
-			// inputStateStreamBundle.addStateStream(new StateStream(
-			// simpleArm, j, eco.getStatesStreamLength()));
-			// }
-			//
-			// for (int j = 0; j < simpleArm.getStatesLength(); j++) {
-			// oututStateStreamBundle.addStateStream(new StateStream(
-			// simpleArm, j, eco.getStatesStreamLength()));
-			// }
+			for (int outs = outputsIndex; outs < streams; outs++) {
+				StateStream stream = allPotentialPredictorStateStreams
+						.get(streamIndexes[outs]);
+				StateStream streamCopy = new StateStream(
+						stream.getStatesProvider(),
+						stream.getStatesProviderChannel(),
+						stream.getStreamLength());
+				oututStateStreamBundle.addStateStream(streamCopy);
+			}
 
 			Predictor predictor = new Predictor(inputStateStreamBundle,
 					oututStateStreamBundle);
 			eco.addPredictor(predictor);
 		}
+
 		return eco;
 	}
 }

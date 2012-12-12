@@ -14,7 +14,7 @@ public class Ecosystem {
 
 	public Ecosystem(int statesStreamLength) {
 		this.statesStreamLength = statesStreamLength;
-		allErrors = new StateStreamBundle(6000);
+		allErrors = new StateStreamBundle(2000);
 	}
 
 	public SensorimotorInput makeInput(StatesProvider statesProvider) {

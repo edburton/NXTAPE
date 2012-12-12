@@ -22,7 +22,7 @@ public class StateStreamBundleRenderer extends Renderer {
 		if (stateStreamBundle != null) {
 			g.noFill();
 			int nc = stateStreamBundle.getStateStreams().size();
-			float lineWidth = (Renderer.lineWidth * 2) / nc;
+			float lineWidth = (Renderer.lineWidth / 2) / nc;
 			for (int c = 0; c < nc; c++) {
 				double[] states = stateStreamBundle.getStateStreams().get(c)
 						.read();

@@ -1,6 +1,6 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
-public class Predictor extends StateStreamBundleGroup {
+public class Predictor extends Actor {
 
 	StateStreamBundle inputStateStreamBundle;
 	StateStreamBundle outputStateStreamBundle;
