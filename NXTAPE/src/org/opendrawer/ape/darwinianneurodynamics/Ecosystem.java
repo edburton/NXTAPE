@@ -81,12 +81,12 @@ public class Ecosystem {
 			predictors.get(i).predict();
 	}
 
-	public List<StateStreamBundle> getRandomUniqueSensorimotorStateStreamBundles(
-			int n, int min, int max) {
+	private List<StateStreamBundle> getRandomUniqueStateStreamBundles(
+			List<StateStreamBundle> stateStreamBundles, int n, int min, int max) {
 		List<StateStreamBundle> result = new ArrayList<StateStreamBundle>();
 		List<StateStream> allPotentialPredictorStateStreams = new ArrayList<StateStream>();
-		for (int i = 0; i < sensorimotorBundles.size(); i++)
-			allPotentialPredictorStateStreams.addAll(sensorimotorBundles.get(i)
+		for (int i = 0; i < stateStreamBundles.size(); i++)
+			allPotentialPredictorStateStreams.addAll(stateStreamBundles.get(i)
 					.getStateStreams());
 
 		for (int i = 0; i < n; i++) {
@@ -124,6 +124,30 @@ public class Ecosystem {
 			result.add(stateStreamBundle);
 		}
 		return result;
+	}
+
+	public List<StateStreamBundle> getRandomUniqueSensorimotorStateStreamBundles(
+			int n, int min, int max) {
+		List<StateStreamBundle> stateStreamBundles = new ArrayList<StateStreamBundle>();
+		stateStreamBundles.addAll(sensorimotorBundles);
+		return getRandomUniqueStateStreamBundles(stateStreamBundles, n, min,
+				max);
+	}
+
+	public List<StateStreamBundle> getRandomUniqueInputStateStreamBundles(
+			int n, int min, int max) {
+		List<StateStreamBundle> stateStreamBundles = new ArrayList<StateStreamBundle>();
+		stateStreamBundles.addAll(inputs);
+		return getRandomUniqueStateStreamBundles(stateStreamBundles, n, min,
+				max);
+	}
+
+	public List<StateStreamBundle> getRandomUniqueOutputStateStreamBundles(
+			int n, int min, int max) {
+		List<StateStreamBundle> stateStreamBundles = new ArrayList<StateStreamBundle>();
+		stateStreamBundles.addAll(outputs);
+		return getRandomUniqueStateStreamBundles(stateStreamBundles, n, min,
+				max);
 	}
 
 	public List<SensorimotorInput> getInputs() {

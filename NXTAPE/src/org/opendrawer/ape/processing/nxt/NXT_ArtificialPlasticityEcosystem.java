@@ -328,8 +328,13 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			List<StateStreamBundle> stateStreamBundles = eco
 					.getRandomUniqueSensorimotorStateStreamBundles(2, 1, 6);
 			if (stateStreamBundles != null && stateStreamBundles.size() == 2) {
-				Predictor predictor = new Predictor(stateStreamBundles.get(0),
-						stateStreamBundles.get(1));
+				// Predictor predictor = new
+				// Predictor(stateStreamBundles.get(0),
+				// stateStreamBundles.get(1));
+				Predictor predictor = new Predictor(eco
+						.getRandomUniqueOutputStateStreamBundles(1, 1, 2)
+						.get(0), eco.getRandomUniqueOutputStateStreamBundles(1,
+						1, 2).get(0));
 				eco.addPredictor(predictor);
 			}
 		}

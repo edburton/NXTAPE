@@ -11,7 +11,6 @@ public class Prediction extends OutputStatesProvider {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -22,24 +21,26 @@ public class Prediction extends OutputStatesProvider {
 
 	@Override
 	public String[] getStateNames() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int getStatesLength() {
-		// TODO Auto-generated method stub
 		return states.length;
 	}
 
 	@Override
 	public void updateStates() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void setOutputState(double state, int stateChannel) {
 		states[stateChannel] = state;
+	}
+
+	@Override
+	public int[] getStateTypes() {
+		return null;
 	}
 }

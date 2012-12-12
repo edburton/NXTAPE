@@ -13,5 +13,4 @@ public class SensorimotorOutput extends SensorimotorBundle {
 	public OutputStatesProvider getOutputStatesProvider() {
 		return outputStatesProvider;
 	}
-
 }

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class StatesProvider {
+	public static int GENERIC = 0;
+	public static int INPUT = 1;
+	public static int OUTPUT = 2;
 
 	List<StatesObserver> statesObservers = new ArrayList<StatesObserver>();
 
@@ -29,6 +32,8 @@ public abstract class StatesProvider {
 	public abstract double[] getStates();
 
 	public abstract String[] getStateNames();
+
+	public abstract int[] getStateTypes();
 
 	public abstract int getStatesLength();
 }

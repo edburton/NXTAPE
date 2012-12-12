@@ -8,6 +8,7 @@ public class NXTAccelerometer extends StatesProvider {
 	private final AccelHTSensor accelerometer;
 	private final String name;
 	private static final String[] stateNames = new String[] { "X", "Y", "Z" };
+	private static final int[] stateTypes = new int[] { INPUT, INPUT, INPUT };
 	private final double states[];
 	private final float maxExpectedValue = 256; // Arbitrary
 
@@ -45,5 +46,10 @@ public class NXTAccelerometer extends StatesProvider {
 	@Override
 	public int getStatesLength() {
 		return 3;
+	}
+
+	@Override
+	public int[] getStateTypes() {
+		return stateTypes;
 	}
 }

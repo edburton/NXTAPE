@@ -40,4 +40,9 @@ public class TestingStatesProvider extends StatesProvider {
 				Math.random() / 10 + phase * (Math.sin(c / 20.0d)) };
 		c++;
 	}
+
+	@Override
+	public int[] getStateTypes() {
+		return null;
+	}
 }

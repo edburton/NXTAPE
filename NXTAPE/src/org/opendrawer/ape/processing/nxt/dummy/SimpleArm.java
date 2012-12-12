@@ -12,6 +12,7 @@ public class SimpleArm extends OutputStatesProvider {
 	private final double[] ys;
 	private final double[] jointLength;
 	private final double[] states;
+	private final int[] stateTypes;
 
 	public SimpleArm(int joints) {
 		this.joints = joints;
@@ -22,6 +23,7 @@ public class SimpleArm extends OutputStatesProvider {
 		jointLength = new double[joints];
 		states = new double[joints * 2 + 2];
 		stateNames = new String[states.length];
+		stateTypes = new int[states.length];
 		double totalJointLength = 0;
 		for (int i = 0; i < joints; i++) {
 			int c = 0;
@@ -97,5 +99,10 @@ public class SimpleArm extends OutputStatesProvider {
 
 	public double[] getYs() {
 		return ys;
+	}
+
+	@Override
+	public int[] getStateTypes() {
+		return stateTypes;
 	}
 }

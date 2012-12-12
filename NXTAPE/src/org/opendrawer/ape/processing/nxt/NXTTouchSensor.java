@@ -8,6 +8,7 @@ public class NXTTouchSensor extends StatesProvider {
 	private final TouchSensor touchSensor;
 	private final String name;
 	private static String[] stateNames = new String[] { "On/Off" };
+	private static final int[] stateTypes = new int[] { INPUT };
 	private boolean on = false;
 
 	public NXTTouchSensor(TouchSensor touchSensor, String name) {
@@ -47,5 +48,10 @@ public class NXTTouchSensor extends StatesProvider {
 
 	public void setOn(boolean on) {
 		this.on = on;
+	}
+
+	@Override
+	public int[] getStateTypes() {
+		return stateTypes;
 	}
 }

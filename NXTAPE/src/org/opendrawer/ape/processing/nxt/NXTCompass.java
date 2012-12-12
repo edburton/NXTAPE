@@ -8,6 +8,7 @@ public class NXTCompass extends StatesProvider {
 	private final CompassHTSensor compass;
 	private final String name;
 	private static final String[] stateNames = new String[] { "Heading South" };
+	private static final int[] stateTypes = new int[] { INPUT };
 	private double direction;
 
 	public NXTCompass(CompassHTSensor compass, String name) {
@@ -42,5 +43,10 @@ public class NXTCompass extends StatesProvider {
 	@Override
 	public int getStatesLength() {
 		return 1;
+	}
+
+	@Override
+	public int[] getStateTypes() {
+		return stateTypes;
 	}
 }
