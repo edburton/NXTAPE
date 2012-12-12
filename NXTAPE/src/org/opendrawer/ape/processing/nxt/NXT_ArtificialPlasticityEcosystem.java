@@ -324,64 +324,14 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			eco.addActor(actor);
 		}
 
-		List<StateStream> allPotentialPredictorStateStreams = new ArrayList<StateStream>();
-		for (int i = 0; i < eco.getInputs().size(); i++)
-			allPotentialPredictorStateStreams.addAll(eco.getInputs().get(i)
-					.getStateStreams());
-		for (int i = 0; i < eco.getOutputs().size(); i++)
-			allPotentialPredictorStateStreams.addAll(eco.getOutputs().get(i)
-					.getStateStreams());
-
 		for (int i = 0; i < 12; i++) {
-			int streams = (int) Math.floor(random(2,
-					allPotentialPredictorStateStreams.size()));
-			int outputsIndex = (int) Math.floor(random(1, streams - 1));
-			int[] streamIndexes = new int[streams];
-			for (int s = 0; s < streams; s++)
-				streamIndexes[s] = -1;
-
-			for (int s = 0; s < streams; s++) {
-				boolean original = false;
-				int p = -1;
-				while (!original) {
-					original = true;
-					p = (int) Math.floor(random(0,
-							allPotentialPredictorStateStreams.size()));
-					for (int ss = 0; ss < streams; ss++)
-						if (p == streamIndexes[ss])
-							original = false;
-				}
-				streamIndexes[s] = p;
+			List<StateStreamBundle> stateStreamBundles = eco
+					.getRandomUniqueSensorimotorStateStreamBundles(2, 1, 6);
+			if (stateStreamBundles != null && stateStreamBundles.size() == 2) {
+				Predictor predictor = new Predictor(stateStreamBundles.get(0),
+						stateStreamBundles.get(1));
+				eco.addPredictor(predictor);
 			}
-
-			StateStreamBundle inputStateStreamBundle = new StateStreamBundle(
-					eco.getStatesStreamLength());
-			StateStreamBundle oututStateStreamBundle = new StateStreamBundle(
-					eco.getStatesStreamLength());
-
-			for (int ins = 0; ins < outputsIndex; ins++) {
-				StateStream stream = allPotentialPredictorStateStreams
-						.get(streamIndexes[ins]);
-				StateStream streamCopy = new StateStream(
-						stream.getStatesProvider(),
-						stream.getStatesProviderChannel(),
-						stream.getStreamLength());
-				inputStateStreamBundle.addStateStream(streamCopy);
-			}
-
-			for (int outs = outputsIndex; outs < streams; outs++) {
-				StateStream stream = allPotentialPredictorStateStreams
-						.get(streamIndexes[outs]);
-				StateStream streamCopy = new StateStream(
-						stream.getStatesProvider(),
-						stream.getStatesProviderChannel(),
-						stream.getStreamLength());
-				oututStateStreamBundle.addStateStream(streamCopy);
-			}
-
-			Predictor predictor = new Predictor(inputStateStreamBundle,
-					oututStateStreamBundle);
-			eco.addPredictor(predictor);
 		}
 
 		return eco;

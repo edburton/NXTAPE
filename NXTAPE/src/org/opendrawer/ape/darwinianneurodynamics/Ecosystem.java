@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ecosystem {
+	private final List<SensorimotorBundle> sensorimotorBundles = new ArrayList<SensorimotorBundle>();
 	private final List<SensorimotorInput> inputs = new ArrayList<SensorimotorInput>();
 	private final List<SensorimotorOutput> outputs = new ArrayList<SensorimotorOutput>();
 	private final List<Reflex> reflexes = new ArrayList<Reflex>();
@@ -22,6 +23,7 @@ public class Ecosystem {
 		SensorimotorInput input = new SensorimotorInput(statesProvider,
 				statesStreamLength);
 		inputs.add(input);
+		sensorimotorBundles.add(input);
 		return input;
 	}
 
@@ -29,6 +31,7 @@ public class Ecosystem {
 		SensorimotorOutput output = new SensorimotorOutput(statesProvider,
 				statesStreamLength);
 		outputs.add(output);
+		sensorimotorBundles.add(output);
 		return output;
 	}
 
@@ -78,6 +81,51 @@ public class Ecosystem {
 			predictors.get(i).predict();
 	}
 
+	public List<StateStreamBundle> getRandomUniqueSensorimotorStateStreamBundles(
+			int n, int min, int max) {
+		List<StateStreamBundle> result = new ArrayList<StateStreamBundle>();
+		List<StateStream> allPotentialPredictorStateStreams = new ArrayList<StateStream>();
+		for (int i = 0; i < sensorimotorBundles.size(); i++)
+			allPotentialPredictorStateStreams.addAll(sensorimotorBundles.get(i)
+					.getStateStreams());
+
+		for (int i = 0; i < n; i++) {
+			int streams = Util.RandomInt(min, max);
+			int[] streamIndexes = new int[streams];
+			for (int s = 0; s < streams; s++)
+				streamIndexes[s] = -1;
+
+			for (int s = 0; s < streams; s++) {
+				boolean original = false;
+				int p = -1;
+				while (!original) {
+					original = true;
+					p = Util.RandomInt(0,
+							allPotentialPredictorStateStreams.size() - 1);
+					for (int ss = 0; ss < streams; ss++)
+						if (p == streamIndexes[ss])
+							original = false;
+				}
+				streamIndexes[s] = p;
+			}
+
+			StateStreamBundle stateStreamBundle = new StateStreamBundle(
+					statesStreamLength);
+
+			for (int c = 0; c < streams; c++) {
+				StateStream stream = allPotentialPredictorStateStreams
+						.get(streamIndexes[c]);
+				StateStream streamCopy = new StateStream(
+						stream.getStatesProvider(),
+						stream.getStatesProviderChannel(),
+						stream.getStreamLength());
+				stateStreamBundle.addStateStream(streamCopy);
+			}
+			result.add(stateStreamBundle);
+		}
+		return result;
+	}
+
 	public List<SensorimotorInput> getInputs() {
 		return inputs;
 	}
@@ -108,5 +156,9 @@ public class Ecosystem {
 
 	public List<CuriosityLoop> getCuriosityLoops() {
 		return curiosityLoops;
+	}
+
+	public List<SensorimotorBundle> getSensorimotorBundles() {
+		return sensorimotorBundles;
 	}
 }

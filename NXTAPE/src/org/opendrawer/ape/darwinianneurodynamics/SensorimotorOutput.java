@@ -1,6 +1,6 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
-public class SensorimotorOutput extends HomogeneousStateStreamBundle {
+public class SensorimotorOutput extends SensorimotorBundle {
 
 	private final OutputStatesProvider outputStatesProvider;
 
