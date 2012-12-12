@@ -7,6 +7,7 @@ public class Ecosystem {
 	private final List<SensorimotorInput> inputs = new ArrayList<SensorimotorInput>();
 	private final List<SensorimotorOutput> outputs = new ArrayList<SensorimotorOutput>();
 	private final List<Reflex> reflexes = new ArrayList<Reflex>();
+	private final List<CuriosityLoop> curiosityLoops = new ArrayList<CuriosityLoop>();
 	private final List<Actor> actors = new ArrayList<Actor>();
 	private final List<Predictor> predictors = new ArrayList<Predictor>();
 	private final StateStreamBundle allErrors;
@@ -103,5 +104,9 @@ public class Ecosystem {
 
 	public StateStreamBundle getAllErrors() {
 		return allErrors;
+	}
+
+	public List<CuriosityLoop> getCuriosityLoops() {
+		return curiosityLoops;
 	}
 }

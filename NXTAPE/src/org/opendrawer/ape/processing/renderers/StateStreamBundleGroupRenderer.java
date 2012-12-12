@@ -1,14 +1,11 @@
 package org.opendrawer.ape.processing.renderers;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundleGroup;
 
 public class StateStreamBundleGroupRenderer extends Renderer {
-	// private final ArrayList<StateStreamBundleRenderer>
-	// stateStreamBundleRenderers = new ArrayList<StateStreamBundleRenderer>();
 
 	public StateStreamBundleGroupRenderer(
 			StateStreamBundleGroup statesStreamBundleList) {
@@ -43,21 +40,15 @@ public class StateStreamBundleGroupRenderer extends Renderer {
 						.size() - 1))) / children.size());
 				float moduleX = x;
 				for (int i = 0; i < children.size(); i++) {
+					float xx = moduleX + lineMarginWidth * 2;
+					float yy = y + lineMarginWidth * 2;
+					float ww = moduleWidth - lineMarginWidth * 2;
+					float hh = height - lineMarginWidth * 2;
 					StateStreamBundleRenderer statesStreamBundleRender = (StateStreamBundleRenderer) children
 							.get(i);
-					statesStreamBundleRender.setVisibleAt(moduleX, y,
-							moduleWidth, height);
+					statesStreamBundleRender.setVisibleAt(xx, yy, ww, hh);
 					moduleX += moduleWidth + (lineMarginWidth / 2);
 				}
-			}
-	}
-
-	@Override
-	public void setKeyColor(Color keyColor) {
-		super.setKeyColor(keyColor);
-		if (children != null)
-			for (int i = 0; i < children.size(); i++) {
-				children.get(i).setKeyColor(keyColor);
 			}
 	}
 }
