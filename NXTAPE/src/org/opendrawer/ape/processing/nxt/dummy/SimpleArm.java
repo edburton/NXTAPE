@@ -69,10 +69,10 @@ public class SimpleArm extends OutputStatesProvider {
 		double y = 0;
 		double a = 0;
 		for (int i = 0; i < joints; i++) {
-			jointAngle[i] += jointMovement[i] / 5;
-			if (jointAngle[i] < -1)
+			jointAngle[i] += jointMovement[i] / 10;
+			if (jointAngle[i] < -1) {
 				jointAngle[i] = -1;
-			else if (jointAngle[i] > 1)
+			} else if (jointAngle[i] > 1)
 				jointAngle[i] = 1;
 			a += ((jointAngle[i]) + 1) * (Math.PI / 8);
 			x += Math.cos(a) * jointLength[i];

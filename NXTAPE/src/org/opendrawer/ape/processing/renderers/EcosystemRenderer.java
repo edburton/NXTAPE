@@ -9,7 +9,7 @@ public class EcosystemRenderer extends Renderer {
 
 	public EcosystemRenderer(Ecosystem ecosystem) {
 		this.ecosystem = ecosystem;
-		int nTypes = 6;
+		int nTypes = 5;
 		int nType = 0;
 
 		for (int i = 0; i < ecosystem.getInputs().size(); i++) {
@@ -39,18 +39,9 @@ public class EcosystemRenderer extends Renderer {
 
 		nType++;
 
-		for (int i = 0; i < ecosystem.getActors().size(); i++) {
-			Renderer renderer = Renderer.makeRendererFor(ecosystem.getActors()
-					.get(i));
-			addChild(renderer);
-			renderer.setKeyColor(createKeyColour(nType, nTypes));
-		}
-
-		nType++;
-
-		for (int i = 0; i < ecosystem.getPredictors().size(); i++) {
+		for (int i = 0; i < ecosystem.getCuriosityLoops().size(); i++) {
 			Renderer renderer = Renderer.makeRendererFor(ecosystem
-					.getPredictors().get(i));
+					.getCuriosityLoops().get(i));
 			addChild(renderer);
 			renderer.setKeyColor(createKeyColour(nType, nTypes));
 		}
@@ -66,11 +57,27 @@ public class EcosystemRenderer extends Renderer {
 	public void setVisibleAt(float x, float y, float width, float height) {
 		super.setVisibleAt(x, y, width, height);
 
-		int zones = children.size() + 1;
+		int zones = children.size();
 
 		float margin = Renderer.lineMarginWidth * 4;
-		int gridWidth = (int) Math.ceil(Math.pow(zones, 1 / 3.0d));
-		int gridHeight = (int) Math.floor(Math.pow(zones, 2 / 3.0d));
+
+		// int gridWidth = (int) Math.round(Math.pow(zones
+		// * (height / (double) width), 1 / 2.0d));
+		// int gridHeight = (int) Math.round(Math.pow(zones
+		// * (width / (double) height), 1 / 2.0d));
+		int gridWidth = 0;
+		int gridHeight = 0;
+		int best = Integer.MAX_VALUE;
+
+		for (int ww = 0; ww < zones; ww++) {
+			for (int hh = ww + 1; hh <= ww * 16; hh++) {
+				if (hh * ww >= zones && (hh * ww) - zones <= best) {
+					best = (hh * ww) - zones;
+					gridWidth = ww;
+					gridHeight = hh;
+				}
+			}
+		}
 
 		float w = ((width + margin - margin * 2) / gridWidth) - margin;
 		float h = ((height + margin - margin * 2) / gridHeight) - margin;

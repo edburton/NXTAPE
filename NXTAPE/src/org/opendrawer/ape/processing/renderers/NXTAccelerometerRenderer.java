@@ -29,9 +29,9 @@ public class NXTAccelerometerRenderer extends Renderer {
 		g.strokeWeight(Renderer.lineWidth);
 		float r = Renderer.lineMarginWidth * 2;
 		for (int i = 0; i < 3; i++) {
-			int c = Color.HSBtoRGB(i / 3.0f, 1.0f, 1.0f);
-			g.stroke(c);
-			g.fill(c);
+			Color c = Renderer.createKeyColour(i, 3);
+			g.stroke(c.getRed(), c.getGreen(), c.getBlue());
+			g.fill(c.getRed(), c.getGreen(), c.getBlue());
 			float a = ((float) Math.PI * (2 / 3.0f)) * i;
 			float rdx = (float) ((Math.sin(a) * radius) * states[i]);
 			float rdy = (float) ((Math.cos(a) * radius) * states[i]);

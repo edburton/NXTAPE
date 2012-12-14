@@ -5,7 +5,7 @@ import org.opendrawer.ape.darwinianneurodynamics.Reflex;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
 
 public class SimpleArmTwitchReflex extends Reflex {
-	int twitchTime = 0;
+	int twitchTime = 1;
 	double twitchAmount = 0;
 	int counter = 0;
 
@@ -22,10 +22,13 @@ public class SimpleArmTwitchReflex extends Reflex {
 			return;
 		if (counter > twitchTime && Math.random() > 0.9) {
 			counter = 0;
-			twitchTime = (int) ((Math.random()) * 10);
+			twitchTime = 1 + (int) ((Math.random()) * 50);
 			twitchAmount = (Math.random() - 0.5) * 2;
 		}
-		double output = counter++ > twitchTime ? 0 : twitchAmount;
+		double output = counter > twitchTime ? 0 : (twitchAmount / 2)
+				* (1 - Math
+						.cos((counter / (double) twitchTime) * (Math.PI * 2)));
+		counter++;
 		outputStatesProvider.setOutputState(output, outputChannel);
 	}
 }

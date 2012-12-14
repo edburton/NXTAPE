@@ -8,15 +8,14 @@ import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundleGroup;
 public class StateStreamBundleGroupRenderer extends Renderer {
 
 	public StateStreamBundleGroupRenderer(
-			StateStreamBundleGroup statesStreamBundleList) {
-		if (statesStreamBundleList != null) {
-			addStatesStreamBundles(statesStreamBundleList
+			StateStreamBundleGroup statesStreamBundleGroup) {
+		if (statesStreamBundleGroup != null) {
+			addStatesStreamBundles(statesStreamBundleGroup
 					.getStatesStreamBundles());
 		}
 	}
 
 	public void addStatesStreamBundle(StateStreamBundle stateStreamBundle) {
-		Renderer renderer = Renderer.makeRendererFor(stateStreamBundle);
 		addChild(Renderer.makeRendererFor(stateStreamBundle));
 	}
 
@@ -24,7 +23,6 @@ public class StateStreamBundleGroupRenderer extends Renderer {
 			ArrayList<StateStreamBundle> stateStreamBundles) {
 		for (int i = 0; i < stateStreamBundles.size(); i++)
 			addChild(Renderer.makeRendererFor(stateStreamBundles.get(i)));
-		// setKeyColor(keyColor);
 	}
 
 	protected float getStreamLeft() {

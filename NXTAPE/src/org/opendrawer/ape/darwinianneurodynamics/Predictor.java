@@ -46,14 +46,14 @@ public class Predictor extends Actor {
 				// weightsMatrix[i][o] = 0;
 			}
 
-		System.out.println("");
-		for (int i = 0; i < inputLength + 1; i++) {
-			System.out.println("");
-			for (int o = 0; o < outputLength; o++) {
-				System.out.print("[" + weightsMatrix[i][o] + "]");
-			}
-		}
-		System.out.println("");
+		// System.out.println("");
+		// for (int i = 0; i < inputLength + 1; i++) {
+		// System.out.println("");
+		// for (int o = 0; o < outputLength; o++) {
+		// System.out.print("[" + weightsMatrix[i][o] + "]");
+		// }
+		// }
+		// System.out.println("");
 
 		error = new Error();
 		errorStreamBundle = new HomogeneousStateStreamBundle(error, 1000);

@@ -17,12 +17,13 @@ public class StateStreamBundleGroupList {
 	public StateStreamBundleGroupList() {
 	}
 
-	public ArrayList<StateStreamBundleGroup> getStatesStreamBundles() {
+	public ArrayList<StateStreamBundleGroup> getStatesStreamBundleGroups() {
 		return stateStreamBundleGroups;
 	}
 
-	public void addStateStreamBundle(StateStreamBundleGroup stateStreamBundle) {
-		if (stateStreamBundle != null)
-			stateStreamBundleGroups.add(stateStreamBundle);
+	public void addStateStreamBundleGroup(
+			StateStreamBundleGroup stateStreamBundleGroup) {
+		if (stateStreamBundleGroup != null)
+			stateStreamBundleGroups.add(stateStreamBundleGroup);
 	}
 }

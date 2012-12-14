@@ -49,6 +49,12 @@ public class Ecosystem {
 		allErrors.addStatesProviderStreams(predictor.getError());
 	}
 
+	public void addCuriosityLoop(CuriosityLoop curiosityLoop) {
+		curiosityLoops.add(curiosityLoop);
+		allErrors.addStatesProviderStreams(curiosityLoop.getPredictor()
+				.getError());
+	}
+
 	public void step() {
 		stepInputs();
 		stepOutputs();
@@ -79,15 +85,14 @@ public class Ecosystem {
 
 		for (int i = 0; i < predictors.size(); i++)
 			predictors.get(i).predict();
+
+		for (int i = 0; i < curiosityLoops.size(); i++)
+			curiosityLoops.get(i).step();
 	}
 
 	private List<StateStreamBundle> getRandomUniqueStateStreamBundles(
-			List<StateStreamBundle> stateStreamBundles, int n, int min, int max) {
+			List<StateStream> stateStreams, int n, int min, int max) {
 		List<StateStreamBundle> result = new ArrayList<StateStreamBundle>();
-		List<StateStream> allPotentialPredictorStateStreams = new ArrayList<StateStream>();
-		for (int i = 0; i < stateStreamBundles.size(); i++)
-			allPotentialPredictorStateStreams.addAll(stateStreamBundles.get(i)
-					.getStateStreams());
 
 		for (int i = 0; i < n; i++) {
 			int streams = Util.RandomInt(min, max);
@@ -100,8 +105,7 @@ public class Ecosystem {
 				int p = -1;
 				while (!original) {
 					original = true;
-					p = Util.RandomInt(0,
-							allPotentialPredictorStateStreams.size() - 1);
+					p = Util.RandomInt(0, stateStreams.size() - 1);
 					for (int ss = 0; ss < streams; ss++)
 						if (p == streamIndexes[ss])
 							original = false;
@@ -113,8 +117,7 @@ public class Ecosystem {
 					statesStreamLength);
 
 			for (int c = 0; c < streams; c++) {
-				StateStream stream = allPotentialPredictorStateStreams
-						.get(streamIndexes[c]);
+				StateStream stream = stateStreams.get(streamIndexes[c]);
 				StateStream streamCopy = new StateStream(
 						stream.getStatesProvider(),
 						stream.getStatesProviderChannel(),
@@ -127,27 +130,24 @@ public class Ecosystem {
 	}
 
 	public List<StateStreamBundle> getRandomUniqueSensorimotorStateStreamBundles(
-			int n, int min, int max) {
-		List<StateStreamBundle> stateStreamBundles = new ArrayList<StateStreamBundle>();
-		stateStreamBundles.addAll(sensorimotorBundles);
-		return getRandomUniqueStateStreamBundles(stateStreamBundles, n, min,
-				max);
-	}
-
-	public List<StateStreamBundle> getRandomUniqueInputStateStreamBundles(
-			int n, int min, int max) {
-		List<StateStreamBundle> stateStreamBundles = new ArrayList<StateStreamBundle>();
-		stateStreamBundles.addAll(inputs);
-		return getRandomUniqueStateStreamBundles(stateStreamBundles, n, min,
-				max);
-	}
-
-	public List<StateStreamBundle> getRandomUniqueOutputStateStreamBundles(
-			int n, int min, int max) {
-		List<StateStreamBundle> stateStreamBundles = new ArrayList<StateStreamBundle>();
-		stateStreamBundles.addAll(outputs);
-		return getRandomUniqueStateStreamBundles(stateStreamBundles, n, min,
-				max);
+			int types, int n, int min, int max) {
+		List<StateStream> stateStreams = new ArrayList<StateStream>();
+		for (int i = 0; i < sensorimotorBundles.size(); i++) {
+			HomogeneousStateStreamBundle sensorimotorBundle = sensorimotorBundles
+					.get(i);
+			for (int c = 0; c < sensorimotorBundle.getStateStreams().size(); c++) {
+				StateStream stateStream = sensorimotorBundle.getStateStreams()
+						.get(c);
+				for (int cc = 0; cc < stateStream.getStatesProvider()
+						.getStateTypes().length; cc++) {
+					if ((types | stateStream.getStatesProvider()
+							.getStateTypes()[cc]) != 0)
+						stateStreams.add(new StateStream(stateStream
+								.getStatesProvider(), cc, statesStreamLength));
+				}
+			}
+		}
+		return getRandomUniqueStateStreamBundles(stateStreams, n, min, max);
 	}
 
 	public List<SensorimotorInput> getInputs() {

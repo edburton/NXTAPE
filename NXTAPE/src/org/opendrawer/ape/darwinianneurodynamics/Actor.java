@@ -6,4 +6,8 @@ public class Actor extends StateStreamBundleGroup {
 			StateStreamBundle outputStateStreamBundle) {
 		super(inputStateStreamBundle, outputStateStreamBundle);
 	}
+
+	public void step() {
+
+	}
 }
