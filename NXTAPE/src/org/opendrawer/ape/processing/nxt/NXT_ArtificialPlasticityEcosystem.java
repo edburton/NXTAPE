@@ -279,7 +279,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	}
 
 	private Ecosystem makeSimpleArmEcology() {
-		Ecosystem eco = new Ecosystem(80);
+		Ecosystem eco = new Ecosystem(100);
 		int joints = 3;
 		SimpleArm simpleArm = new SimpleArm(joints);
 
@@ -293,7 +293,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			eco.addReflex(simpleArmTwitchReflex);
 		}
 
-		for (int i = 0; i < 15; i++) {
+		for (int i = 0; i < 10; i++) {
 			Predictor predictor;
 			Actor actor;
 			List<StateStreamBundle> predictorBundles = eco

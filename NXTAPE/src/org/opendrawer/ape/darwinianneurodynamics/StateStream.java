@@ -97,4 +97,12 @@ public class StateStream implements StatesObserver {
 				writeHead = 0;
 		}
 	}
+
+	public int getMin() {
+		return -1;
+	}
+
+	public int getMax() {
+		return 1;
+	}
 }

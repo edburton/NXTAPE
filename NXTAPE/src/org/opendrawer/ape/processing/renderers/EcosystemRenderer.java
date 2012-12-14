@@ -61,16 +61,12 @@ public class EcosystemRenderer extends Renderer {
 
 		float margin = Renderer.lineMarginWidth * 4;
 
-		// int gridWidth = (int) Math.round(Math.pow(zones
-		// * (height / (double) width), 1 / 2.0d));
-		// int gridHeight = (int) Math.round(Math.pow(zones
-		// * (width / (double) height), 1 / 2.0d));
 		int gridWidth = 0;
 		int gridHeight = 0;
 		int best = Integer.MAX_VALUE;
 
 		for (int ww = 0; ww < zones; ww++) {
-			for (int hh = ww + 1; hh <= ww * 16; hh++) {
+			for (int hh = ww + 1; hh <= ww * 12; hh++) {
 				if (hh * ww >= zones && (hh * ww) - zones <= best) {
 					best = (hh * ww) - zones;
 					gridWidth = ww;

@@ -23,7 +23,7 @@ public class CompressingStateStream extends StateStream {
 			int index = pastPosition;
 			while (index < 0)
 				index += streamLength;
-			return stateStream[index];
+			return (stateStream[index]);
 		} else
 			return Double.NaN;
 	}
@@ -57,5 +57,15 @@ public class CompressingStateStream extends StateStream {
 				}
 			}
 		}
+	}
+
+	@Override
+	public int getMin() {
+		return 0;
+	}
+
+	@Override
+	public int getMax() {
+		return 1;
 	}
 }
