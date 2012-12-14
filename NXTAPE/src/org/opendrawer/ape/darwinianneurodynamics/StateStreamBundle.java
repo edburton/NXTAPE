@@ -56,6 +56,13 @@ public class StateStreamBundle {
 			addStateStream(new StateStream(statesProvider, i, streamLength));
 	}
 
+	public void addCompressingStatesProviderStreams(
+			StatesProvider statesProvider) {
+		for (int i = 0; i < statesProvider.getStatesLength(); i++)
+			addStateStream(new CompressingStateStream(statesProvider, i,
+					streamLength));
+	}
+
 	public void addEmptyStateStreams(int n) {
 		for (int i = 0; i < n; i++)
 			addStateStream(new StateStream(streamLength));

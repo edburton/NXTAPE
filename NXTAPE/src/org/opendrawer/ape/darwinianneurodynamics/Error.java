@@ -1,10 +1,20 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
 public class Error extends OutputStatesProvider {
-	double error;
-	private static final int[] stateTypes = new int[] { GENERIC };
+	private int channels = 1;
+	private double[] states = new double[channels];
+	private static int[] stateTypes = new int[] { GENERIC };
+	int count = 0;
 
 	public Error() {
+	}
+
+	public Error(int channels) {
+		this.channels = channels;
+		states = new double[channels];
+		stateTypes = new int[channels];
+		for (int i = 0; i < channels; i++)
+			stateTypes[i] = GENERIC;
 	}
 
 	@Override
@@ -15,7 +25,7 @@ public class Error extends OutputStatesProvider {
 
 	@Override
 	public double[] getStates() {
-		return new double[] { error };
+		return states;
 	}
 
 	@Override
@@ -27,7 +37,7 @@ public class Error extends OutputStatesProvider {
 	@Override
 	public int getStatesLength() {
 		// TODO Auto-generated method stub
-		return 1;
+		return channels;
 	}
 
 	@Override
@@ -38,7 +48,7 @@ public class Error extends OutputStatesProvider {
 
 	@Override
 	public void setOutputState(double state, int stateChannel) {
-		error = state;
+		states[stateChannel] = state;
 	}
 
 	@Override

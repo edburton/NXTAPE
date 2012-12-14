@@ -53,15 +53,15 @@ public class StateStreamBundleGroupListRenderer extends Renderer {
 		this.keyColor = keyColor;
 		if (children != null)
 			for (int i = 0; i < children.size(); i++)
-				if (i % 2 == 0)
+				if (i % 2 == 1)
 					children.get(i).setKeyColor(
-							new Color(Math.round(keyColor.getBlue()), Math
-									.round(keyColor.getGreen()), Math
-									.round(keyColor.getRed())));
+							new Color(Math.round(keyColor.getBlue() * .75f),
+									Math.round(keyColor.getGreen() * .75f),
+									Math.round(keyColor.getRed() * .75f)));
 				else
 					children.get(i).setKeyColor(
-							new Color(Math.round(keyColor.getRed()), Math
-									.round(keyColor.getBlue()), Math
-									.round(keyColor.getGreen())));
+							new Color(Math.round(keyColor.getRed() * .75f),
+									Math.round(keyColor.getGreen() * .75f),
+									Math.round(keyColor.getBlue() * .75f)));
 	}
 }

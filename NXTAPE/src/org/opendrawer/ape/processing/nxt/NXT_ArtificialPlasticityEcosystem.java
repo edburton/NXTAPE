@@ -279,8 +279,8 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	}
 
 	private Ecosystem makeSimpleArmEcology() {
-		Ecosystem eco = new Ecosystem(60);
-		int joints = 4;
+		Ecosystem eco = new Ecosystem(80);
+		int joints = 3;
 		SimpleArm simpleArm = new SimpleArm(joints);
 
 		eco.makeOutput(simpleArm);

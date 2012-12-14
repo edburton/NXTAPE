@@ -11,12 +11,14 @@ public class Ecosystem {
 	private final List<CuriosityLoop> curiosityLoops = new ArrayList<CuriosityLoop>();
 	private final List<Actor> actors = new ArrayList<Actor>();
 	private final List<Predictor> predictors = new ArrayList<Predictor>();
-	private final StateStreamBundle allErrors;
+	private Error allErros;
+	private final HomogeneousStateStreamBundle allErrors;
 	private final int statesStreamLength;
 
 	public Ecosystem(int statesStreamLength) {
 		this.statesStreamLength = statesStreamLength;
-		allErrors = new StateStreamBundle(2000);
+		allErrors = new HomogeneousStateStreamBundle(allErros,
+				statesStreamLength);
 	}
 
 	public SensorimotorInput makeInput(StatesProvider statesProvider) {
@@ -46,13 +48,13 @@ public class Ecosystem {
 
 	public void addPredictor(Predictor predictor) {
 		predictors.add(predictor);
-		allErrors.addStatesProviderStreams(predictor.getError());
+		allErrors.addCompressingStatesProviderStreams(predictor.getError());
 	}
 
 	public void addCuriosityLoop(CuriosityLoop curiosityLoop) {
 		curiosityLoops.add(curiosityLoop);
-		allErrors.addStatesProviderStreams(curiosityLoop.getPredictor()
-				.getError());
+		allErrors.addCompressingStatesProviderStreams(curiosityLoop
+				.getPredictor().getError());
 	}
 
 	public void step() {
@@ -118,11 +120,7 @@ public class Ecosystem {
 
 			for (int c = 0; c < streams; c++) {
 				StateStream stream = stateStreams.get(streamIndexes[c]);
-				StateStream streamCopy = new StateStream(
-						stream.getStatesProvider(),
-						stream.getStatesProviderChannel(),
-						stream.getStreamLength());
-				stateStreamBundle.addStateStream(streamCopy);
+				stateStreamBundle.addStateStream(stream);
 			}
 			result.add(stateStreamBundle);
 		}
@@ -142,8 +140,7 @@ public class Ecosystem {
 						.getStateTypes().length; cc++) {
 					if ((types | stateStream.getStatesProvider()
 							.getStateTypes()[cc]) != 0)
-						stateStreams.add(new StateStream(stateStream
-								.getStatesProvider(), cc, statesStreamLength));
+						stateStreams.add(stateStream);
 				}
 			}
 		}

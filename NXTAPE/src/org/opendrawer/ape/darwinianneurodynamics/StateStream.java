@@ -1,12 +1,12 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
 public class StateStream implements StatesObserver {
-	private int streamLength;
-	private double[] stateStream;
-	private int writeHead = 0;
-	private int totalWriteHead = 0;
-	private StatesProvider statesProvider;
-	private int statesProviderChannel;
+	protected int streamLength;
+	protected double[] stateStream;
+	protected int writeHead = 0;
+	protected int totalWriteHead = 0;
+	protected StatesProvider statesProvider;
+	protected int statesProviderChannel;
 
 	public StateStream(StatesProvider statesProvider,
 			int statesProviderChannel, int streamLength) {
@@ -88,7 +88,7 @@ public class StateStream implements StatesObserver {
 			write(states[statesProviderChannel]);
 	}
 
-	private void write(double value) {
+	protected void write(double value) {
 		if (stateStream != null) {
 			stateStream[writeHead] = value;
 			writeHead++;

@@ -6,7 +6,7 @@ public class Predictor extends Actor {
 	StateStreamBundle outputStateStreamBundle;
 
 	HomogeneousStateStreamBundle predictionStreamBundle;
-	HomogeneousStateStreamBundle errorStreamBundle;
+	StateStreamBundle errorStreamBundle;
 
 	Prediction prediction;
 	Error error;
@@ -17,8 +17,6 @@ public class Predictor extends Actor {
 	int outputLength;
 	double weightsMatrix[][];
 	double learningRate = 0.001;
-
-	private final int counter = 0;
 
 	public Predictor(StateStreamBundle inputStateStreamBundle,
 			StateStreamBundle outputStateStreamBundle) {
@@ -56,7 +54,9 @@ public class Predictor extends Actor {
 		// System.out.println("");
 
 		error = new Error();
-		errorStreamBundle = new HomogeneousStateStreamBundle(error, 1000);
+		errorStreamBundle = new StateStreamBundle(
+				inputStateStreamBundle.getStreamLength());
+		errorStreamBundle.addCompressingStatesProviderStreams(error);
 		addStateStreamBundle(errorStreamBundle);
 	}
 
