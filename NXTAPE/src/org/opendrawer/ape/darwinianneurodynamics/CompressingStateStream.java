@@ -55,6 +55,12 @@ public class CompressingStateStream extends StateStream {
 						} else
 							stateStream[i] = Double.NaN;
 				}
+			} else {
+				double v = 0;
+				for (int i = 0; i < step - 1; i++)
+					v += stepStates[i];
+				v /= step - 1;
+				stateStream[writeHead] = v;
 			}
 		}
 	}

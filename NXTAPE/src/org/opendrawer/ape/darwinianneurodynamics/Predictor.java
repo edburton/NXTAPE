@@ -97,17 +97,6 @@ public class Predictor extends Actor {
 		error.setOutputState(errorValue, 0);
 		prediction.notifyStatesObservers();
 		error.notifyStatesObservers();
-
-		// if (++counter % 100 == 0) {
-		// System.out.println("");
-		// for (int i = 0; i < inputLength + 1; i++) {
-		// System.out.println("");
-		// for (int o = 0; o < outputLength; o++) {
-		// System.out.print("[" + weightsMatrix[i][o] + "]");
-		// }
-		// }
-		// System.out.println("");
-		// }
 	}
 
 	public Error getError() {
