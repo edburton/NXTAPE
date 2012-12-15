@@ -81,8 +81,8 @@ public class Renderer {
 	public void draw(PGraphics g) {
 		if (keyColor != null) {
 			g.noStroke();
-			g.fill(keyColor.getRed() * .8f, keyColor.getGreen() * .8f,
-					keyColor.getBlue() * .8f);
+			g.fill(keyColor.getRed() * .75f, keyColor.getGreen() * .75f,
+					keyColor.getBlue() * .75f);
 			g.beginShape(PConstants.QUADS);
 			g.vertex(x - lineMarginWidth, y - lineMarginWidth);
 			g.vertex(x + width - lineMarginWidth, y - lineMarginWidth);
@@ -98,9 +98,9 @@ public class Renderer {
 			g.vertex(x, y + height);
 			g.vertex(x, y);
 			g.endShape();
-			g.fill(Math.round(keyColor.getRed() * .2f),
-					Math.round(keyColor.getGreen() * .2f),
-					Math.round(keyColor.getBlue() * .2f));
+			g.fill(Math.round(keyColor.getRed() * .125f),
+					Math.round(keyColor.getGreen() * .125f),
+					Math.round(keyColor.getBlue() * .125f));
 			g.rect(x, y, x + width, y + height);
 		}
 		if (children != null)
@@ -121,9 +121,9 @@ public class Renderer {
 		if (children != null)
 			for (int i = 0; i < children.size(); i++)
 				children.get(i).setKeyColor(
-						new Color(Math.round(keyColor.getRed() * .5f), Math
-								.round(keyColor.getGreen() * .5f), Math
-								.round(keyColor.getBlue() * .5f)));
+						new Color(Math.round(keyColor.getRed() * .75f), Math
+								.round(keyColor.getGreen() * .75f), Math
+								.round(keyColor.getBlue() * .75f)));
 	}
 
 	public static Color createKeyColour(int index, int outOf) {

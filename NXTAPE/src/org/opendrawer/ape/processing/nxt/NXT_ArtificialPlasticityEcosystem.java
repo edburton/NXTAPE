@@ -89,7 +89,15 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		} else {
 			dummyMode = true;
 			// ecosystems.add(makeEyeBallEcology());
+			// ecosystems.add(makeSimpleArmEcology());
+			// ecosystems.add(makeEyeBallEcology());
+			// ecosystems.add(makeSimpleArmEcology());
+			// ecosystems.add(makeEyeBallEcology());
+			// ecosystems.add(makeEyeBallEcology());
+			// ecosystems.add(makeSimpleArmEcology());
+			// ecosystems.add(makeEyeBallEcology());
 			ecosystems.add(makeSimpleArmEcology());
+			// ecosystems.add(makeEyeBallEcology());
 		}
 		float height = getHeight() / (float) ecosystems.size();
 		for (int i = 0; i < ecosystems.size(); i++) {
@@ -253,7 +261,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			eco.addReflex(eyeBallTwitchReflex);
 		}
 
-		for (int i = 0; i < 12; i++) {
+		for (int i = 0; i < 8; i++) {
 			Predictor predictor;
 			Actor actor;
 			List<StateStreamBundle> predictorBundles = eco
@@ -291,7 +299,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			eco.addReflex(wobbleReflex);
 		}
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 15; i++) {
 			Predictor predictor;
 			Actor actor;
 			List<StateStreamBundle> predictorBundles = eco

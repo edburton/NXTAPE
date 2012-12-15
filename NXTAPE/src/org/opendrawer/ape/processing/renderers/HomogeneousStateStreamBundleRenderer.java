@@ -30,7 +30,7 @@ public class HomogeneousStateStreamBundleRenderer extends
 		super.setVisibleAt(x, y, width, height);
 		if (statesProviderRenderer != null)
 			statesProviderRenderer.setVisibleAt(x + Renderer.lineWidth, y
-					+ Renderer.lineWidth, height - Renderer.lineWidth * 2,
-					height - Renderer.lineWidth * 2);
+					+ Renderer.lineWidth, height - Renderer.lineWidth, height
+					- Renderer.lineWidth);
 	}
 }
