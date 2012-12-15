@@ -16,7 +16,7 @@ public class NXTAccelerometerRenderer extends Renderer {
 	@Override
 	public void draw(PGraphics g) {
 		super.draw(g);
-		float radius = (Math.min(width, height) / 2);
+		float radius = (Math.min(width, height) / 2) - Renderer.lineMarginWidth;
 		float xc = x + width / 2;
 		float yc = y + height / 2;
 		g.noStroke();

@@ -70,7 +70,7 @@ public class SimpleArm extends OutputStatesProvider {
 				jointAngle[i] = -1;
 			} else if (jointAngle[i] > 1)
 				jointAngle[i] = 1;
-			a += ((jointAngle[i]) + 1) * (Math.PI / 8);
+			a += ((jointAngle[i]) + 1) * (Math.PI / 4);
 			x += Math.cos(a) * jointLength[i];
 			y += Math.sin(a) * jointLength[i];
 			xs[i] = x;

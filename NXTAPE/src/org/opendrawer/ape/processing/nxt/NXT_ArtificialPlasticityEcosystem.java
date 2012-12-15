@@ -242,7 +242,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 
 		eco.makeInput(eyeBall);
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 4; i++) {
 			Muscle muscle = new Muscle("Muscle " + i);
 			muscles.add(muscle);
 			eyeBall.addMuscle(muscle);
@@ -279,7 +279,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	}
 
 	private Ecosystem makeSimpleArmEcology() {
-		Ecosystem eco = new Ecosystem(100);
+		Ecosystem eco = new Ecosystem(50);
 		int joints = 3;
 		SimpleArm simpleArm = new SimpleArm(joints);
 
@@ -302,10 +302,10 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 							joints * 2);
 			List<StateStreamBundle> actorInputBundles = eco
 					.getRandomUniqueSensorimotorStateStreamBundles(
-							StatesProvider.INPUT, 1, 1, joints * 2);
+							StatesProvider.INPUT, 1, 1, joints);
 			List<StateStreamBundle> actorOutputBundles = eco
 					.getRandomUniqueSensorimotorStateStreamBundles(
-							StatesProvider.OUTPUT, 1, 1, joints * 2);
+							StatesProvider.OUTPUT, 1, 1, joints);
 			predictor = new Predictor(predictorBundles.get(0),
 					predictorBundles.get(1));
 			actor = new Actor(actorInputBundles.get(0),

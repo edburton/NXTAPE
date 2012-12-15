@@ -15,7 +15,7 @@ public class NXTMotorRenderer extends Renderer {
 	public void draw(PGraphics g) {
 		super.draw(g);
 		g.strokeWeight(Renderer.lineWidth);
-		float radius = (Math.min(width, height) / 2);
+		float radius = (Math.min(width, height) / 2) - Renderer.lineMarginWidth;
 		float xc = x + width / 2;
 		float yc = y + height / 2;
 		g.noStroke();

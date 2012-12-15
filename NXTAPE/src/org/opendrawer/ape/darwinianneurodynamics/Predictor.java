@@ -16,7 +16,7 @@ public class Predictor extends Actor {
 	int inputLength;
 	int outputLength;
 	double weightsMatrix[][];
-	double learningRate = 0.01;
+	double learningRate = 0.001;
 
 	public Predictor(StateStreamBundle inputStateStreamBundle,
 			StateStreamBundle outputStateStreamBundle) {
@@ -36,13 +36,8 @@ public class Predictor extends Actor {
 		outputLength = outputStateStreamBundle.getStateStreams().size();
 		weightsMatrix = new double[inputLength + 1][outputLength];
 		for (int i = 0; i < inputLength + 1; i++)
-			for (int o = 0; o < outputLength; o++) {
+			for (int o = 0; o < outputLength; o++)
 				weightsMatrix[i][o] = (Math.random() * 2) - 1;
-				// if (i - 1 == o)
-				// weightsMatrix[i][o] = 1;
-				// else
-				// weightsMatrix[i][o] = 0;
-			}
 
 		// System.out.println("");
 		// for (int i = 0; i < inputLength + 1; i++) {
@@ -92,7 +87,7 @@ public class Predictor extends Actor {
 						* ((resultingPrediction[o] - output[o]) * input[i]);
 				errorValue += Math.pow(resultingPrediction[o] - output[o], 2);
 			}
-		errorValue = Math.sqrt(errorValue) / (inputLength + 1);
+		errorValue = (Math.sqrt(errorValue) / (inputLength + 1)) / 2;
 
 		error.setOutputState(errorValue, 0);
 		prediction.notifyStatesObservers();

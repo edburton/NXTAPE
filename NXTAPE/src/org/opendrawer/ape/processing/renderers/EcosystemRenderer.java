@@ -66,7 +66,7 @@ public class EcosystemRenderer extends Renderer {
 		int best = Integer.MAX_VALUE;
 
 		for (int ww = 0; ww < zones; ww++) {
-			for (int hh = ww + 1; hh <= ww * 12; hh++) {
+			for (int hh = ww + 1; hh <= ww * 4; hh++) {
 				if (hh * ww >= zones && (hh * ww) - zones <= best) {
 					best = (hh * ww) - zones;
 					gridWidth = ww;

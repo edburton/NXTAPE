@@ -27,7 +27,7 @@ public class EyeBallTwitchReflex extends Reflex {
 			input += v * v;
 		}
 		input = Math.sqrt(input);
-		if (input < 0.1 && counter > twitchTime && Math.random() > 0.99) {
+		if (input < 0.1 && counter > twitchTime && Math.random() > 0.9) {
 			counter = 0;
 			twitchTime = 20;
 			twitchLength = Math.random();
