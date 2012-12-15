@@ -37,10 +37,6 @@ public class SimpleArm extends OutputStatesProvider {
 		stateNames[states.length - 1] = "Y extremity";
 		for (int i = 0; i < joints; i++)
 			jointLength[i] /= totalJointLength;
-		System.out.println("");
-		for (int i = 0; i < stateNames.length; i++)
-			System.out.print("[" + stateNames[i] + "]");
-		System.out.println("");
 	}
 
 	@Override
