@@ -23,7 +23,8 @@ public class StateStreamBundleRenderer extends Renderer {
 		if (stateStreamBundle != null) {
 			g.noFill();
 			int nc = stateStreamBundle.getStateStreams().size();
-			float lineWidth = (float) ((Renderer.lineWidth) / Math.sqrt(nc));
+			float lineWidth = (float) ((Renderer.lineMarginWidth) / Math
+					.sqrt(nc));
 			for (int c = 0; c < nc; c++) {
 				StateStream stateStream = stateStreamBundle.getStateStreams()
 						.get(c);
@@ -46,10 +47,10 @@ public class StateStreamBundleRenderer extends Renderer {
 								vertexCount = 0;
 							}
 							v = (v - min) / (max - min);
-							x1 = (getStreamLeft() + Renderer.lineWidth)
-									+ ((i / (float) (streamLength - 1)) * ((width - Renderer.lineWidth * 2) - (getStreamLeft() - x)));
-							y1 = (float) ((y + height - Renderer.lineWidth) - v
-									* (height - Renderer.lineWidth * 2));
+							x1 = (getStreamLeft() + Renderer.lineMarginWidth)
+									+ ((i / (float) (streamLength - 1)) * ((width - Renderer.lineMarginWidth * 2) - (getStreamLeft() - x)));
+							y1 = (float) ((y + height - Renderer.lineMarginWidth) - v
+									* (height - Renderer.lineMarginWidth * 2));
 							// y1 -= ((c - (nc - 1)) * Renderer.lineWidth) /
 							// 8.0f;
 							// x1 -= ((c - (nc - 1)) * Renderer.lineWidth) /

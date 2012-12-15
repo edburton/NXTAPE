@@ -12,13 +12,19 @@ public class Ecosystem {
 	private final List<Actor> actors = new ArrayList<Actor>();
 	private final List<Predictor> predictors = new ArrayList<Predictor>();
 	private Error allErros;
-	private final HomogeneousStateStreamBundle allErrors;
+	private HomogeneousStateStreamBundle allErrors;
 	private final int statesStreamLength;
 
 	public Ecosystem(int statesStreamLength) {
 		this.statesStreamLength = statesStreamLength;
-		allErrors = new HomogeneousStateStreamBundle(allErros,
-				statesStreamLength);
+		setErrorStreamLength(statesStreamLength * 4);
+	}
+
+	private void setErrorStreamLength(int length) {
+		allErrors = new HomogeneousStateStreamBundle(allErros, length);
+		for (int i = 0; i < curiosityLoops.size(); i++)
+			allErrors.addCompressingStatesProviderStreams(curiosityLoops.get(i)
+					.getPredictor().getError());
 	}
 
 	public SensorimotorInput makeInput(StatesProvider statesProvider) {
@@ -97,12 +103,12 @@ public class Ecosystem {
 		List<StateStreamBundle> result = new ArrayList<StateStreamBundle>();
 		int[] streamIndexes = new int[max * 2];
 		for (int s = 0; s < streamIndexes.length; s++)
-			streamIndexes[s] = -1;
+			streamIndexes[s] = Integer.MIN_VALUE;
 		int streamCount = 0;
 		int resultLengths[] = new int[n];
 		int total;
-		if (min * n > stateStreams.size())
-			min = (int) Math.ceil((double) stateStreams.size() / n);
+		if (min * n >= stateStreams.size())
+			min = (int) Math.floor((double) stateStreams.size() / n);
 		do {
 			total = 0;
 			for (int i = 0; i < n; i++) {
@@ -111,7 +117,6 @@ public class Ecosystem {
 			}
 		} while (total > stateStreams.size());
 		for (int i = 0; i < n; i++) {
-
 			for (int s = 0; s < resultLengths[i]; s++) {
 				boolean original = false;
 				int p = -1;
@@ -124,10 +129,8 @@ public class Ecosystem {
 				}
 				streamIndexes[streamCount++] = p;
 			}
-
 			StateStreamBundle stateStreamBundle = new StateStreamBundle(
 					statesStreamLength);
-
 			for (int c = 0; c < resultLengths[i]; c++) {
 				StateStream stream = stateStreams
 						.get(streamIndexes[(streamCount - 1) - c]);

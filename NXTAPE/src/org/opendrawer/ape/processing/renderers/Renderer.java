@@ -81,8 +81,8 @@ public class Renderer {
 	public void draw(PGraphics g) {
 		if (keyColor != null) {
 			g.noStroke();
-			g.fill(keyColor.getRed() * .75f, keyColor.getGreen() * .75f,
-					keyColor.getBlue() * .75f);
+			g.fill(keyColor.getRed() * .8f, keyColor.getGreen() * .8f,
+					keyColor.getBlue() * .8f);
 			g.beginShape(PConstants.QUADS);
 			g.vertex(x - lineMarginWidth, y - lineMarginWidth);
 			g.vertex(x + width - lineMarginWidth, y - lineMarginWidth);
@@ -98,9 +98,9 @@ public class Renderer {
 			g.vertex(x, y + height);
 			g.vertex(x, y);
 			g.endShape();
-			g.fill(Math.round(keyColor.getRed() * .25f),
-					Math.round(keyColor.getGreen() * .25f),
-					Math.round(keyColor.getBlue() * .25f));
+			g.fill(Math.round(keyColor.getRed() * .2f),
+					Math.round(keyColor.getGreen() * .2f),
+					Math.round(keyColor.getBlue() * .2f));
 			g.rect(x, y, x + width, y + height);
 		}
 		if (children != null)

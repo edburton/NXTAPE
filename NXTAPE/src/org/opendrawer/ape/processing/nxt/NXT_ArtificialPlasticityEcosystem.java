@@ -8,8 +8,6 @@ import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
 import lejos.nxt.addon.AccelHTSensor;
 import lejos.pc.comm.NXTComm;
-import lejos.pc.comm.NXTCommException;
-import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
 import org.opendrawer.ape.darwinianneurodynamics.Actor;
@@ -79,12 +77,12 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	}
 
 	private void setupNXT() {
-		try {
-			nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
-			NXTs = nxtComm.search(null);
-		} catch (NXTCommException e) {
-			e.printStackTrace();
-		}
+		// try {
+		// nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
+		// NXTs = nxtComm.search(null);
+		// } catch (NXTCommException e) {
+		// e.printStackTrace();
+		// }
 
 		if (NXTs != null && NXTs.length == 1) {
 			ecosystems.add(makeNXTEcology());

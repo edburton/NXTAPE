@@ -34,9 +34,10 @@ public class CompressingStateStream extends StateStream {
 			stepStates[step++] = value;
 			if (step >= steps) {
 				step = 0;
-				double v = Double.MIN_VALUE;
+				double v = 0;
 				for (int i = 0; i < steps; i++)
-					v = Math.max(stepStates[i], v);
+					v += stepStates[i];
+				v /= steps;
 				stateStream[writeHead] = v;
 				writeHead++;
 				totalWriteHead++;
@@ -50,16 +51,15 @@ public class CompressingStateStream extends StateStream {
 						temp[i] = stateStream[i];
 					for (int i = 0; i < streamLength; i++)
 						if (i < streamLength / 2) {
-							stateStream[i] = Math.max(temp[i * 2],
-									temp[i * 2 + 1]);
+							stateStream[i] = (temp[i * 2] + temp[i * 2 + 1]) / 2;
 						} else
 							stateStream[i] = Double.NaN;
 				}
 			} else if (step > 1) {
-				double v = Double.MIN_VALUE;
+				double v = 0;
 				for (int i = 0; i < step - 1; i++)
-					v = Math.max(stepStates[i], v);
-				// v /= step - 1;
+					v += stepStates[i];
+				v /= step - 1;
 				stateStream[writeHead] = v;
 			}
 		}

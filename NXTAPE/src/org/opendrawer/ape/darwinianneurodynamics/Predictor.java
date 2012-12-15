@@ -50,7 +50,7 @@ public class Predictor extends Actor {
 
 		error = new Error();
 		errorStreamBundle = new StateStreamBundle(
-				inputStateStreamBundle.getStreamLength());
+				inputStateStreamBundle.getStreamLength() * 2);
 		errorStreamBundle.addCompressingStatesProviderStreams(error);
 		addStateStreamBundle(errorStreamBundle);
 	}
@@ -87,7 +87,7 @@ public class Predictor extends Actor {
 						* ((resultingPrediction[o] - output[o]) * input[i]);
 				errorValue += Math.pow(resultingPrediction[o] - output[o], 2);
 			}
-		errorValue = (Math.sqrt(errorValue) / (inputLength + 1)) / 2;
+		errorValue = (Math.sqrt(errorValue) / (inputLength + 1)) * 0.70710678118655;
 
 		error.setOutputState(errorValue, 0);
 		prediction.notifyStatesObservers();
