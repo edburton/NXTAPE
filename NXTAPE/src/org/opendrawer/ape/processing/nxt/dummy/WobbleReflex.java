@@ -3,13 +3,16 @@ package org.opendrawer.ape.processing.nxt.dummy;
 import org.opendrawer.ape.darwinianneurodynamics.OutputStatesProvider;
 import org.opendrawer.ape.darwinianneurodynamics.Reflex;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
+import org.opendrawer.ape.darwinianneurodynamics.Util;
 
-public class SimpleArmTwitchReflex extends Reflex {
-	int twitchTime = 1;
-	double twitchAmount = 0;
-	int counter = 0;
+public class WobbleReflex extends Reflex {
+	double counter = 0;
+	double s = 0.1;
+	double ss = s;
+	int c = 0;
+	int n = 10;
 
-	public SimpleArmTwitchReflex(StateStreamBundle inputStatesStreamBundle,
+	public WobbleReflex(StateStreamBundle inputStatesStreamBundle,
 			OutputStatesProvider outputStatesProvider, int inputIndex,
 			int outputIndex) {
 		super(inputStatesStreamBundle, outputStatesProvider, inputIndex,
@@ -20,15 +23,14 @@ public class SimpleArmTwitchReflex extends Reflex {
 	public void react() {
 		if (outputStatesProvider == null)
 			return;
-		if (counter > twitchTime && Math.random() > 0.9) {
-			counter = 0;
-			twitchTime = 1 + (int) ((Math.random()) * 50);
-			twitchAmount = (Math.random() - 0.5) * 2;
+		if (c % n == 0) {
+			n = Util.RandomInt(2, 100);
+			s = Math.pow(Math.random() / 2, 2);
 		}
-		double output = counter > twitchTime ? 0 : (twitchAmount / 2)
-				* (1 - Math
-						.cos((counter / (double) twitchTime) * (Math.PI * 2)));
-		counter++;
+		double output = Math.cos(counter);
+		ss = (s + ss * 19) / 20;
+		counter += ss;
+		c++;
 		outputStatesProvider.setOutputState(output, outputChannel);
 	}
 }

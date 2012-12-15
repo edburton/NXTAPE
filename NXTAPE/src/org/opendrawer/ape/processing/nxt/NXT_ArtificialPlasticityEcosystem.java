@@ -25,7 +25,7 @@ import org.opendrawer.ape.processing.nxt.dummy.EyeBall;
 import org.opendrawer.ape.processing.nxt.dummy.EyeBallTwitchReflex;
 import org.opendrawer.ape.processing.nxt.dummy.Muscle;
 import org.opendrawer.ape.processing.nxt.dummy.SimpleArm;
-import org.opendrawer.ape.processing.nxt.dummy.SimpleArmTwitchReflex;
+import org.opendrawer.ape.processing.nxt.dummy.WobbleReflex;
 import org.opendrawer.ape.processing.renderers.EcosystemRenderer;
 import org.opendrawer.ape.processing.renderers.Renderer;
 
@@ -288,9 +288,9 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		for (int i = 0; i < joints; i++) {
 			StateStreamBundle reflexStateStreamBundle = new StateStreamBundle(
 					eco.getStatesStreamLength());
-			SimpleArmTwitchReflex simpleArmTwitchReflex = new SimpleArmTwitchReflex(
+			WobbleReflex wobbleReflex = new WobbleReflex(
 					reflexStateStreamBundle, simpleArm, 0, i);
-			eco.addReflex(simpleArmTwitchReflex);
+			eco.addReflex(wobbleReflex);
 		}
 
 		for (int i = 0; i < 10; i++) {

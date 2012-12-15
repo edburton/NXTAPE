@@ -16,7 +16,7 @@ public class Predictor extends Actor {
 	int inputLength;
 	int outputLength;
 	double weightsMatrix[][];
-	double learningRate = 0.001;
+	double learningRate = 0.01;
 
 	public Predictor(StateStreamBundle inputStateStreamBundle,
 			StateStreamBundle outputStateStreamBundle) {
