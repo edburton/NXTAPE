@@ -33,4 +33,9 @@ public class TestingStatesProvider extends StatesProvider {
 	public int[] getStateTypes() {
 		return null;
 	}
+
+	@Override
+	public void setOutputState(double state, int stateChannel) {
+		states[stateChannel] = state;
+	}
 }

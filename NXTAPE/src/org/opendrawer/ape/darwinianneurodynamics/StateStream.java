@@ -74,6 +74,10 @@ public class StateStream implements StatesObserver {
 		return statesProviderChannel;
 	}
 
+	public void setOutputState(double state) {
+		statesProvider.setOutputState(state, statesProviderChannel);
+	}
+
 	@Override
 	public void statesUpdated(StatesProvider statesProvider) {
 		double[] states = statesProvider.getStates();

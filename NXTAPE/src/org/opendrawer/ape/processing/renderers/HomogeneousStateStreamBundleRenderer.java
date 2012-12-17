@@ -10,9 +10,9 @@ public class HomogeneousStateStreamBundleRenderer extends
 	public HomogeneousStateStreamBundleRenderer(
 			HomogeneousStateStreamBundle statesStreamBundle) {
 		super(statesStreamBundle);
-		if (statesStreamBundle.getStateProvider() != null)
+		if (statesStreamBundle.getStatesProvider() != null)
 			this.statesProviderRenderer = Renderer
-					.makeRendererFor(statesStreamBundle.getStateProvider());
+					.makeRendererFor(statesStreamBundle.getStatesProvider());
 		if (this.statesProviderRenderer != null)
 			addChild(this.statesProviderRenderer);
 	}

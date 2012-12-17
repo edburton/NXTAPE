@@ -2,9 +2,9 @@ package org.opendrawer.ape.processing.nxt;
 
 import lejos.nxt.remote.RemoteMotor;
 
-import org.opendrawer.ape.darwinianneurodynamics.OutputStatesProvider;
+import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 
-public class NXTMotor extends OutputStatesProvider {
+public class NXTMotor extends StatesProvider {
 	private final RemoteMotor remoteMotor;
 	private final int minAngle;
 	private final int maxAngle;

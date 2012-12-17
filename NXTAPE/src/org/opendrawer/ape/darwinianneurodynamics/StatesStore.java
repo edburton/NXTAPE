@@ -1,6 +1,6 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
-public class StatesStore extends OutputStatesProvider {
+public class StatesStore extends StatesProvider {
 	int length;
 	double[] states;
 

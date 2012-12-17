@@ -15,7 +15,7 @@ public class HomogeneousStateStreamBundle extends StateStreamBundle {
 			addStateStream(new StateStream(statesProvider, i, streamLength));
 	}
 
-	public StatesProvider getStateProvider() {
+	public StatesProvider getStatesProvider() {
 		return statesProvider;
 	}
 }

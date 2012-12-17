@@ -14,8 +14,7 @@ import org.opendrawer.ape.darwinianneurodynamics.Actor;
 import org.opendrawer.ape.darwinianneurodynamics.CuriosityLoop;
 import org.opendrawer.ape.darwinianneurodynamics.Ecosystem;
 import org.opendrawer.ape.darwinianneurodynamics.Predictor;
-import org.opendrawer.ape.darwinianneurodynamics.SensorimotorInput;
-import org.opendrawer.ape.darwinianneurodynamics.SensorimotorOutput;
+import org.opendrawer.ape.darwinianneurodynamics.SensorimotorBundle;
 import org.opendrawer.ape.darwinianneurodynamics.StateStream;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
 import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
@@ -142,27 +141,27 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		NXTMotor armMiddleMotorNXT = new NXTMotor(Motor.B, -90, 90, 0, 0.8f);
 		NXTMotor armBodyMotorNXT = new NXTMotor(Motor.C, -90, 90, 0, 0.8f);
 
-		SensorimotorInput accelerometer = eco.makeInput(accelerometerNXT);
-		SensorimotorInput touchLeft = eco.makeInput(touchLeftNXT);
-		SensorimotorInput touchBottom = eco.makeInput(touchBottomNXT);
-		SensorimotorInput touchRight = eco.makeInput(touchRightNXT);
+		SensorimotorBundle accelerometer = eco.makeInput(accelerometerNXT);
+		SensorimotorBundle touchLeft = eco.makeInput(touchLeftNXT);
+		SensorimotorBundle touchBottom = eco.makeInput(touchBottomNXT);
+		SensorimotorBundle touchRight = eco.makeInput(touchRightNXT);
 
-		SensorimotorOutput armHeadMotor = eco.makeOutput(armHeadMotorNXT);
-		SensorimotorOutput armMiddleMotor = eco.makeOutput(armMiddleMotorNXT);
-		SensorimotorOutput armBodyMotor = eco.makeOutput(armBodyMotorNXT);
+		SensorimotorBundle armHeadMotor = eco.makeOutput(armHeadMotorNXT);
+		SensorimotorBundle armMiddleMotor = eco.makeOutput(armMiddleMotorNXT);
+		SensorimotorBundle armBodyMotor = eco.makeOutput(armBodyMotorNXT);
 
 		eco.addReflex(new LinearReflex(accelerometer, armHeadMotor
-				.getOutputStatesProvider(), 1, 0, -1));
+				.getStatesProvider(), 1, 0, -1));
 		eco.addReflex(new LinearReflex(touchBottom, armHeadMotor
-				.getOutputStatesProvider(), 0, 0, -1));
+				.getStatesProvider(), 0, 0, -1));
 		eco.addReflex(new LinearReflex(touchLeft, armMiddleMotor
-				.getOutputStatesProvider(), 0, 0, -1));
+				.getStatesProvider(), 0, 0, -1));
 		eco.addReflex(new LinearReflex(touchRight, armMiddleMotor
-				.getOutputStatesProvider(), 0, 0, 1));
+				.getStatesProvider(), 0, 0, 1));
 		eco.addReflex(new LinearReflex(touchLeft, armBodyMotor
-				.getOutputStatesProvider(), 0, 0, -1));
+				.getStatesProvider(), 0, 0, -1));
 		eco.addReflex(new LinearReflex(touchRight, armBodyMotor
-				.getOutputStatesProvider(), 0, 0, 1));
+				.getStatesProvider(), 0, 0, 1));
 
 		for (int i = 0; i < 50; i++) {
 			Actor actor = new Actor(null, null);

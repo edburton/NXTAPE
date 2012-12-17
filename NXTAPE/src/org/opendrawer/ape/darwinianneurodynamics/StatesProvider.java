@@ -32,4 +32,6 @@ public abstract class StatesProvider {
 	public abstract int[] getStateTypes();
 
 	public abstract int getStatesLength();
+
+	public abstract void setOutputState(double state, int stateChannel);
 }

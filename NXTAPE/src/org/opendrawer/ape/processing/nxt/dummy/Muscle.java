@@ -1,8 +1,8 @@
 package org.opendrawer.ape.processing.nxt.dummy;
 
-import org.opendrawer.ape.darwinianneurodynamics.OutputStatesProvider;
+import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 
-public class Muscle extends OutputStatesProvider {
+public class Muscle extends StatesProvider {
 	private double requestedRestLength = 1;
 	private double currentRestLength = requestedRestLength;
 	private static final int[] stateTypes = new int[] { OUTPUT, INPUT };

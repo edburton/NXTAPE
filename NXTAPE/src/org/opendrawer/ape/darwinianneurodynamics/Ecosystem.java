@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Ecosystem {
 	private final List<SensorimotorBundle> sensorimotorBundles = new ArrayList<SensorimotorBundle>();
-	private final List<SensorimotorInput> inputs = new ArrayList<SensorimotorInput>();
-	private final List<SensorimotorOutput> outputs = new ArrayList<SensorimotorOutput>();
+	private final List<SensorimotorBundle> inputs = new ArrayList<SensorimotorBundle>();
+	private final List<SensorimotorBundle> outputs = new ArrayList<SensorimotorBundle>();
 	private final List<Reflex> reflexes = new ArrayList<Reflex>();
 	private final List<CuriosityLoop> curiosityLoops = new ArrayList<CuriosityLoop>();
 	private final List<Actor> actors = new ArrayList<Actor>();
@@ -23,20 +23,20 @@ public class Ecosystem {
 	private void setErrorStreamLength(int length) {
 		allErrorStreams = new HomogeneousStateStreamBundle(allErrors, length);
 		for (int i = 0; i < curiosityLoops.size(); i++)
-			allErrorStreams.addCompressingStatesProviderStreams(curiosityLoops.get(i)
-					.getPredictor().getError());
+			allErrorStreams.addCompressingStatesProviderStreams(curiosityLoops
+					.get(i).getPredictor().getError());
 	}
 
-	public SensorimotorInput makeInput(StatesProvider statesProvider) {
-		SensorimotorInput input = new SensorimotorInput(statesProvider,
+	public SensorimotorBundle makeInput(StatesProvider statesProvider) {
+		SensorimotorBundle input = new SensorimotorBundle(statesProvider,
 				statesStreamLength);
 		inputs.add(input);
 		sensorimotorBundles.add(input);
 		return input;
 	}
 
-	public SensorimotorOutput makeOutput(OutputStatesProvider statesProvider) {
-		SensorimotorOutput output = new SensorimotorOutput(statesProvider,
+	public SensorimotorBundle makeOutput(StatesProvider statesProvider) {
+		SensorimotorBundle output = new SensorimotorBundle(statesProvider,
 				statesStreamLength);
 		outputs.add(output);
 		sensorimotorBundles.add(output);
@@ -54,7 +54,8 @@ public class Ecosystem {
 
 	public void addPredictor(Predictor predictor) {
 		predictors.add(predictor);
-		allErrorStreams.addCompressingStatesProviderStreams(predictor.getError());
+		allErrorStreams.addCompressingStatesProviderStreams(predictor
+				.getError());
 	}
 
 	public void addCuriosityLoop(CuriosityLoop curiosityLoop) {
@@ -70,25 +71,24 @@ public class Ecosystem {
 
 	private void stepInputs() {
 		for (int i = 0; i < inputs.size(); i++) {
-			inputs.get(i).getStateProvider().updateStates();
-			inputs.get(i).getStateProvider().notifyStatesObservers();
+			inputs.get(i).getStatesProvider().updateStates();
+			inputs.get(i).getStatesProvider().notifyStatesObservers();
 		}
 	}
 
 	private void stepOutputs() {
 		for (int i = 0; i < outputs.size(); i++) {
-			int channels = outputs.get(i).getOutputStatesProvider()
-					.getStatesLength();
+			int channels = outputs.get(i).getStateStreams().size();
 			for (int n = 0; n < channels; n++)
-				outputs.get(i).getOutputStatesProvider().setOutputState(0, n);
+				outputs.get(i).getStateStreams().get(n).setOutputState(0);
 		}
 
 		for (int i = 0; i < reflexes.size(); i++)
 			reflexes.get(i).react();
 
 		for (int i = 0; i < outputs.size(); i++) {
-			outputs.get(i).getOutputStatesProvider().updateStates();
-			outputs.get(i).getOutputStatesProvider().notifyStatesObservers();
+			outputs.get(i).getStatesProvider().updateStates();
+			outputs.get(i).getStatesProvider().notifyStatesObservers();
 		}
 
 		for (int i = 0; i < predictors.size(); i++)
@@ -167,11 +167,11 @@ public class Ecosystem {
 		return getRandomUniqueStateStreamBundles(stateStreams, n, min, max);
 	}
 
-	public List<SensorimotorInput> getInputs() {
+	public List<SensorimotorBundle> getInputs() {
 		return inputs;
 	}
 
-	public List<SensorimotorOutput> getOutputs() {
+	public List<SensorimotorBundle> getOutputs() {
 		return outputs;
 	}
 

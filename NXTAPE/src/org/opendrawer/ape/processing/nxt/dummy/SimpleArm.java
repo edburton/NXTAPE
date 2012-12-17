@@ -1,8 +1,8 @@
 package org.opendrawer.ape.processing.nxt.dummy;
 
-import org.opendrawer.ape.darwinianneurodynamics.OutputStatesProvider;
+import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 
-public class SimpleArm extends OutputStatesProvider {
+public class SimpleArm extends StatesProvider {
 	private final int joints;
 	private final double[] jointMovement;
 	private final double[] jointAngle;

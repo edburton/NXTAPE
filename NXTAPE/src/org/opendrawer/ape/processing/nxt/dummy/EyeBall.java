@@ -81,4 +81,19 @@ public class EyeBall extends StatesProvider {
 	public int[] getStateTypes() {
 		return stateTypes;
 	}
+
+	@Override
+	public void setOutputState(double state, int stateChannel) {
+		switch (stateChannel) {
+		case 0:
+			x = state;
+			break;
+		case 1:
+			y = state;
+			break;
+		case 2:
+			speed = state;
+			break;
+		}
+	}
 }

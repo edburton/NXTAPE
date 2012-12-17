@@ -26,8 +26,9 @@ public class Actor extends StateStreamBundleGroup {
 	}
 
 	public void step() {
-		OutputStatesProvider outputProvider = (OutputStatesProvider) (outputStateStreamBundle
-				.getStateStreams().get(0).getStatesProvider());
+		// OutputStatesProvider outputProvider = (OutputStatesProvider)
+		// (outputStateStreamBundle
+		// .getStateStreams().get(0).getStatesProvider());
 
 	}
 

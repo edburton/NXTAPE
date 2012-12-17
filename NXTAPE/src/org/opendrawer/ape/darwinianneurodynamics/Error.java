@@ -1,6 +1,6 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
-public class Error extends OutputStatesProvider {
+public class Error extends StatesProvider {
 	private int channels = 1;
 	private double[] states = new double[channels];
 	private static int[] stateTypes = new int[] { GENERIC };

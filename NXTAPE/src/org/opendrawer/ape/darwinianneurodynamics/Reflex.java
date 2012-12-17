@@ -4,10 +4,10 @@ public abstract class Reflex extends StateStreamBundleGroup {
 
 	protected int inputChannel;
 	protected int outputChannel;
-	protected OutputStatesProvider outputStatesProvider;
+	protected StatesProvider outputStatesProvider;
 
 	public Reflex(StateStreamBundle inputStateStreamBundle,
-			OutputStatesProvider outputStatesProvider, int inputStateIndex,
+			StatesProvider outputStatesProvider, int inputStateIndex,
 			int outputIndex) {
 		super();
 		addStateStreamBundle(inputStateStreamBundle);

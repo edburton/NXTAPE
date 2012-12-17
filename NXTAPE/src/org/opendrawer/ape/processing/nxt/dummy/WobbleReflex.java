@@ -1,8 +1,8 @@
 package org.opendrawer.ape.processing.nxt.dummy;
 
-import org.opendrawer.ape.darwinianneurodynamics.OutputStatesProvider;
 import org.opendrawer.ape.darwinianneurodynamics.Reflex;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
+import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 import org.opendrawer.ape.darwinianneurodynamics.Util;
 
 public class WobbleReflex extends Reflex {
@@ -13,8 +13,7 @@ public class WobbleReflex extends Reflex {
 	int n = 10;
 
 	public WobbleReflex(StateStreamBundle inputStatesStreamBundle,
-			OutputStatesProvider outputStatesProvider, int inputIndex,
-			int outputIndex) {
+			StatesProvider outputStatesProvider, int inputIndex, int outputIndex) {
 		super(inputStatesStreamBundle, outputStatesProvider, inputIndex,
 				outputIndex);
 	}

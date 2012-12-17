@@ -36,4 +36,9 @@ public class NXTCompass extends StatesProvider {
 	public int[] getStateTypes() {
 		return stateTypes;
 	}
+
+	@Override
+	public void setOutputState(double state, int stateChannel) {
+		direction = state;
+	}
 }

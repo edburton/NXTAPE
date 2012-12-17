@@ -39,4 +39,9 @@ public class NXTAccelerometer extends StatesProvider {
 	public int[] getStateTypes() {
 		return stateTypes;
 	}
+
+	@Override
+	public void setOutputState(double state, int stateChannel) {
+		states[stateChannel] = state;
+	}
 }

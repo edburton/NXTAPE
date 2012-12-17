@@ -1,8 +1,8 @@
 package org.opendrawer.ape.processing.nxt.dummy;
 
-import org.opendrawer.ape.darwinianneurodynamics.OutputStatesProvider;
 import org.opendrawer.ape.darwinianneurodynamics.Reflex;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
+import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 
 public class EyeBallTwitchReflex extends Reflex {
 	int twitchTime = 0;
@@ -10,8 +10,7 @@ public class EyeBallTwitchReflex extends Reflex {
 	int counter = 0;
 
 	public EyeBallTwitchReflex(StateStreamBundle inputStatesStreamBundle,
-			OutputStatesProvider outputStatesProvider, int inputIndex,
-			int outputIndex) {
+			StatesProvider outputStatesProvider, int inputIndex, int outputIndex) {
 		super(inputStatesStreamBundle, outputStatesProvider, inputIndex,
 				outputIndex);
 	}
