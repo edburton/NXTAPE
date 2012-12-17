@@ -11,8 +11,8 @@ public class Ecosystem {
 	private final List<CuriosityLoop> curiosityLoops = new ArrayList<CuriosityLoop>();
 	private final List<Actor> actors = new ArrayList<Actor>();
 	private final List<Predictor> predictors = new ArrayList<Predictor>();
-	private Error allErros;
-	private HomogeneousStateStreamBundle allErrors;
+	private Error allErrors;
+	private HomogeneousStateStreamBundle allErrorStreams;
 	private final int statesStreamLength;
 
 	public Ecosystem(int statesStreamLength) {
@@ -21,9 +21,9 @@ public class Ecosystem {
 	}
 
 	private void setErrorStreamLength(int length) {
-		allErrors = new HomogeneousStateStreamBundle(allErros, length);
+		allErrorStreams = new HomogeneousStateStreamBundle(allErrors, length);
 		for (int i = 0; i < curiosityLoops.size(); i++)
-			allErrors.addCompressingStatesProviderStreams(curiosityLoops.get(i)
+			allErrorStreams.addCompressingStatesProviderStreams(curiosityLoops.get(i)
 					.getPredictor().getError());
 	}
 
@@ -54,12 +54,12 @@ public class Ecosystem {
 
 	public void addPredictor(Predictor predictor) {
 		predictors.add(predictor);
-		allErrors.addCompressingStatesProviderStreams(predictor.getError());
+		allErrorStreams.addCompressingStatesProviderStreams(predictor.getError());
 	}
 
 	public void addCuriosityLoop(CuriosityLoop curiosityLoop) {
 		curiosityLoops.add(curiosityLoop);
-		allErrors.addCompressingStatesProviderStreams(curiosityLoop
+		allErrorStreams.addCompressingStatesProviderStreams(curiosityLoop
 				.getPredictor().getError());
 	}
 
@@ -92,7 +92,7 @@ public class Ecosystem {
 		}
 
 		for (int i = 0; i < predictors.size(); i++)
-			predictors.get(i).predict();
+			predictors.get(i).step();
 
 		for (int i = 0; i < curiosityLoops.size(); i++)
 			curiosityLoops.get(i).step();
@@ -191,8 +191,8 @@ public class Ecosystem {
 		return statesStreamLength;
 	}
 
-	public StateStreamBundle getAllErrors() {
-		return allErrors;
+	public StateStreamBundle getAllErrorsStreams() {
+		return allErrorStreams;
 	}
 
 	public List<CuriosityLoop> getCuriosityLoops() {

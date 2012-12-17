@@ -1,27 +1,17 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
-public class Prediction extends OutputStatesProvider {
+public class StatesStore extends OutputStatesProvider {
 	int length;
 	double[] states;
 
-	public Prediction(int length) {
+	public StatesStore(int length) {
 		this.length = length;
 		states = new double[length];
 	}
 
 	@Override
-	public String getName() {
-		return null;
-	}
-
-	@Override
 	public double[] getStates() {
 		return states;
-	}
-
-	@Override
-	public String[] getStateNames() {
-		return null;
 	}
 
 	@Override

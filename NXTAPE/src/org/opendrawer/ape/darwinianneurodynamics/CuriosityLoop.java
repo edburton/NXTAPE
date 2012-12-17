@@ -2,7 +2,7 @@ package org.opendrawer.ape.darwinianneurodynamics;
 
 public class CuriosityLoop extends StateStreamBundleGroupList {
 
-	public CuriosityLoop(Predictor predictor, Actor actor) {
+	public CuriosityLoop(Actor predictor, Actor actor) {
 		super(predictor, actor);
 
 	}
@@ -20,7 +20,7 @@ public class CuriosityLoop extends StateStreamBundleGroupList {
 	}
 
 	public void step() {
-		getPredictor().predict();
+		getPredictor().step();
 		getActor().step();
 	}
 }

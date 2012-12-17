@@ -70,13 +70,6 @@ public class StateStream implements StatesObserver {
 		return statesProvider;
 	}
 
-	public String getName() {
-		if (statesProvider != null)
-			return statesProvider.getName() + ':'
-					+ statesProvider.getStateNames()[statesProviderChannel];
-		return "no StatesProvider";
-	}
-
 	public int getStatesProviderChannel() {
 		return statesProviderChannel;
 	}

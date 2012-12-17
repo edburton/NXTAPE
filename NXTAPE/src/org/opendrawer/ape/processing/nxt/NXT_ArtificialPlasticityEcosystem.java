@@ -31,18 +31,13 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcosystem extends PApplet {
-	private static final boolean presentationMode = true;
+	private static final boolean presentationMode = false;
 
 	private NXTComm nxtComm;
 	private NXTInfo[] NXTs;
 	private final List<Ecosystem> ecosystems = new ArrayList<Ecosystem>();
 	private final List<EcosystemRenderer> ecosytemRenderers = new ArrayList<EcosystemRenderer>();
 	private boolean dummyMode = false;
-	private static final String touch_left_name = "Touch Left";
-	private static final String touch_bottom_name = "Touch Bottom";
-	private static final String touch_right_name = "Touch Right";
-	private static final String accelerometer_name = "Accelerometer";
-	// private static final String compass_name = "Compass";
 	private float zoomToModule = 1;
 
 	private boolean cursorVisible = true;
@@ -89,15 +84,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		} else {
 			dummyMode = true;
 			// ecosystems.add(makeEyeBallEcology());
-			// ecosystems.add(makeSimpleArmEcology());
-			// ecosystems.add(makeEyeBallEcology());
-			// ecosystems.add(makeSimpleArmEcology());
-			// ecosystems.add(makeEyeBallEcology());
-			// ecosystems.add(makeEyeBallEcology());
-			// ecosystems.add(makeSimpleArmEcology());
-			// ecosystems.add(makeEyeBallEcology());
 			ecosystems.add(makeSimpleArmEcology());
-			// ecosystems.add(makeEyeBallEcology());
 		}
 		float height = getHeight() / (float) ecosystems.size();
 		for (int i = 0; i < ecosystems.size(); i++) {
@@ -143,24 +130,17 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	private Ecosystem makeNXTEcology() {
 		Ecosystem eco = new Ecosystem(20);
 		NXTAccelerometer accelerometerNXT = new NXTAccelerometer(
-				!dummyMode ? new AccelHTSensor(SensorPort.S1) : null,
-				accelerometer_name);
-		NXTTouchSensor touchLeftNXT = new NXTTouchSensor(
-				!dummyMode ? new TouchSensor(SensorPort.S2) : null,
-				touch_left_name);
-		NXTTouchSensor touchBottomNXT = new NXTTouchSensor(
-				!dummyMode ? new TouchSensor(SensorPort.S3) : null,
-				touch_bottom_name);
-		NXTTouchSensor touchRightNXT = new NXTTouchSensor(
-				!dummyMode ? new TouchSensor(SensorPort.S4) : null,
-				touch_right_name);
+				new AccelHTSensor(SensorPort.S1));
+		NXTTouchSensor touchLeftNXT = new NXTTouchSensor(new TouchSensor(
+				SensorPort.S2));
+		NXTTouchSensor touchBottomNXT = new NXTTouchSensor(new TouchSensor(
+				SensorPort.S3));
+		NXTTouchSensor touchRightNXT = new NXTTouchSensor(new TouchSensor(
+				SensorPort.S4));
 
-		NXTMotor armHeadMotorNXT = new NXTMotor(!dummyMode ? Motor.A : null,
-				"arm head motor", -180, 0, 0, 0.925f);
-		NXTMotor armMiddleMotorNXT = new NXTMotor(!dummyMode ? Motor.B : null,
-				"arm midle motor", -90, 90, 0, 0.8f);
-		NXTMotor armBodyMotorNXT = new NXTMotor(!dummyMode ? Motor.C : null,
-				"arm body motor", -90, 90, 0, 0.8f);
+		NXTMotor armHeadMotorNXT = new NXTMotor(Motor.A, -180, 0, 0, 0.925f);
+		NXTMotor armMiddleMotorNXT = new NXTMotor(Motor.B, -90, 90, 0, 0.8f);
+		NXTMotor armBodyMotorNXT = new NXTMotor(Motor.C, -90, 90, 0, 0.8f);
 
 		SensorimotorInput accelerometer = eco.makeInput(accelerometerNXT);
 		SensorimotorInput touchLeft = eco.makeInput(touchLeftNXT);
@@ -249,7 +229,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		eco.makeInput(eyeBall);
 
 		for (int i = 0; i < 4; i++) {
-			Muscle muscle = new Muscle("Muscle " + i);
+			Muscle muscle = new Muscle();
 			muscles.add(muscle);
 			eyeBall.addMuscle(muscle);
 			eco.makeOutput(muscle);
@@ -262,7 +242,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		}
 
 		for (int i = 0; i < 8; i++) {
-			Predictor predictor;
+			Actor predictor;
 			Actor actor;
 			List<StateStreamBundle> predictorBundles = eco
 					.getRandomUniqueSensorimotorStateStreamBundles(
@@ -299,8 +279,8 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			eco.addReflex(wobbleReflex);
 		}
 
-		for (int i = 0; i < 15; i++) {
-			Predictor predictor;
+		for (int i = 0; i < 8; i++) {
+			Actor predictor;
 			Actor actor;
 			List<StateStreamBundle> predictorBundles = eco
 					.getRandomUniqueSensorimotorStateStreamBundles(

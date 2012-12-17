@@ -6,31 +6,18 @@ import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 
 public class NXTAccelerometer extends StatesProvider {
 	private final AccelHTSensor accelerometer;
-	private final String name;
-	private static final String[] stateNames = new String[] { "X", "Y", "Z" };
 	private static final int[] stateTypes = new int[] { INPUT, INPUT, INPUT };
 	private final double states[];
 	private final float maxExpectedValue = 256; // Arbitrary
 
-	public NXTAccelerometer(AccelHTSensor accelerometer, String name) {
+	public NXTAccelerometer(AccelHTSensor accelerometer) {
 		this.accelerometer = accelerometer;
-		this.name = name;
 		states = new double[3];
 	}
 
 	@Override
 	public double[] getStates() {
 		return states;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public String[] getStateNames() {
-		return stateNames;
 	}
 
 	@Override

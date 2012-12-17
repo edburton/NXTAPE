@@ -18,7 +18,8 @@ public class NXTTouchSensorRenderer extends Renderer {
 		float xc = x + width / 2;
 		float yc = y + height / 2;
 		g.noStroke();
-		g.fill(64, 64, 64);
+		g.fill(Math.round(keyColor.getRed()), Math.round(keyColor.getGreen()),
+				Math.round(keyColor.getBlue()));
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 		radius -= Renderer.lineMarginWidth;
 

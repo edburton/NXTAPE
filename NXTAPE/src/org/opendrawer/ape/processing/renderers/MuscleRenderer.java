@@ -19,8 +19,9 @@ public class MuscleRenderer extends Renderer {
 		float value = (float) muscle.getCurrentRestLength();
 
 		float mh = ((1.2f - value) / 4) * width;
-		g.stroke(255, 128, 128);
-		g.fill(250, 100, 100);
+		g.noStroke();
+		g.fill(Math.round(keyColor.getRed()), Math.round(keyColor.getGreen()),
+				Math.round(keyColor.getBlue()));
 		g.ellipse(xc - mh, (y + height) - (height * value), xc + mh, y + height);
 	}
 }

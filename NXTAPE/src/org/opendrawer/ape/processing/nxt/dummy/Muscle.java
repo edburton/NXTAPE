@@ -3,20 +3,11 @@ package org.opendrawer.ape.processing.nxt.dummy;
 import org.opendrawer.ape.darwinianneurodynamics.OutputStatesProvider;
 
 public class Muscle extends OutputStatesProvider {
-	private final String name;
 	private double requestedRestLength = 1;
 	private double currentRestLength = requestedRestLength;
-	private static String[] stateNames = new String[] {
-			"Requested rest length", "Current rest length" };
 	private static final int[] stateTypes = new int[] { OUTPUT, INPUT };
 
-	public Muscle(String name) {
-		this.name = name;
-	}
-
-	@Override
-	public String getName() {
-		return name;
+	public Muscle() {
 	}
 
 	@Override
@@ -32,11 +23,6 @@ public class Muscle extends OutputStatesProvider {
 	@Override
 	public double[] getStates() {
 		return new double[] { requestedRestLength, currentRestLength };
-	}
-
-	@Override
-	public String[] getStateNames() {
-		return stateNames;
 	}
 
 	@Override

@@ -11,20 +11,8 @@ public class TestingStatesProvider extends StatesProvider {
 	}
 
 	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public double[] getStates() {
 		return states;
-	}
-
-	@Override
-	public String[] getStateNames() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

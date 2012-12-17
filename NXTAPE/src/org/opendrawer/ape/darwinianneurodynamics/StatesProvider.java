@@ -27,11 +27,7 @@ public abstract class StatesProvider {
 
 	public abstract void updateStates();
 
-	public abstract String getName();
-
 	public abstract double[] getStates();
-
-	public abstract String[] getStateNames();
 
 	public abstract int[] getStateTypes();
 

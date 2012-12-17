@@ -40,7 +40,7 @@ public class EcosystemRenderer extends Renderer {
 			renderer.setKeyColor(createKeyColour(nType, nTypes));
 		}
 		nType++;
-		Renderer renderer = Renderer.makeRendererFor(ecosystem.getAllErrors());
+		Renderer renderer = Renderer.makeRendererFor(ecosystem.getAllErrorsStreams());
 		addChild(renderer);
 		renderer.setKeyColor(createKeyColour(nType, nTypes));
 	}

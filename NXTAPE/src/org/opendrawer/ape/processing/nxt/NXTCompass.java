@@ -6,29 +6,16 @@ import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 
 public class NXTCompass extends StatesProvider {
 	private final CompassHTSensor compass;
-	private final String name;
-	private static final String[] stateNames = new String[] { "Heading South" };
 	private static final int[] stateTypes = new int[] { INPUT };
 	private double direction;
 
-	public NXTCompass(CompassHTSensor compass, String name) {
+	public NXTCompass(CompassHTSensor compass) {
 		this.compass = compass;
-		this.name = name;
 	}
 
 	@Override
 	public double[] getStates() {
 		return new double[] { direction };
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public String[] getStateNames() {
-		return stateNames;
 	}
 
 	@Override

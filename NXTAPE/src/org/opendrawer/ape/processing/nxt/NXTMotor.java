@@ -6,7 +6,6 @@ import org.opendrawer.ape.darwinianneurodynamics.OutputStatesProvider;
 
 public class NXTMotor extends OutputStatesProvider {
 	private final RemoteMotor remoteMotor;
-	private final String name;
 	private final int minAngle;
 	private final int maxAngle;
 	private final int restAngle;
@@ -18,15 +17,13 @@ public class NXTMotor extends OutputStatesProvider {
 	private int actualAngle;
 	private final double maxInputRate = 1f;
 	private final double maxRate = 40.0f;
-	private static String[] stateNames = new String[] { "Impulse", "Angle" };
 	private static final int[] stateTypes = new int[] { OUTPUT, INPUT };
 	private double topSpeed;
 	private int currentSpeed;
 
-	public NXTMotor(RemoteMotor remoteMotor, String name, int minAngle,
-			int maxAngle, int restAngle, double friction) {
+	public NXTMotor(RemoteMotor remoteMotor, int minAngle, int maxAngle,
+			int restAngle, double friction) {
 		this.remoteMotor = remoteMotor;
-		this.name = name;
 		this.minAngle = minAngle;
 		this.maxAngle = maxAngle;
 		this.friction = friction;
@@ -43,11 +40,6 @@ public class NXTMotor extends OutputStatesProvider {
 
 	public int getRestAngle() {
 		return restAngle;
-	}
-
-	@Override
-	public String getName() {
-		return name;
 	}
 
 	public double getMinAngle() {
@@ -113,11 +105,6 @@ public class NXTMotor extends OutputStatesProvider {
 	public double[] getStates() {
 		return new double[] { inputRate,
 				((double) actualAngle - restAngle) / (maxAngle - minAngle) };
-	}
-
-	@Override
-	public String[] getStateNames() {
-		return stateNames;
 	}
 
 	@Override

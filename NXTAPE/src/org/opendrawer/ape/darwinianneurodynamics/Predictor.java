@@ -2,48 +2,30 @@ package org.opendrawer.ape.darwinianneurodynamics;
 
 public class Predictor extends Actor {
 
-	StateStreamBundle inputStateStreamBundle;
-	StateStreamBundle outputStateStreamBundle;
-
 	HomogeneousStateStreamBundle predictionStreamBundle;
 	StateStreamBundle errorStreamBundle;
 
-	Prediction prediction;
 	Error error;
 
-	private int streamLength;
-
-	int inputLength;
-	int outputLength;
-	double weightsMatrix[][];
 	double learningRate = 0.001;
 
 	public Predictor(StateStreamBundle inputStateStreamBundle,
 			StateStreamBundle outputStateStreamBundle) {
 		super(inputStateStreamBundle, outputStateStreamBundle);
-		this.inputStateStreamBundle = inputStateStreamBundle;
-		this.outputStateStreamBundle = outputStateStreamBundle;
-		streamLength = inputStateStreamBundle.getStreamLength();
+
 		if (outputStateStreamBundle == null)
 			return;
-		prediction = new Prediction(outputStateStreamBundle.getStateStreams()
+		statesStore = new StatesStore(outputStateStreamBundle.getStateStreams()
 				.size());
-		predictionStreamBundle = new HomogeneousStateStreamBundle(prediction,
+		predictionStreamBundle = new HomogeneousStateStreamBundle(statesStore,
 				streamLength);
 		addStateStreamBundle(predictionStreamBundle);
-
-		inputLength = inputStateStreamBundle.getStateStreams().size();
-		outputLength = outputStateStreamBundle.getStateStreams().size();
-		weightsMatrix = new double[inputLength + 1][outputLength];
-		for (int i = 0; i < inputLength + 1; i++)
-			for (int o = 0; o < outputLength; o++)
-				weightsMatrix[i][o] = (Math.random() * 2) - 1;
 
 		// System.out.println("");
 		// for (int i = 0; i < inputLength + 1; i++) {
 		// System.out.println("");
 		// for (int o = 0; o < outputLength; o++) {
-		// System.out.print("[" + weightsMatrix[i][o] + "]");
+		// System.out.print("[" + inputToOutputWeightsMatrix[i][o] + "]");
 		// }
 		// }
 		// System.out.println("");
@@ -55,7 +37,8 @@ public class Predictor extends Actor {
 		addStateStreamBundle(errorStreamBundle);
 	}
 
-	public void predict() {
+	@Override
+	public void step() {
 
 		double[][] inputPeriod = inputStateStreamBundle.readPortion(0, 1);
 		double[][] outputPeriod = outputStateStreamBundle.readPortion(0, 1);
@@ -75,22 +58,24 @@ public class Predictor extends Actor {
 
 		for (int i = 0; i < inputLength + 1; i++)
 			for (int o = 0; o < outputLength; o++)
-				resultingPrediction[o] += input[i] * weightsMatrix[i][o];
+				resultingPrediction[o] += input[i]
+						* inputToOutputWeightsMatrix[i][o];
 
 		for (int i = 0; i < outputLength; i++)
-			prediction.setOutputState(resultingPrediction[i], i);
+			statesStore.setOutputState(resultingPrediction[i], i);
 
 		double errorValue = 0;
 		for (int i = 0; i < inputLength + 1; i++)
 			for (int o = 0; o < outputLength; o++) {
-				weightsMatrix[i][o] = weightsMatrix[i][o] - learningRate
+				inputToOutputWeightsMatrix[i][o] = inputToOutputWeightsMatrix[i][o]
+						- learningRate
 						* ((resultingPrediction[o] - output[o]) * input[i]);
 				errorValue += Math.pow(resultingPrediction[o] - output[o], 2);
 			}
 		errorValue = (Math.sqrt(errorValue) / (inputLength + 1)) * 0.70710678118655;
 
 		error.setOutputState(errorValue, 0);
-		prediction.notifyStatesObservers();
+		statesStore.notifyStatesObservers();
 		error.notifyStatesObservers();
 	}
 
