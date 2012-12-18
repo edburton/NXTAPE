@@ -121,12 +121,17 @@ public class Renderer {
 		if (children != null)
 			for (int i = 0; i < children.size(); i++)
 				children.get(i).setKeyColor(
-						new Color(Math.round(keyColor.getRed() * .75f), Math
-								.round(keyColor.getGreen() * .75f), Math
-								.round(keyColor.getBlue() * .75f)));
+						new Color(Math.round(keyColor.getRed() * .8f), Math
+								.round(keyColor.getGreen() * .8f), Math
+								.round(keyColor.getBlue() * .8f)));
 	}
 
 	public static Color createKeyColour(int index, int outOf) {
 		return new Color(Color.HSBtoRGB(index / (float) outOf, 1.0f, 1.0f));
+	}
+
+	public static Color createKeyColour(int index, int outOf, float brightness) {
+		return new Color(
+				Color.HSBtoRGB(index / (float) outOf, 1.0f, brightness));
 	}
 }

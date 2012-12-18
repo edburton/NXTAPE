@@ -8,6 +8,8 @@ import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
 import lejos.nxt.addon.AccelHTSensor;
 import lejos.pc.comm.NXTComm;
+import lejos.pc.comm.NXTCommException;
+import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
 import org.opendrawer.ape.darwinianneurodynamics.Actor;
@@ -19,7 +21,6 @@ import org.opendrawer.ape.darwinianneurodynamics.StateStream;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
 import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 import org.opendrawer.ape.processing.nxt.dummy.EyeBall;
-import org.opendrawer.ape.processing.nxt.dummy.EyeBallTwitchReflex;
 import org.opendrawer.ape.processing.nxt.dummy.Muscle;
 import org.opendrawer.ape.processing.nxt.dummy.SimpleArm;
 import org.opendrawer.ape.processing.nxt.dummy.WobbleReflex;
@@ -30,13 +31,10 @@ import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class NXT_ArtificialPlasticityEcosystem extends PApplet {
-	private static final boolean presentationMode = false;
+	private static final boolean presentationMode = true;
 
-	private NXTComm nxtComm;
-	private NXTInfo[] NXTs;
 	private final List<Ecosystem> ecosystems = new ArrayList<Ecosystem>();
 	private final List<EcosystemRenderer> ecosytemRenderers = new ArrayList<EcosystemRenderer>();
-	private boolean dummyMode = false;
 	private float zoomToModule = 1;
 
 	private boolean cursorVisible = true;
@@ -71,19 +69,19 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	}
 
 	private void setupNXT() {
-		// try {
-		// nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
-		// NXTs = nxtComm.search(null);
-		// } catch (NXTCommException e) {
-		// e.printStackTrace();
-		// }
+		NXTInfo[] NXTs = null;
+		try {
+			NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
+			NXTs = nxtComm.search(null);
+		} catch (NXTCommException e) {
+			e.printStackTrace();
+		}
 
 		if (NXTs != null && NXTs.length == 1) {
 			ecosystems.add(makeNXTEcology());
 		} else {
-			dummyMode = true;
-			// ecosystems.add(makeEyeBallEcology());
-			ecosystems.add(makeSimpleArmEcology());
+			ecosystems.add(makeEyeBallEcology());
+			// ecosystems.add(makeSimpleArmEcology());
 		}
 		float height = getHeight() / (float) ecosystems.size();
 		for (int i = 0; i < ecosystems.size(); i++) {
@@ -227,17 +225,19 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 
 		eco.makeInput(eyeBall);
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 6; i++) {
 			Muscle muscle = new Muscle();
 			muscles.add(muscle);
 			eyeBall.addMuscle(muscle);
 			eco.makeOutput(muscle);
-			StateStreamBundle reflexStateStreamBundle = new StateStreamBundle(
-					eco.getStatesStreamLength());
-			reflexStateStreamBundle.addStatesProviderStreams(eyeBall);
-			EyeBallTwitchReflex eyeBallTwitchReflex = new EyeBallTwitchReflex(
-					reflexStateStreamBundle, muscle, 0, 0);
-			eco.addReflex(eyeBallTwitchReflex);
+			// StateStreamBundle reflexStateStreamBundle = new
+			// StateStreamBundle(
+			// eco.getStatesStreamLength());
+			// reflexStateStreamBundle.addStatesProviderStreams(eyeBall);
+			// EyeBallTwitchReflex eyeBallTwitchReflex = new
+			// EyeBallTwitchReflex(
+			// reflexStateStreamBundle, muscle, 0, 0);
+			// eco.addReflex(eyeBallTwitchReflex);
 		}
 
 		for (int i = 0; i < 8; i++) {
@@ -246,13 +246,13 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			List<StateStreamBundle> predictorBundles = eco
 					.getRandomUniqueSensorimotorStateStreamBundles(
 							StatesProvider.INPUT | StatesProvider.OUTPUT, 2, 1,
-							6);
+							muscles.size() * 2);
 			List<StateStreamBundle> actorInputBundles = eco
 					.getRandomUniqueSensorimotorStateStreamBundles(
-							StatesProvider.INPUT, 1, 1, 6);
+							StatesProvider.INPUT, 1, 1, muscles.size() * 2);
 			List<StateStreamBundle> actorOutputBundles = eco
 					.getRandomUniqueSensorimotorStateStreamBundles(
-							StatesProvider.INPUT, 1, 1, 6);
+							StatesProvider.OUTPUT, 1, 1, muscles.size() * 2);
 			predictor = new Predictor(predictorBundles.get(0),
 					predictorBundles.get(1));
 			actor = new Actor(actorInputBundles.get(0),
@@ -264,13 +264,13 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	}
 
 	private Ecosystem makeSimpleArmEcology() {
-		Ecosystem eco = new Ecosystem(50);
+		Ecosystem eco = new Ecosystem(100);
 		int joints = 3;
 		SimpleArm simpleArm = new SimpleArm(joints);
 
 		eco.makeOutput(simpleArm);
 
-		for (int i = 0; i < joints; i++) {
+		for (int i = 0; i < 0; i++) {
 			StateStreamBundle reflexStateStreamBundle = new StateStreamBundle(
 					eco.getStatesStreamLength());
 			WobbleReflex wobbleReflex = new WobbleReflex(
@@ -287,12 +287,12 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 							joints * 2);
 			List<StateStreamBundle> actorInputBundles = eco
 					.getRandomUniqueSensorimotorStateStreamBundles(
-							StatesProvider.INPUT, 1, 1, joints);
+							StatesProvider.INPUT, 1, joints, joints);
 			List<StateStreamBundle> actorOutputBundles = eco
 					.getRandomUniqueSensorimotorStateStreamBundles(
-							StatesProvider.OUTPUT, 1, 1, joints);
-			predictor = new Predictor(predictorBundles.get(0),
-					predictorBundles.get(1));
+							StatesProvider.OUTPUT, 1, joints, joints);
+			predictor = new Predictor(actorInputBundles.get(0),
+					actorOutputBundles.get(0));
 			actor = new Actor(actorInputBundles.get(0),
 					actorOutputBundles.get(0));
 			CuriosityLoop curiosityLoop = new CuriosityLoop(predictor, actor);

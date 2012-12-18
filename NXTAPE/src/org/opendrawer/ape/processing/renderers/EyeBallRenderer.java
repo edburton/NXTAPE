@@ -24,8 +24,8 @@ public class EyeBallRenderer extends Renderer {
 		g.fill(255, 240, 240);
 		g.ellipse(xc - radius, yc - radius, xc + radius, yc + radius);
 
-		double ex = eyeBall.getX();
-		double ey = eyeBall.getY();
+		double ex = eyeBall.getX() / 2;
+		double ey = eyeBall.getY() / 2;
 		float dx = (float) (ex * width / 2);
 		float dy = (float) (ey * height / 2);
 
@@ -35,6 +35,8 @@ public class EyeBallRenderer extends Renderer {
 		for (int i = 0; i < nm; i++) {
 			float mx = -eyeBall.getMuscleX(i) * radius;
 			float my = -eyeBall.getMuscleY(i) * radius;
+			mx /= 2;
+			my /= 2;
 			g.line(xc + (mx * 3 + dx) / 4, yc + (my * 3 + dy) / 4, xc + mx, yc
 					+ my);
 		}

@@ -15,8 +15,6 @@ public class Predictor extends Actor {
 
 		if (outputStateStreamBundle == null)
 			return;
-		statesStore = new StatesStore(outputStateStreamBundle.getStateStreams()
-				.size());
 		predictionStreamBundle = new HomogeneousStateStreamBundle(statesStore,
 				streamLength);
 		addStateStreamBundle(predictionStreamBundle);

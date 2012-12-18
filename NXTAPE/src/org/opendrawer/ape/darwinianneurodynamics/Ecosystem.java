@@ -14,6 +14,7 @@ public class Ecosystem {
 	private Error allErrors;
 	private HomogeneousStateStreamBundle allErrorStreams;
 	private final int statesStreamLength;
+	private CuriosityLoop activeCuriosityLoop = null;
 
 	public Ecosystem(int statesStreamLength) {
 		this.statesStreamLength = statesStreamLength;
@@ -77,11 +78,18 @@ public class Ecosystem {
 	}
 
 	private void stepOutputs() {
-		for (int i = 0; i < outputs.size(); i++) {
-			int channels = outputs.get(i).getStateStreams().size();
-			for (int n = 0; n < channels; n++)
-				outputs.get(i).getStateStreams().get(n).setOutputState(0);
-		}
+		// for (int i = 0; i < outputs.size(); i++) {
+		// int channels = outputs.get(i).getStateStreams().size();
+		// for (int n = 0; n < channels; n++)
+		// outputs.get(i).getStateStreams().get(n).setOutputState(0);
+		// }
+
+		if (activeCuriosityLoop == null) {
+			int r = Util.RandomInt(0, curiosityLoops.size() - 1);
+			activeCuriosityLoop = curiosityLoops.get(r);
+			activeCuriosityLoop.activate();
+		} else if (!activeCuriosityLoop.isActive())
+			activeCuriosityLoop = null;
 
 		for (int i = 0; i < reflexes.size(); i++)
 			reflexes.get(i).react();
@@ -91,8 +99,8 @@ public class Ecosystem {
 			outputs.get(i).getStatesProvider().notifyStatesObservers();
 		}
 
-		for (int i = 0; i < predictors.size(); i++)
-			predictors.get(i).step();
+		// for (int i = 0; i < predictors.size(); i++)
+		// predictors.get(i).step();
 
 		for (int i = 0; i < curiosityLoops.size(); i++)
 			curiosityLoops.get(i).step();

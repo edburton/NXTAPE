@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
+import org.opendrawer.ape.darwinianneurodynamics.Util;
 
 public class EyeBall extends StatesProvider {
 	private static final int[] stateTypes = new int[] { INPUT, INPUT, INPUT };
@@ -13,20 +14,20 @@ public class EyeBall extends StatesProvider {
 	private double xv = 0;
 	private double yv = 0;
 	private double speed = 0;
-	private static final double k = 0.05;
-	private static final double f = 0.8;
+	private static final double k = 0.5;
+	private static final double f = 0.5;
 
 	public EyeBall() {
 	}
 
 	@Override
 	public double[] getStates() {
-		return new double[] { x, y, speed };
+		return new double[] { x, y, xv, yv, speed };
 	}
 
 	@Override
 	public int getStatesLength() {
-		return 3;
+		return 5;
 	}
 
 	@Override
@@ -46,9 +47,19 @@ public class EyeBall extends StatesProvider {
 		}
 		xv *= f;
 		yv *= f;
+		x += xv / 60;
+		y += yv / 60;
+		double d = Util.distance(x, y);
+		if (d > 1) {
+			x /= d;
+			y /= d;
+		}
+		d = Util.distance(xv, yv);
+		if (d > 1) {
+			xv /= d;
+			yv /= d;
+		}
 		speed = Math.sqrt(xv * xv + yv * yv);
-		x += xv;
-		y += yv;
 	}
 
 	public void addMuscle(Muscle muscle) {
@@ -69,12 +80,12 @@ public class EyeBall extends StatesProvider {
 
 	public float getMuscleX(int i) {
 		double a = (Math.PI * 2) * (i / (double) muscles.size());
-		return (float) Math.sin(a);
+		return (float) Math.sin(a) * 2;
 	}
 
 	public float getMuscleY(int i) {
 		double a = (Math.PI * 2) * (i / (double) muscles.size());
-		return (float) Math.cos(a);
+		return (float) Math.cos(a) * 2;
 	}
 
 	@Override
@@ -86,12 +97,18 @@ public class EyeBall extends StatesProvider {
 	public void setOutputState(double state, int stateChannel) {
 		switch (stateChannel) {
 		case 0:
-			x = state;
+			// x = state;
 			break;
 		case 1:
-			y = state;
+			// y = state;
 			break;
 		case 2:
+			xv = state;
+			break;
+		case 3:
+			yv = state;
+			break;
+		case 4:
 			speed = state;
 			break;
 		}

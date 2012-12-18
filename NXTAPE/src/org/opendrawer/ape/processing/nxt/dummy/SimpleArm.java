@@ -1,6 +1,7 @@
 package org.opendrawer.ape.processing.nxt.dummy;
 
 import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
+import org.opendrawer.ape.darwinianneurodynamics.Util;
 
 public class SimpleArm extends StatesProvider {
 	private final int joints;
@@ -19,7 +20,7 @@ public class SimpleArm extends StatesProvider {
 		xs = new double[joints];
 		ys = new double[joints];
 		jointLength = new double[joints];
-		states = new double[joints * 2 + 2];
+		states = new double[joints + 2];
 		stateTypes = new int[states.length];
 		double totalJointLength = 0;
 		for (int i = 0; i < joints; i++) {
@@ -58,7 +59,8 @@ public class SimpleArm extends StatesProvider {
 			xs[i] = x;
 			ys[i] = y;
 			int c = 0;
-			states[(c++ * joints) + i] = jointMovement[i];
+			jointAngle[i] = Util.clampMinusOneToOne(jointAngle[i]);
+			// states[(c++ * joints) + i] = jointMovement[i];
 			states[(c++ * joints) + i] = jointAngle[i];
 		}
 		states[states.length - 2] = x;
@@ -68,7 +70,7 @@ public class SimpleArm extends StatesProvider {
 	@Override
 	public void setOutputState(double state, int stateChannel) {
 		if (stateChannel < joints)
-			jointMovement[stateChannel] = state;
+			jointMovement[stateChannel] = Util.clampMinusOneToOne(state);
 	}
 
 	public double[] getXs() {

@@ -1,6 +1,7 @@
 package org.opendrawer.ape.processing.nxt.dummy;
 
 import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
+import org.opendrawer.ape.darwinianneurodynamics.Util;
 
 public class Muscle extends StatesProvider {
 	private double requestedRestLength = 1;
@@ -12,12 +13,13 @@ public class Muscle extends StatesProvider {
 
 	@Override
 	public void updateStates() {
-		currentRestLength = (requestedRestLength + currentRestLength * 3) / 4;
+		currentRestLength = Util
+				.clampMinusOneToOne((requestedRestLength + currentRestLength * 3) / 4);
 	}
 
 	@Override
 	public void setOutputState(double state, int stateIndex) {
-		requestedRestLength = state;
+		requestedRestLength = Util.clampMinusOneToOne(state);
 	}
 
 	@Override
@@ -31,7 +33,7 @@ public class Muscle extends StatesProvider {
 	}
 
 	public double getCurrentRestLength() {
-		return currentRestLength;
+		return (currentRestLength + 1) / 2;
 	}
 
 	@Override

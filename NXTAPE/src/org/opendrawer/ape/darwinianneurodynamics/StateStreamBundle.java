@@ -39,6 +39,11 @@ public class StateStreamBundle {
 		return stateStreams.get(channel).read(pastPosition);
 	}
 
+	public void setStates(double[] states) {
+		for (int i = 0; i < states.length; i++)
+			stateStreams.get(i).setOutputState(states[i]);
+	}
+
 	public int getStreamLength() {
 		return streamLength;
 	}
