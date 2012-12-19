@@ -9,7 +9,7 @@ public class EcosystemRenderer extends Renderer {
 
 	public EcosystemRenderer(Ecosystem ecosystem) {
 		this.ecosystem = ecosystem;
-		int nTypes = 5;
+		int nTypes = 6;
 		int nType = 0;
 
 		for (int i = 0; i < ecosystem.getInputs().size(); i++) {
@@ -40,7 +40,12 @@ public class EcosystemRenderer extends Renderer {
 			renderer.setKeyColor(createKeyColour(nType, nTypes));
 		}
 		nType++;
-		Renderer renderer = Renderer.makeRendererFor(ecosystem.getAllErrorsStreams());
+		Renderer renderer = Renderer.makeRendererFor(ecosystem
+				.getAllErrorsStreams());
+		addChild(renderer);
+		renderer.setKeyColor(createKeyColour(nType, nTypes));
+		nType++;
+		renderer = Renderer.makeRendererFor(ecosystem.getTotalErrorStreams());
 		addChild(renderer);
 		renderer.setKeyColor(createKeyColour(nType, nTypes));
 	}

@@ -14,8 +14,8 @@ public class EyeBall extends StatesProvider {
 	private double xv = 0;
 	private double yv = 0;
 	private double speed = 0;
-	private static final double k = 0.5;
-	private static final double f = 0.5;
+	private static final double k = 0.25;
+	private static final double f = 0.95;
 
 	public EyeBall() {
 	}

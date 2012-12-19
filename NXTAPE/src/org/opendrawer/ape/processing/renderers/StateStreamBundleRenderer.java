@@ -51,10 +51,6 @@ public class StateStreamBundleRenderer extends Renderer {
 									+ ((i / (float) (streamLength - 1)) * ((width - Renderer.lineMarginWidth * 2) - (getStreamLeft() - x)));
 							y1 = (float) ((y + height - Renderer.lineMarginWidth) - v
 									* (height - Renderer.lineMarginWidth * 2));
-							// y1 -= ((c - (nc - 1)) * Renderer.lineWidth) /
-							// 8.0f;
-							// x1 -= ((c - (nc - 1)) * Renderer.lineWidth) /
-							// 8.0f;
 							g.vertex(x1, y1);
 							xs[vertexCount] = x1 + (lineWidth * c);
 							ys[vertexCount] = y1 + (lineWidth * c);

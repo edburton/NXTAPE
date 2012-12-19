@@ -15,18 +15,18 @@ public class CompressingStateStream extends StateStream {
 		super(statesProvider, i, streamLength);
 	}
 
-	@Override
-	public double read(int pastPosition) {
-		if (stateStream != null) {
-			if (pastPosition > streamLength || pastPosition > totalWriteHead)
-				return Double.NaN;
-			int index = pastPosition;
-			while (index < 0)
-				index += streamLength;
-			return (stateStream[index]);
-		} else
-			return Double.NaN;
-	}
+	// @Override
+	// public double read(int pastPosition) {
+	// if (stateStream != null) {
+	// if (pastPosition > streamLength || pastPosition > totalWriteHead)
+	// return Double.NaN;
+	// int index = pastPosition;
+	// while (index < 0)
+	// index += streamLength;
+	// return (stateStream[index]);
+	// } else
+	// return Double.NaN;
+	// }
 
 	@Override
 	protected void write(double value) {
@@ -60,7 +60,7 @@ public class CompressingStateStream extends StateStream {
 				for (int i = 0; i < step - 1; i++)
 					v += stepStates[i];
 				v /= step - 1;
-				stateStream[writeHead] = v;
+				stateStream[writeHead - 1] = v;
 			}
 		}
 	}

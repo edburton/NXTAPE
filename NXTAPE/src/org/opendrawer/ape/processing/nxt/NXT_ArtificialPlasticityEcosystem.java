@@ -16,8 +16,6 @@ import org.opendrawer.ape.darwinianneurodynamics.Actor;
 import org.opendrawer.ape.darwinianneurodynamics.CuriosityLoop;
 import org.opendrawer.ape.darwinianneurodynamics.Ecosystem;
 import org.opendrawer.ape.darwinianneurodynamics.Predictor;
-import org.opendrawer.ape.darwinianneurodynamics.SensorimotorBundle;
-import org.opendrawer.ape.darwinianneurodynamics.StateStream;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
 import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 import org.opendrawer.ape.processing.nxt.dummy.EyeBall;
@@ -126,95 +124,36 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 
 	private Ecosystem makeNXTEcology() {
 		Ecosystem eco = new Ecosystem(20);
-		NXTAccelerometer accelerometerNXT = new NXTAccelerometer(
-				new AccelHTSensor(SensorPort.S1));
-		NXTTouchSensor touchLeftNXT = new NXTTouchSensor(new TouchSensor(
-				SensorPort.S2));
-		NXTTouchSensor touchBottomNXT = new NXTTouchSensor(new TouchSensor(
-				SensorPort.S3));
-		NXTTouchSensor touchRightNXT = new NXTTouchSensor(new TouchSensor(
-				SensorPort.S4));
+		eco.makeInput(new NXTAccelerometer(new AccelHTSensor(SensorPort.S1)));
+		eco.makeInput(new NXTTouchSensor(new TouchSensor(SensorPort.S2)));
+		eco.makeInput(new NXTTouchSensor(new TouchSensor(SensorPort.S3)));
+		eco.makeInput(new NXTTouchSensor(new TouchSensor(SensorPort.S4)));
 
-		NXTMotor armHeadMotorNXT = new NXTMotor(Motor.A, -180, 0, 0, 0.925f);
-		NXTMotor armMiddleMotorNXT = new NXTMotor(Motor.B, -90, 90, 0, 0.8f);
-		NXTMotor armBodyMotorNXT = new NXTMotor(Motor.C, -90, 90, 0, 0.8f);
+		eco.makeOutput(new NXTMotor(Motor.A, -180, 0, 0, 0.925f));
+		eco.makeOutput(new NXTMotor(Motor.B, -90, 90, 0, 0.8f));
+		eco.makeOutput(new NXTMotor(Motor.C, -90, 90, 0, 0.8f));
 
-		SensorimotorBundle accelerometer = eco.makeInput(accelerometerNXT);
-		SensorimotorBundle touchLeft = eco.makeInput(touchLeftNXT);
-		SensorimotorBundle touchBottom = eco.makeInput(touchBottomNXT);
-		SensorimotorBundle touchRight = eco.makeInput(touchRightNXT);
-
-		SensorimotorBundle armHeadMotor = eco.makeOutput(armHeadMotorNXT);
-		SensorimotorBundle armMiddleMotor = eco.makeOutput(armMiddleMotorNXT);
-		SensorimotorBundle armBodyMotor = eco.makeOutput(armBodyMotorNXT);
-
-		eco.addReflex(new LinearReflex(accelerometer, armHeadMotor
-				.getStatesProvider(), 1, 0, -1));
-		eco.addReflex(new LinearReflex(touchBottom, armHeadMotor
-				.getStatesProvider(), 0, 0, -1));
-		eco.addReflex(new LinearReflex(touchLeft, armMiddleMotor
-				.getStatesProvider(), 0, 0, -1));
-		eco.addReflex(new LinearReflex(touchRight, armMiddleMotor
-				.getStatesProvider(), 0, 0, 1));
-		eco.addReflex(new LinearReflex(touchLeft, armBodyMotor
-				.getStatesProvider(), 0, 0, -1));
-		eco.addReflex(new LinearReflex(touchRight, armBodyMotor
-				.getStatesProvider(), 0, 0, 1));
-
-		for (int i = 0; i < 50; i++) {
-			Actor actor = new Actor(null, null);
-			eco.addActor(actor);
+		for (int i = 0; i < 8; i++) {
+			Actor predictor;
+			Actor actor;
+			List<StateStreamBundle> predictorBundles = eco
+					.getRandomUniqueSensorimotorStateStreamBundles(
+							StatesProvider.INPUT | StatesProvider.OUTPUT, 2, 1,
+							8);
+			List<StateStreamBundle> actorInputBundles = eco
+					.getRandomUniqueSensorimotorStateStreamBundles(
+							StatesProvider.INPUT, 1, 1, 8);
+			List<StateStreamBundle> actorOutputBundles = eco
+					.getRandomUniqueSensorimotorStateStreamBundles(
+							StatesProvider.OUTPUT, 1, 1, 8);
+			predictor = new Predictor(predictorBundles.get(0),
+					predictorBundles.get(1));
+			actor = new Actor(actorInputBundles.get(0),
+					actorOutputBundles.get(0));
+			CuriosityLoop curiosityLoop = new CuriosityLoop(predictor, actor);
+			eco.addCuriosityLoop(curiosityLoop);
 		}
 
-		List<StateStream> allPotentialPredictorStateStreams = new ArrayList<StateStream>();
-		for (int i = 0; i < eco.getInputs().size(); i++)
-			allPotentialPredictorStateStreams.addAll(eco.getInputs().get(i)
-					.getStateStreams());
-		for (int i = 0; i < eco.getOutputs().size(); i++)
-			allPotentialPredictorStateStreams.addAll(eco.getOutputs().get(i)
-					.getStateStreams());
-
-		for (int i = 0; i < 50; i++) {
-			int streams = (int) Math.floor(random(2,
-					allPotentialPredictorStateStreams.size()));
-			int outputsIndex = (int) Math.floor(random(1, streams - 1));
-			int[] streamIndexes = new int[streams];
-			for (int s = 0; s < streams; s++)
-				streamIndexes[s] = -1;
-
-			for (int s = 0; s < streams; s++) {
-				boolean original = false;
-				int p = -1;
-				while (!original) {
-					original = true;
-					p = (int) Math.floor(random(0,
-							allPotentialPredictorStateStreams.size()));
-					for (int ss = 0; ss < streams; ss++)
-						if (p == streamIndexes[ss])
-							original = false;
-				}
-				streamIndexes[s] = p;
-			}
-
-			StateStreamBundle inputStateStreamBundle = new StateStreamBundle(
-					eco.getStatesStreamLength());
-			StateStreamBundle oututStateStreamBundle = new StateStreamBundle(
-					eco.getStatesStreamLength());
-
-			for (int ins = 0; ins < outputsIndex; ins++)
-				inputStateStreamBundle
-						.addStateStream(allPotentialPredictorStateStreams
-								.get(streamIndexes[ins]));
-			for (int outs = outputsIndex; outs < streams; outs++)
-				oututStateStreamBundle
-						.addStateStream(allPotentialPredictorStateStreams
-								.get(streamIndexes[outs]));
-
-			Predictor predictor = new Predictor(inputStateStreamBundle,
-					oututStateStreamBundle);
-			eco.addPredictor(predictor);
-
-		}
 		return eco;
 	}
 
@@ -225,7 +164,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 
 		eco.makeInput(eyeBall);
 
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 4; i++) {
 			Muscle muscle = new Muscle();
 			muscles.add(muscle);
 			eyeBall.addMuscle(muscle);
@@ -240,13 +179,12 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			// eco.addReflex(eyeBallTwitchReflex);
 		}
 
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 12; i++) {
 			Actor predictor;
 			Actor actor;
 			List<StateStreamBundle> predictorBundles = eco
 					.getRandomUniqueSensorimotorStateStreamBundles(
-							StatesProvider.INPUT | StatesProvider.OUTPUT, 2, 1,
-							muscles.size() * 2);
+							StatesProvider.INPUT, 2, 1, muscles.size() * 2);
 			List<StateStreamBundle> actorInputBundles = eco
 					.getRandomUniqueSensorimotorStateStreamBundles(
 							StatesProvider.INPUT, 1, 1, muscles.size() * 2);
@@ -264,7 +202,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	}
 
 	private Ecosystem makeSimpleArmEcology() {
-		Ecosystem eco = new Ecosystem(100);
+		Ecosystem eco = new Ecosystem(20);
 		int joints = 3;
 		SimpleArm simpleArm = new SimpleArm(joints);
 

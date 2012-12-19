@@ -11,21 +11,18 @@ public class Ecosystem {
 	private final List<CuriosityLoop> curiosityLoops = new ArrayList<CuriosityLoop>();
 	private final List<Actor> actors = new ArrayList<Actor>();
 	private final List<Predictor> predictors = new ArrayList<Predictor>();
-	private Error allErrors;
-	private HomogeneousStateStreamBundle allErrorStreams;
+	private final StateStreamBundle allErrorStreams;
+	private final StatesStreamBundleMean totalErrors;
+	private final StateStreamBundle totalErrorStreams;
 	private final int statesStreamLength;
 	private CuriosityLoop activeCuriosityLoop = null;
 
 	public Ecosystem(int statesStreamLength) {
 		this.statesStreamLength = statesStreamLength;
-		setErrorStreamLength(statesStreamLength * 4);
-	}
-
-	private void setErrorStreamLength(int length) {
-		allErrorStreams = new HomogeneousStateStreamBundle(allErrors, length);
-		for (int i = 0; i < curiosityLoops.size(); i++)
-			allErrorStreams.addCompressingStatesProviderStreams(curiosityLoops
-					.get(i).getPredictor().getError());
+		allErrorStreams = new StateStreamBundle(statesStreamLength * 4);
+		totalErrors = new StatesStreamBundleMean(allErrorStreams);
+		totalErrorStreams = new StateStreamBundle(statesStreamLength * 4);
+		totalErrorStreams.addCompressingStatesProviderStreams(totalErrors);
 	}
 
 	public SensorimotorBundle makeInput(StatesProvider statesProvider) {
@@ -103,7 +100,10 @@ public class Ecosystem {
 		// predictors.get(i).step();
 
 		for (int i = 0; i < curiosityLoops.size(); i++)
-			curiosityLoops.get(i).step();
+			if (curiosityLoops.get(i).isActive())
+				curiosityLoops.get(i).step();
+
+		totalErrors.updateStates();
 	}
 
 	private List<StateStreamBundle> getRandomUniqueStateStreamBundles(
@@ -209,5 +209,9 @@ public class Ecosystem {
 
 	public List<SensorimotorBundle> getSensorimotorBundles() {
 		return sensorimotorBundles;
+	}
+
+	public StateStreamBundle getTotalErrorStreams() {
+		return totalErrorStreams;
 	}
 }

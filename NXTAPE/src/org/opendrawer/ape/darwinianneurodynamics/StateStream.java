@@ -7,6 +7,8 @@ public class StateStream implements StatesObserver {
 	protected int totalWriteHead = 0;
 	protected StatesProvider statesProvider;
 	protected int statesProviderChannel;
+	protected double min = -1;
+	protected double max = 1;
 
 	public StateStream(StatesProvider statesProvider,
 			int statesProviderChannel, int streamLength) {
