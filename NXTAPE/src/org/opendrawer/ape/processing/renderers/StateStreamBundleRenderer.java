@@ -22,7 +22,7 @@ public class StateStreamBundleRenderer extends Renderer {
 		if (stateStreamBundle != null) {
 			g.noStroke();
 			int nc = stateStreamBundle.getStateStreams().size();
-			float streamHeight = height - Renderer.lineMarginWidth * 2;
+			float streamHeight = height - Renderer.lineMarginWidth * 4;
 			float streamWidth = (width - Renderer.lineMarginWidth * 2)
 					- getStreamRightMargin();
 			for (int c = 0; c < nc; c++) {
@@ -53,7 +53,7 @@ public class StateStreamBundleRenderer extends Renderer {
 								x1 -= subStep
 										* (1 / (float) (streamLength - 1))
 										* streamWidth;
-							y1 = (float) ((y + height - Renderer.lineMarginWidth) - v
+							y1 = (float) ((y + height - Renderer.lineMarginWidth * 2) - v
 									* streamHeight);
 							g.vertex(x1, y1);
 							xs[vertexCount] = x1;
