@@ -1,15 +1,13 @@
 package org.opendrawer.ape.darwinianneurodynamics;
 
-public class CompressingStateStream extends StateStream {
+public class CompressingStateStream extends StateProviderStream {
 
 	private int steps = 1;
 	private double stepStates[] = new double[steps];
 	private int step = 0;
 	private float subStep = 0;
-
-	public CompressingStateStream(int streamLength) {
-		super(streamLength);
-	}
+	protected StatesProvider statesProvider;
+	protected int statesProviderChannel;
 
 	public CompressingStateStream(StatesProvider statesProvider, int i,
 			int streamLength) {
@@ -80,5 +78,26 @@ public class CompressingStateStream extends StateStream {
 	@Override
 	public int getMax() {
 		return 1;
+	}
+
+	@Override
+	public void setStatesProvider(StatesProvider statesProvider,
+			int statesProviderChannel, int streamLength) {
+		statesProvider.addStreamObserver(this);
+		this.streamLength = streamLength;
+		this.statesProvider = statesProvider;
+		this.statesProviderChannel = statesProviderChannel;
+		stateStream = new double[streamLength];
+		setToNaN();
+	}
+
+	@Override
+	public StatesProvider getStatesProvider() {
+		return statesProvider;
+	}
+
+	@Override
+	public int getStatesProviderChannel() {
+		return statesProviderChannel;
 	}
 }

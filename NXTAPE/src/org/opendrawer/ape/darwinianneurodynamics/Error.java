@@ -24,14 +24,11 @@ public class Error extends StatesProvider {
 
 	@Override
 	public int getStatesLength() {
-		// TODO Auto-generated method stub
 		return channels;
 	}
 
 	@Override
 	public void updateStates() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

@@ -21,6 +21,7 @@ public class HomogeneousStateStreamBundle extends StateStreamBundle {
 		stateStreams.clear();
 		int channels = statesProvider.getStatesLength();
 		for (int i = 0; i < channels; i++)
-			addStateStream(new StateStream(statesProvider, i, streamLength));
+			addStateStream(new StateProviderStream(statesProvider, i,
+					streamLength));
 	}
 }

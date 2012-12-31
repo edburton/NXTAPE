@@ -41,7 +41,8 @@ public class StateStreamBundle {
 
 	public void setStates(double[] states) {
 		for (int i = 0; i < states.length; i++)
-			stateStreams.get(i).setOutputState(states[i]);
+			((StateProviderStream) stateStreams.get(i))
+					.setOutputState(states[i]);
 	}
 
 	public int getStreamLength() {
@@ -58,7 +59,8 @@ public class StateStreamBundle {
 
 	public void addStatesProviderStreams(StatesProvider statesProvider) {
 		for (int i = 0; i < statesProvider.getStatesLength(); i++)
-			addStateStream(new StateStream(statesProvider, i, streamLength));
+			addStateStream(new StateProviderStream(statesProvider, i,
+					streamLength));
 	}
 
 	public void addCompressingStatesProviderStreams(

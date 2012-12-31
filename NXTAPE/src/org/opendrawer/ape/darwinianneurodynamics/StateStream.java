@@ -5,20 +5,8 @@ public class StateStream implements StatesObserver {
 	protected double[] stateStream;
 	protected int writeHead = 0;
 	protected int totalWriteHead = 0;
-	protected StatesProvider statesProvider;
-	protected int statesProviderChannel;
 	protected double min = -1;
 	protected double max = 1;
-
-	public StateStream(StatesProvider statesProvider,
-			int statesProviderChannel, int streamLength) {
-		super();
-		setStatesProvider(statesProvider, statesProviderChannel, streamLength);
-	}
-
-	public StateStream() {
-		super();
-	}
 
 	public StateStream(int streamLength) {
 		super();
@@ -27,17 +15,7 @@ public class StateStream implements StatesObserver {
 		setToNaN();
 	}
 
-	public void setStatesProvider(StatesProvider statesProvider,
-			int statesProviderChannel, int streamLength) {
-		statesProvider.addStreamObserver(this);
-		this.streamLength = streamLength;
-		this.statesProvider = statesProvider;
-		this.statesProviderChannel = statesProviderChannel;
-		stateStream = new double[streamLength];
-		setToNaN();
-	}
-
-	private void setToNaN() {
+	protected void setToNaN() {
 		for (int i = 0; i < streamLength; i++)
 			stateStream[i] = Double.NaN;
 	}
@@ -68,25 +46,6 @@ public class StateStream implements StatesObserver {
 		return streamLength;
 	}
 
-	public StatesProvider getStatesProvider() {
-		return statesProvider;
-	}
-
-	public int getStatesProviderChannel() {
-		return statesProviderChannel;
-	}
-
-	public void setOutputState(double state) {
-		statesProvider.setOutputState(state, statesProviderChannel);
-	}
-
-	@Override
-	public void statesUpdated(StatesProvider statesProvider) {
-		double[] states = statesProvider.getStates();
-		if (states != null)
-			write(states[statesProviderChannel]);
-	}
-
 	protected void write(double value) {
 		if (stateStream != null) {
 			stateStream[writeHead] = value;
@@ -107,5 +66,10 @@ public class StateStream implements StatesObserver {
 
 	public float getSubStep() {
 		return 0;
+	}
+
+	@Override
+	public void statesUpdated(StatesProvider statesProvider) {
+
 	}
 }

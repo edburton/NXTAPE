@@ -156,8 +156,8 @@ public class Ecosystem {
 			HomogeneousStateStreamBundle sensorimotorBundle = sensorimotorBundles
 					.get(i);
 			for (int c = 0; c < sensorimotorBundle.getStateStreams().size(); c++) {
-				StateStream stateStream = sensorimotorBundle.getStateStreams()
-						.get(c);
+				StateProviderStream stateStream = (StateProviderStream) sensorimotorBundle
+						.getStateStreams().get(c);
 				for (int cc = 0; cc < stateStream.getStatesProvider()
 						.getStateTypes().length; cc++) {
 					if ((types | stateStream.getStatesProvider()

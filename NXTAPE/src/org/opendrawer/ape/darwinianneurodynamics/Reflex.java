@@ -14,8 +14,9 @@ public abstract class Reflex extends StateStreamBundleGroup {
 		this.outputStatesProvider = outputStatesProvider;
 		this.inputChannel = inputStateIndex;
 		this.outputChannel = outputIndex;
-		StateStream outputStream = new StateStream(outputStatesProvider,
-				outputIndex, inputStateStreamBundle.getStreamLength());
+		StateStream outputStream = new StateProviderStream(
+				outputStatesProvider, outputIndex,
+				inputStateStreamBundle.getStreamLength());
 		addStateStreamBundle(new StateStreamBundle(outputStream));
 	}
 

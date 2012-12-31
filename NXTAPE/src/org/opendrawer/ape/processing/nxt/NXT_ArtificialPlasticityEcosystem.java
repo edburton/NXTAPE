@@ -76,7 +76,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			ecosystems.add(makeNXTEcology());
 		} else {
 			ecosystems.add(makeEyeBallEcology());
-			ecosystems.add(makeSimpleArmEcology());
+			// ecosystems.add(makeSimpleArmEcology());
 		}
 		float height = getHeight() / (float) ecosystems.size();
 		for (int i = 0; i < ecosystems.size(); i++) {
@@ -226,8 +226,8 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			List<StateStreamBundle> actorOutputBundles = eco
 					.getRandomUniqueSensorimotorStateStreamBundles(
 							StatesProvider.OUTPUT, 1, joints, joints);
-			predictor = new Predictor(actorInputBundles.get(0),
-					actorOutputBundles.get(0));
+			predictor = new Predictor(predictorBundles.get(0),
+					predictorBundles.get(1));
 			actor = new Actor(actorInputBundles.get(0),
 					actorOutputBundles.get(0));
 			CuriosityLoop curiosityLoop = new CuriosityLoop(predictor, actor);
