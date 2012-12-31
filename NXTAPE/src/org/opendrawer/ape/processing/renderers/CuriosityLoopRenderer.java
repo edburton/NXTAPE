@@ -18,7 +18,7 @@ public class CuriosityLoopRenderer extends StateStreamBundleGroupListRenderer {
 		if (curiosityLoop.isActive()) {
 			g.noStroke();
 			float t = (float) (Math
-					.cos(((System.currentTimeMillis() * 2 * Math.PI) / 500.0) + 1) / 2);
+					.cos(((System.currentTimeMillis() * 2 * Math.PI) / 1000.0) + 1) / 2);
 			t *= t;
 			g.fill(Math.round(keyColor.getRed()),
 					Math.round(keyColor.getGreen()),

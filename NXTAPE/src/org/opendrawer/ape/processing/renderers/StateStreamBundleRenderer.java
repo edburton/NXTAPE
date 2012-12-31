@@ -19,12 +19,12 @@ public class StateStreamBundleRenderer extends Renderer {
 	@Override
 	public void draw(PGraphics g) {
 		super.draw(g);
-		g.noStroke();
 		if (stateStreamBundle != null) {
-			g.noFill();
+			g.noStroke();
 			int nc = stateStreamBundle.getStateStreams().size();
-			float lineWidth = (float) ((Renderer.lineMarginWidth) / Math
-					.sqrt(nc));
+			float streamHeight = height - Renderer.lineMarginWidth * 2;
+			float streamWidth = (width - Renderer.lineMarginWidth * 2)
+					- getStreamRightMargin();
 			for (int c = 0; c < nc; c++) {
 				StateStream stateStream = stateStreamBundle.getStateStreams()
 						.get(c);
@@ -47,56 +47,44 @@ public class StateStreamBundleRenderer extends Renderer {
 								vertexCount = 0;
 							}
 							v = (v - min) / (max - min);
-							x1 = (getStreamLeft() + Renderer.lineMarginWidth)
-									+ ((i / (float) (streamLength - 1)) * ((width - Renderer.lineMarginWidth * 2) - (getStreamLeft() - x)));
+							x1 = ((x + streamWidth + Renderer.lineMarginWidth) - ((i / (float) (streamLength - 1)) * streamWidth));
+							float subStep = stateStream.getSubStep();
+							if (subStep > 0)
+								x1 -= subStep
+										* (1 / (float) (streamLength - 1))
+										* streamWidth;
 							y1 = (float) ((y + height - Renderer.lineMarginWidth) - v
-									* (height - Renderer.lineMarginWidth * 2));
+									* streamHeight);
 							g.vertex(x1, y1);
-							xs[vertexCount] = x1 + (lineWidth * c);
-							ys[vertexCount] = y1 + (lineWidth * c);
+							xs[vertexCount] = x1;
+							ys[vertexCount] = y1;
 							vertexCount++;
 						} else {
 							if (drawing) {
-
-								for (int i1 = vertexCount - 2; i1 >= 0; i1--) {
-									float dx = xs[i1 + 1] - xs[i1];
-									float dy = ys[i1 + 1] - ys[i1];
-									float a = (float) Math.atan2(dx, dy);
-									a = (float) ((a + Math.PI) / (Math.PI * 2));
-									g.fill(Color.HSBtoRGB(c / (float) nc, 1.0f,
-											a));
-									g.beginShape(PConstants.QUAD);
-									g.vertex(xs[i1], ys[i1]);
-									g.vertex(xs[i1 + 1], ys[i1 + 1]);
-									g.vertex(xs[i1 + 1] + lineWidth, ys[i1 + 1]
-											+ lineWidth);
-									g.vertex(xs[i1] + lineWidth, ys[i1]
-											+ lineWidth);
-									g.endShape();
+								g.fill(Color.HSBtoRGB(c / (float) nc, 1.0f, 1));
+								g.beginShape(PConstants.QUAD_STRIP);
+								for (int i1 = vertexCount - 1; i1 >= 0; i1--) {
+									g.vertex(xs[i1], ys[i1]
+											- Renderer.lineMarginWidth / 2);
+									g.vertex(xs[i1], ys[i1]
+											+ Renderer.lineMarginWidth / 2);
 								}
-
+								g.endShape();
 								vertexCount = 0;
 								drawing = false;
 							}
 						}
 					}
 					if (drawing) {
-
-						for (int i1 = vertexCount - 2; i1 >= 0; i1--) {
-							float dx = xs[i1 + 1] - xs[i1];
-							float dy = ys[i1 + 1] - ys[i1];
-							float a = (float) Math.atan2(dx, dy);
-							a = (float) ((a + Math.PI) / (Math.PI * 2));
-							g.fill(Color.HSBtoRGB(c / (float) nc, 1.0f, a));
-							g.beginShape(PConstants.QUAD);
-							g.vertex(xs[i1], ys[i1]);
-							g.vertex(xs[i1 + 1], ys[i1 + 1]);
-							g.vertex(xs[i1 + 1] + lineWidth, ys[i1 + 1]
-									+ lineWidth);
-							g.vertex(xs[i1] + lineWidth, ys[i1] + lineWidth);
-							g.endShape();
+						g.fill(Color.HSBtoRGB(c / (float) nc, 1.0f, 1));
+						g.beginShape(PConstants.QUAD_STRIP);
+						for (int i1 = vertexCount - 1; i1 >= 0; i1--) {
+							g.vertex(xs[i1], ys[i1] - Renderer.lineMarginWidth
+									/ 2);
+							g.vertex(xs[i1], ys[i1] + Renderer.lineMarginWidth
+									/ 2);
 						}
-
+						g.endShape();
 						drawing = false;
 					}
 				}
@@ -104,8 +92,8 @@ public class StateStreamBundleRenderer extends Renderer {
 		}
 	}
 
-	protected float getStreamLeft() {
-		return x;
+	protected float getStreamRightMargin() {
+		return 0;
 	}
 
 	public StateStreamBundle getStatesStreamBundle() {

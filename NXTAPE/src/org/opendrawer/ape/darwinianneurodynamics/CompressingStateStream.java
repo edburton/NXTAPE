@@ -5,6 +5,7 @@ public class CompressingStateStream extends StateStream {
 	private int steps = 1;
 	private double stepStates[] = new double[steps];
 	private int step = 0;
+	private float subStep = 0;
 
 	public CompressingStateStream(int streamLength) {
 		super(streamLength);
@@ -62,7 +63,13 @@ public class CompressingStateStream extends StateStream {
 				v /= step - 1;
 				stateStream[writeHead - 1] = v;
 			}
+			subStep = step / (float) steps;
 		}
+	}
+
+	@Override
+	public float getSubStep() {
+		return subStep;
 	}
 
 	@Override

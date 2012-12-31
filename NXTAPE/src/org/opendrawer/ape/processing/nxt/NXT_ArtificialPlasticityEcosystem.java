@@ -7,9 +7,6 @@ import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
 import lejos.nxt.addon.AccelHTSensor;
-import lejos.pc.comm.NXTComm;
-import lejos.pc.comm.NXTCommException;
-import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
 import org.opendrawer.ape.darwinianneurodynamics.Actor;
@@ -58,7 +55,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		Renderer.lineMarginWidth = getHeight() / 768.0f;
 		Renderer.lineWidth = Renderer.lineMarginWidth * 1.70710678118655f;
 		smooth();
-		frameRate(50);
+		frameRate(200);
 		ellipseMode(CORNERS);
 		rectMode(CORNERS);
 		background(0);
@@ -68,18 +65,18 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 
 	private void setupNXT() {
 		NXTInfo[] NXTs = null;
-		try {
-			NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
-			NXTs = nxtComm.search(null);
-		} catch (NXTCommException e) {
-			e.printStackTrace();
-		}
+		// try {
+		// NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
+		// NXTs = nxtComm.search(null);
+		// } catch (NXTCommException e) {
+		// e.printStackTrace();
+		// }
 
 		if (NXTs != null && NXTs.length == 1) {
 			ecosystems.add(makeNXTEcology());
 		} else {
 			ecosystems.add(makeEyeBallEcology());
-			// ecosystems.add(makeSimpleArmEcology());
+			ecosystems.add(makeSimpleArmEcology());
 		}
 		float height = getHeight() / (float) ecosystems.size();
 		for (int i = 0; i < ecosystems.size(); i++) {
@@ -158,13 +155,13 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	}
 
 	private Ecosystem makeEyeBallEcology() {
-		Ecosystem eco = new Ecosystem(60);
+		Ecosystem eco = new Ecosystem(20);
 		List<Muscle> muscles = new ArrayList<Muscle>();
 		EyeBall eyeBall = new EyeBall();
 
 		eco.makeInput(eyeBall);
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 8; i++) {
 			Muscle muscle = new Muscle();
 			muscles.add(muscle);
 			eyeBall.addMuscle(muscle);
@@ -190,7 +187,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 							StatesProvider.INPUT, 1, 1, muscles.size() * 2);
 			List<StateStreamBundle> actorOutputBundles = eco
 					.getRandomUniqueSensorimotorStateStreamBundles(
-							StatesProvider.OUTPUT, 1, 1, muscles.size() * 2);
+							StatesProvider.OUTPUT, 1, 2, muscles.size() * 2);
 			predictor = new Predictor(predictorBundles.get(0),
 					predictorBundles.get(1));
 			actor = new Actor(actorInputBundles.get(0),

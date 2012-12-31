@@ -18,19 +18,21 @@ public class HomogeneousStateStreamBundleRenderer extends
 	}
 
 	@Override
-	protected float getStreamLeft() {
+	protected float getStreamRightMargin() {
 		if (statesProviderRenderer != null)
-			return x + height;
+			return height;
 		else
-			return x;
+			return 0;
 	}
 
 	@Override
 	public void setVisibleAt(float x, float y, float width, float height) {
 		super.setVisibleAt(x, y, width, height);
 		if (statesProviderRenderer != null)
-			statesProviderRenderer.setVisibleAt(x + Renderer.lineWidth, y
-					+ Renderer.lineWidth, height - Renderer.lineWidth, height
-					- Renderer.lineWidth);
+			statesProviderRenderer.setVisibleAt((x + width - height)
+					+ Renderer.lineMarginWidth * 2, y
+					+ Renderer.lineMarginWidth * 2, height
+					- Renderer.lineMarginWidth * 2, height
+					- Renderer.lineMarginWidth * 2);
 	}
 }

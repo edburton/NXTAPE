@@ -104,4 +104,8 @@ public class StateStream implements StatesObserver {
 	public int getMax() {
 		return 1;
 	}
+
+	public float getSubStep() {
+		return 0;
+	}
 }

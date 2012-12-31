@@ -25,10 +25,6 @@ public class StateStreamBundleGroupRenderer extends Renderer {
 			addChild(Renderer.makeRendererFor(stateStreamBundles.get(i)));
 	}
 
-	protected float getStreamLeft() {
-		return x;
-	}
-
 	@Override
 	public void setVisibleAt(float x, float y, float width, float height) {
 		super.setVisibleAt(x, y, width, height);
