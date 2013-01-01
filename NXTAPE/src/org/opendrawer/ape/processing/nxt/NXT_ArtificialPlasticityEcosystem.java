@@ -7,6 +7,9 @@ import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
 import lejos.nxt.addon.AccelHTSensor;
+import lejos.pc.comm.NXTComm;
+import lejos.pc.comm.NXTCommException;
+import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
 import org.opendrawer.ape.darwinianneurodynamics.Actor;
@@ -52,7 +55,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		else
 			size(1024, 768, OPENGL);
 		frameRate(200);
-		Renderer.lineMarginWidth = getHeight() / 768.0f;
+		Renderer.lineMarginWidth = (getHeight() / 768.0f) * 2f;
 		Renderer.lineWidth = Renderer.lineMarginWidth * 1.70710678118655f;
 		smooth();
 		frameRate(200);
@@ -65,12 +68,12 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 
 	private void setupNXT() {
 		NXTInfo[] NXTs = null;
-		// try {
-		// NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
-		// NXTs = nxtComm.search(null);
-		// } catch (NXTCommException e) {
-		// e.printStackTrace();
-		// }
+		try {
+			NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
+			NXTs = nxtComm.search(null);
+		} catch (NXTCommException e) {
+			e.printStackTrace();
+		}
 
 		if (NXTs != null && NXTs.length == 1) {
 			ecosystems.add(makeNXTEcology());
@@ -155,7 +158,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 	}
 
 	private Ecosystem makeEyeBallEcology() {
-		Ecosystem eco = new Ecosystem(20);
+		Ecosystem eco = new Ecosystem(120);
 		List<Muscle> muscles = new ArrayList<Muscle>();
 		EyeBall eyeBall = new EyeBall();
 
@@ -176,7 +179,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			// eco.addReflex(eyeBallTwitchReflex);
 		}
 
-		for (int i = 0; i < 12; i++) {
+		for (int i = 0; i < 20; i++) {
 			Actor predictor;
 			Actor actor;
 			List<StateStreamBundle> predictorBundles = eco

@@ -14,19 +14,6 @@ public class CompressingStateStream extends StateProviderStream {
 		super(statesProvider, i, streamLength);
 	}
 
-	// @Override
-	// public double read(int pastPosition) {
-	// if (stateStream != null) {
-	// if (pastPosition > streamLength || pastPosition > totalWriteHead)
-	// return Double.NaN;
-	// int index = pastPosition;
-	// while (index < 0)
-	// index += streamLength;
-	// return (stateStream[index]);
-	// } else
-	// return Double.NaN;
-	// }
-
 	@Override
 	protected void write(double value) {
 		if (stateStream != null) {

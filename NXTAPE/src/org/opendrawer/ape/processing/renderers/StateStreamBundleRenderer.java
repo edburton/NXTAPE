@@ -1,7 +1,5 @@
 package org.opendrawer.ape.processing.renderers;
 
-import java.awt.Color;
-
 import org.opendrawer.ape.darwinianneurodynamics.StateStream;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
 
@@ -61,7 +59,7 @@ public class StateStreamBundleRenderer extends Renderer {
 							vertexCount++;
 						} else {
 							if (drawing) {
-								g.fill(Color.HSBtoRGB(c / (float) nc, 1.0f, 1));
+								g.fill(createKeyColourInt(c, nc));
 								g.beginShape(PConstants.QUAD_STRIP);
 								for (int i1 = vertexCount - 1; i1 >= 0; i1--) {
 									g.vertex(xs[i1], ys[i1]
@@ -76,7 +74,7 @@ public class StateStreamBundleRenderer extends Renderer {
 						}
 					}
 					if (drawing) {
-						g.fill(Color.HSBtoRGB(c / (float) nc, 1.0f, 1));
+						g.fill(createKeyColourInt(c, nc));
 						g.beginShape(PConstants.QUAD_STRIP);
 						for (int i1 = vertexCount - 1; i1 >= 0; i1--) {
 							g.vertex(xs[i1], ys[i1] - Renderer.lineMarginWidth

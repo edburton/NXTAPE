@@ -16,18 +16,19 @@ public class EyeBall extends StatesProvider {
 	private double speed = 0;
 	private static final double k = 0.25;
 	private static final double f = 0.95;
+	private int count = 0;
 
 	public EyeBall() {
 	}
 
 	@Override
 	public double[] getStates() {
-		return new double[] { x, y, xv, yv, speed };
+		return new double[] { count++ % 20 < 5 ? 1 : 0 /* x, y, xv, yv, speed */};
 	}
 
 	@Override
 	public int getStatesLength() {
-		return 5;
+		return 1;// 5;
 	}
 
 	@Override

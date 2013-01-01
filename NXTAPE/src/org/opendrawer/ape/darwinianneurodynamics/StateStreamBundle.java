@@ -70,11 +70,6 @@ public class StateStreamBundle {
 					streamLength));
 	}
 
-	public void addEmptyStateStreams(int n) {
-		for (int i = 0; i < n; i++)
-			addStateStream(new StateStream(streamLength));
-	}
-
 	public void removeStatesStream(StateStream stateStream) {
 		stateStreams.remove(stateStream);
 	}

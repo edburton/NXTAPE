@@ -75,11 +75,6 @@ public class Ecosystem {
 	}
 
 	private void stepOutputs() {
-		// for (int i = 0; i < outputs.size(); i++) {
-		// int channels = outputs.get(i).getStateStreams().size();
-		// for (int n = 0; n < channels; n++)
-		// outputs.get(i).getStateStreams().get(n).setOutputState(0);
-		// }
 
 		if (activeCuriosityLoop == null) {
 			int r = Util.RandomInt(0, curiosityLoops.size() - 1);
@@ -95,9 +90,6 @@ public class Ecosystem {
 			outputs.get(i).getStatesProvider().updateStates();
 			outputs.get(i).getStatesProvider().notifyStatesObservers();
 		}
-
-		// for (int i = 0; i < predictors.size(); i++)
-		// predictors.get(i).step();
 
 		for (int i = 0; i < curiosityLoops.size(); i++)
 			if (curiosityLoops.get(i).isActive())

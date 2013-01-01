@@ -126,6 +126,11 @@ public class Renderer {
 								.round(keyColor.getBlue() * .8f)));
 	}
 
+	public static int createKeyColourInt(int index, int outOf) {
+		return (new Color(Color.HSBtoRGB(index / (float) outOf, 1.0f, 1.0f)))
+				.getRGB();
+	}
+
 	public static Color createKeyColour(int index, int outOf) {
 		return new Color(Color.HSBtoRGB(index / (float) outOf, 1.0f, 1.0f));
 	}

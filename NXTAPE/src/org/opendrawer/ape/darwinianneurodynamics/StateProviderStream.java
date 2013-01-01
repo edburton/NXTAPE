@@ -40,4 +40,9 @@ public class StateProviderStream extends StateStream {
 		return statesProviderChannel;
 	}
 
+	@Override
+	public void updateStates() {
+
+	}
+
 }
