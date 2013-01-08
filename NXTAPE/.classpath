@@ -2,9 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="con" path="org.lejos.nxt.ldt.LEJOS_LIBRARY_CONTAINER/pc"/>
 	<classpathentry kind="lib" path="libs/processing/core.jar"/>
 	<classpathentry kind="lib" path="libs/processing/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="libs/processing/jogl-all.jar"/>
+	<classpathentry kind="lib" path="/Users/Edward/Documents/LEGOgit/NXTAPE/NXTAPE/leJOS_NXJ_0.9.1beta-3/lib/pc/pctools.jar"/>
+	<classpathentry kind="con" path="org.lejos.nxt.ldt.LEJOS_LIBRARY_CONTAINER/pc"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
