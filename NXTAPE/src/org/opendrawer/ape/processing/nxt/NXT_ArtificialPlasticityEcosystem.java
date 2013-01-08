@@ -18,6 +18,7 @@ import org.opendrawer.ape.darwinianneurodynamics.Ecosystem;
 import org.opendrawer.ape.darwinianneurodynamics.Predictor;
 import org.opendrawer.ape.darwinianneurodynamics.StateStreamBundle;
 import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
+import org.opendrawer.ape.darwinianneurodynamics.Util;
 import org.opendrawer.ape.processing.nxt.dummy.EyeBall;
 import org.opendrawer.ape.processing.nxt.dummy.Muscle;
 import org.opendrawer.ape.processing.nxt.dummy.SimpleArm;
@@ -55,7 +56,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 		else
 			size(1024, 768, OPENGL);
 		frameRate(200);
-		Renderer.lineMarginWidth = (getHeight() / 768.0f) * 2f;
+		Renderer.lineMarginWidth = (getHeight() / 768.0f);
 		Renderer.lineWidth = Renderer.lineMarginWidth * 1.70710678118655f;
 		smooth();
 		frameRate(200);
@@ -164,7 +165,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 
 		eco.makeInput(eyeBall);
 
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 4; i++) {
 			Muscle muscle = new Muscle();
 			muscles.add(muscle);
 			eyeBall.addMuscle(muscle);
@@ -179,7 +180,7 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 			// eco.addReflex(eyeBallTwitchReflex);
 		}
 
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 13; i++) {
 			Actor predictor;
 			Actor actor;
 			List<StateStreamBundle> predictorBundles = eco
@@ -231,7 +232,8 @@ public class NXT_ArtificialPlasticityEcosystem extends PApplet {
 							StatesProvider.OUTPUT, 1, joints, joints);
 			predictor = new Predictor(predictorBundles.get(0),
 					predictorBundles.get(1));
-			actor = new Actor(actorInputBundles.get(0),
+			actor = new Actor(
+					Util.randomFilterStateStreamBundle(actorInputBundles.get(0)),
 					actorOutputBundles.get(0));
 			CuriosityLoop curiosityLoop = new CuriosityLoop(predictor, actor);
 			eco.addCuriosityLoop(curiosityLoop);

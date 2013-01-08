@@ -3,7 +3,7 @@ package org.opendrawer.ape.darwinianneurodynamics;
 public class CuriosityLoop extends StateStreamBundleGroupList {
 
 	private int activeCount = 0;
-	private static final int activationDuration = 100;
+	private static final int activationDuration = 200;
 
 	public CuriosityLoop(Actor predictor, Actor actor) {
 		super(predictor, actor);

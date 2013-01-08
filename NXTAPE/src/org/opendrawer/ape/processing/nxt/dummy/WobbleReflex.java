@@ -23,7 +23,7 @@ public class WobbleReflex extends Reflex {
 		if (outputStatesProvider == null)
 			return;
 		if (c % n == 0) {
-			n = Util.RandomInt(2, 100);
+			n = Util.randomInt(2, 100);
 			s = Math.pow(Math.random() / 2, 2);
 		}
 		double output = Math.cos(counter);

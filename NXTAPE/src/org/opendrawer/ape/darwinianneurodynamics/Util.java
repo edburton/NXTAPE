@@ -5,9 +5,14 @@ import java.util.Random;
 public class Util {
 	private static Random random = new Random();
 
-	public static int RandomInt(int min, int max) {
+	public static int randomInt(int min, int max) {
 		checkRandom();
 		return min + (int) (Math.random() * ((max - min) + 1));
+	}
+
+	public static double randomDouble(double min, double max) {
+		checkRandom();
+		return min + (Math.random() * ((max - min)));
 	}
 
 	private static void checkRandom() {
@@ -78,5 +83,17 @@ public class Util {
 			double range, double timeOffset, double timeRange) {
 		return distribution(distribution(input, timeOffset, timeRange), offset,
 				range);
+	}
+
+	public static StateStreamBundle randomFilterStateStreamBundle(
+			StateStreamBundle stateStreamBundle) {
+		StateStreamBundle result = new StateStreamBundle(
+				stateStreamBundle.streamLength);
+		for (int i = 0; i < stateStreamBundle.getStateStreams().size(); i++) {
+			StateStream stateStream = stateStreamBundle.getStateStreams()
+					.get(i);
+			result.addStateStream(new FilteredStateStream(stateStream, 0.5, 0.1));
+		}
+		return result;
 	}
 }

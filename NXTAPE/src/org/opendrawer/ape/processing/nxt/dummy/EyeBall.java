@@ -7,28 +7,29 @@ import org.opendrawer.ape.darwinianneurodynamics.StatesProvider;
 import org.opendrawer.ape.darwinianneurodynamics.Util;
 
 public class EyeBall extends StatesProvider {
-	private static final int[] stateTypes = new int[] { INPUT, INPUT, INPUT };
+	private static final int[] stateTypes = new int[] { INPUT, INPUT, INPUT,
+			INPUT, INPUT };
 	private final List<Muscle> muscles = new ArrayList<Muscle>();
 	private double x = 0;
 	private double y = 0;
 	private double xv = 0;
 	private double yv = 0;
 	private double speed = 0;
-	private static final double k = 0.25;
-	private static final double f = 0.95;
-	private int count = 0;
+	private static final double k = 0.5;
+	private static final double f = 0.9;
+	private final int count = 0;
 
 	public EyeBall() {
 	}
 
 	@Override
 	public double[] getStates() {
-		return new double[] { count++ % 20 < 5 ? 1 : 0 /* x, y, xv, yv, speed */};
+		return new double[] { x, y, xv, yv, speed };
 	}
 
 	@Override
 	public int getStatesLength() {
-		return 1;// 5;
+		return 5;
 	}
 
 	@Override

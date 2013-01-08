@@ -55,6 +55,12 @@ public abstract class StateStream extends StatesProvider implements
 			if (writeHead >= streamLength)
 				writeHead = 0;
 		}
+		updateStates();
+	}
+	
+	@Override
+	public void setOutputState(double state, int stateChannel) {
+		write(state);
 	}
 
 	public int getMin() {
@@ -84,10 +90,6 @@ public abstract class StateStream extends StatesProvider implements
 		return 1;
 	}
 
-	@Override
-	public void setOutputState(double state, int stateChannel) {
-		write(state);
-	}
 
 	@Override
 	public void updateStates() {

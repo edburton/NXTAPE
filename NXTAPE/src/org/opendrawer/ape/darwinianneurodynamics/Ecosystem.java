@@ -77,7 +77,7 @@ public class Ecosystem {
 	private void stepOutputs() {
 
 		if (activeCuriosityLoop == null) {
-			int r = Util.RandomInt(0, curiosityLoops.size() - 1);
+			int r = Util.randomInt(0, curiosityLoops.size() - 1);
 			activeCuriosityLoop = curiosityLoops.get(r);
 			activeCuriosityLoop.activate();
 		} else if (!activeCuriosityLoop.isActive())
@@ -112,7 +112,7 @@ public class Ecosystem {
 		do {
 			total = 0;
 			for (int i = 0; i < n; i++) {
-				resultLengths[i] = Util.RandomInt(min, max);
+				resultLengths[i] = Util.randomInt(min, max);
 				total += resultLengths[i];
 			}
 		} while (total > stateStreams.size());
@@ -122,7 +122,7 @@ public class Ecosystem {
 				int p = -1;
 				while (!original) {
 					original = true;
-					p = Util.RandomInt(0, stateStreams.size() - 1);
+					p = Util.randomInt(0, stateStreams.size() - 1);
 					for (int ss = 0; ss < streamIndexes.length; ss++)
 						if (p == streamIndexes[ss])
 							original = false;
